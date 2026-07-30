@@ -1,10 +1,9 @@
-// External Modules
 import { Router } from "express";
+import { register } from "./auth/auth.controller.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-    res.json({ message: "Welcome to the Users API!" });
-});
+// Auth Routes
+router.get("/auth", register);
 
 export default router;
