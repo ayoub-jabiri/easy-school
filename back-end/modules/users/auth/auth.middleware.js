@@ -1,19 +1,21 @@
 import { clientErrorResponse } from "../../../utils/client.error.js";
 import { serverErrorResponse } from "../../../utils/server.error.js";
+import { getUserByEmail } from "../user.service.js";
 import { userSchema } from "../user.validation.js";
 
-export const dataValidationChaeck = (req, res, next) => {
+export const dataValidationCheck = (req, res, next) => {
     try {
         if (!req.body) {
             return clientErrorResponse(res, 400, "Request body is missing");
         }
 
-        const { fullName, phoneNumber, email, password } = req.body;
+        const { fullName, phoneNumber, email, role, password } = req.body;
 
         userSchema.parse({
             fullName,
             phoneNumber,
             email,
+            role,
             password,
         });
     } catch (error) {
