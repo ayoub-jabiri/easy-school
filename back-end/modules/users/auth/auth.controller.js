@@ -1,10 +1,12 @@
 // External Modules
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 // Internal Modules
 import { userRegister } from "./auth.service.js";
 import { serverErrorResponse } from "../../../utils/server.error.js";
+import { signToken } from "../../../utils/token.utils.js";
+import { getUserByEmail } from "../user.service.js";
+import { excludeUserPassword } from "../../../utils/client.responses.js";
 
 export const register = async (req, res) => {
     try {
@@ -20,16 +22,30 @@ export const register = async (req, res) => {
             password: hashedPassword,
         });
 
-        const accessToken = jwt.sign(
-            { userId: newUser._id, email: newUser.email, role: newUser.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "15d" }
-        );
+        const accessToken = signToken(newUser);
 
         res.json({
             message: "The user has been registered successfully",
             accessToken,
-            user: newUser,
+            user: excludeUserPassword(newUser),
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const login = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await getUserByEmail(email);
+
+        const accessToken = signToken(user);
+
+        res.json({
+            message: "The user has been logged in successfully",
+            accessToken,
+            user: excludeUserPassword(user),
         });
     } catch (error) {
         serverErrorResponse(res, error);
