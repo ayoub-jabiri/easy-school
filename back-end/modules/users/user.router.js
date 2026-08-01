@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { login, profile, register } from "./auth/auth.controller.js";
 import {
-    authenticationCheck,
-    authorizationCheck,
     loginDataValidationCheck,
     passwordMatchCheck,
     registerDataValidationCheck,
     userExistCheck,
     userNotExistCheck,
+    authenticationCheck,
+    authorizationCheck,
 } from "./auth/auth.middleware.js";
 
 const router = Router();
