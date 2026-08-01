@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { login, register } from "./auth/auth.controller.js";
+import { login, profile, register } from "./auth/auth.controller.js";
 import {
+    authenticationCheck,
+    authorizationCheck,
     loginDataValidationCheck,
     passwordMatchCheck,
     registerDataValidationCheck,
@@ -23,6 +25,13 @@ router.post(
     userNotExistCheck,
     passwordMatchCheck,
     login
+);
+
+router.get(
+    "/auth/profile",
+    authenticationCheck,
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    profile
 );
 
 export default router;

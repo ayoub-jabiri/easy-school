@@ -51,3 +51,15 @@ export const login = async (req, res) => {
         serverErrorResponse(res, error);
     }
 };
+
+export const profile = async (req, res) => {
+    try {
+        const user = await getUserByEmail(req.user.email);
+
+        res.json({
+            user: excludeUserPassword(user),
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
