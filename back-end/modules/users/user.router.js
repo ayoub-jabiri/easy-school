@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { login, register } from "./auth/auth.controller.js";
+import { login, profile, register } from "./auth/auth.controller.js";
 import {
     loginDataValidationCheck,
     passwordMatchCheck,
     registerDataValidationCheck,
     userExistCheck,
     userNotExistCheck,
+    authenticationCheck,
+    authorizationCheck,
 } from "./auth/auth.middleware.js";
 
 const router = Router();
@@ -23,6 +25,13 @@ router.post(
     userNotExistCheck,
     passwordMatchCheck,
     login
+);
+
+router.get(
+    "/auth/profile",
+    authenticationCheck,
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    profile
 );
 
 export default router;
