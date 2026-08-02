@@ -1,10 +1,6 @@
-// External Modules
-import bcrypt from "bcrypt";
-
-// Internal Modules
 import { userRegister } from "./auth.service.js";
 import { serverErrorResponse } from "../../../utils/server.error.js";
-import { signToken } from "../../../utils/token.utils.js";
+import { hashPassword, signToken } from "../../../utils/user.utils.js";
 import { getUserByEmail } from "../user.service.js";
 import { excludeUserPassword } from "../../../utils/client.responses.js";
 
@@ -12,7 +8,7 @@ export const register = async (req, res) => {
     try {
         const { fullName, phoneNumber, email, role, password } = req.body;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await hashPassword(password);
 
         const newUser = await userRegister({
             fullName,
@@ -24,7 +20,7 @@ export const register = async (req, res) => {
 
         const accessToken = signToken(newUser);
 
-        res.json({
+        res.status(201).json({
             message: "The user has been registered successfully",
             accessToken,
             user: excludeUserPassword(newUser),
