@@ -6,21 +6,28 @@ import {
     registerDataValidationCheck,
     userExistCheck,
     userNotExistCheck,
+} from "./auth/auth.middleware.js";
+import {
     authenticationCheck,
     authorizationCheck,
-} from "./auth/auth.middleware.js";
+    requestBodyCheck,
+} from "../../middlewares/global.middlewares.js";
 
 const router = Router();
 
 // Auth Routes
 router.post(
     "/auth/register",
+    authenticationCheck,
+    authorizationCheck(["admin"]),
+    requestBodyCheck,
     registerDataValidationCheck,
     userExistCheck,
     register
 );
 router.post(
     "/auth/login",
+    requestBodyCheck,
     loginDataValidationCheck,
     userNotExistCheck,
     passwordMatchCheck,
