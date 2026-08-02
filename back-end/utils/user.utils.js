@@ -1,4 +1,9 @@
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
+export const hashPassword = async (password) => {
+    return await bcrypt.hash(password, 10);
+};
 
 export const signToken = (user) => {
     const token = jwt.sign(
@@ -12,5 +17,6 @@ export const signToken = (user) => {
             expiresIn: "15d",
         }
     );
+
     return token;
 };
