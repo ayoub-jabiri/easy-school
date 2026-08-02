@@ -10,10 +10,6 @@ import { userLoginSchema, userRegisterSchema } from "../user.validation.js";
 
 export const registerDataValidationCheck = (req, res, next) => {
     try {
-        if (!req.body) {
-            return clientErrorResponse(res, 400, "Request body is missing");
-        }
-
         const {
             fullName,
             phoneNumber,
@@ -40,10 +36,6 @@ export const registerDataValidationCheck = (req, res, next) => {
 
 export const loginDataValidationCheck = (req, res, next) => {
     try {
-        if (!req.body) {
-            return clientErrorResponse(res, 400, "Request body is missing");
-        }
-
         const { email, password } = req.body;
 
         userLoginSchema.parse({
@@ -110,46 +102,4 @@ export const passwordMatchCheck = async (req, res, next) => {
     }
 
     next();
-};
-
-export const authenticationCheck = (req, res, next) => {
-    const authHeader =
-        req.headers?.authorization &&
-        req.headers?.authorization.includes("Bearer") &&
-        req.headers.authorization.split(" ")[1];
-
-    if (!authHeader) {
-        return clientErrorResponse(
-            res,
-            401,
-            "Access denied due to not being authenticated: No token provided"
-        );
-    }
-
-    next();
-};
-
-export const authorizationCheck = (allowedRules) => {
-    return (req, res, next) => {
-        const token = req.headers.authorization.split(" ")[1];
-
-        jwt.verify(token, process.env.JWT_SECRET, async (error, user) => {
-            if (error)
-                return clientErrorResponse(
-                    res,
-                    403,
-                    "Access denied due to not being authorized: Invalid token"
-                );
-
-            if (!allowedRules.includes(user.role))
-                return clientErrorResponse(
-                    res,
-                    403,
-                    "Access denied due to not being authorized: You do not have permission to access this resource"
-                );
-
-            req.user = user;
-            next();
-        });
-    };
 };
