@@ -1,10 +1,11 @@
 import request from "supertest";
 import app from "../../app.js";
 import { testingToken } from "../setup.js";
+import User from "../../modules/users/user.model.js";
 
 describe("user register", () => {
     describe("success test cases", () => {
-        test("user registered with valid data", async () => {
+        test("user registered successfully", async () => {
             const res = await request(app)
                 .post("/api/users/auth/register")
                 .send({
@@ -18,6 +19,15 @@ describe("user register", () => {
                 .set("Authorization", `Bearer ${testingToken}`);
 
             expect(res.statusCode).toEqual(201);
+            expect(res.body).toHaveProperty("message");
+            expect(res.body).toHaveProperty("accessToken");
+            expect(res.body).toHaveProperty("user");
+        });
+
+        test("user added successfully to the database", async () => {
+            const user = await User.findOne({ email: "johndoe1@gmail.com" });
+            expect(user).not.toBeNull();
+            expect(user).toHaveProperty("fullName", "John Doe 1");
         });
     });
 });
