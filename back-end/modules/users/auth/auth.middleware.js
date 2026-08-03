@@ -76,7 +76,7 @@ export const userNotExistCheck = async (req, res, next) => {
         if (!user) {
             return clientErrorResponse(
                 res,
-                400,
+                404,
                 "There is no user registered with this email"
             );
         }
