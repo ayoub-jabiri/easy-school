@@ -48,7 +48,7 @@ describe("user register", () => {
             expect(res.body).toHaveProperty("message");
         });
 
-        test("user registration fails due to missing required body", async () => {
+        test("user registration fails due to missing request body", async () => {
             const res = await request(app)
                 .post("/api/users/auth/register")
                 .set("Authorization", `Bearer ${adminTestingToken}`);
@@ -86,6 +86,60 @@ describe("user register", () => {
                     passwordConfirm: "12345678",
                 })
                 .set("Authorization", `Bearer ${adminTestingToken}`);
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+    });
+});
+
+describe("user login", () => {
+    describe("success test cases", () => {
+        test("user logged in successfully", async () => {
+            const res = await request(app).post("/api/users/auth/login").send({
+                email: "johndoe1@gmail.com",
+                password: "12345678",
+            });
+
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toHaveProperty("message");
+            expect(res.body).toHaveProperty("accessToken");
+        });
+    });
+
+    describe("failure test cases", () => {
+        test("user login fails due to missing request body", async () => {
+            const res = await request(app).post("/api/users/auth/login");
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+
+        test("user login fails due to missing required data", async () => {
+            const res = await request(app).post("/api/users/auth/login").send({
+                email: "",
+                password: "",
+            });
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body).toHaveProperty("message");
+        });
+
+        test("user login fails due to incorrect email", async () => {
+            const res = await request(app).post("/api/users/auth/login").send({
+                email: "incorrect@gmail.com",
+                password: "12345678",
+            });
+
+            expect(res.statusCode).toEqual(404);
+            expect(res.body).toHaveProperty("message");
+        });
+
+        test("user login fails due to incorrect password", async () => {
+            const res = await request(app).post("/api/users/auth/login").send({
+                email: "johndoe1@gmail.com",
+                password: "wrongpassword",
+            });
 
             expect(res.statusCode).toEqual(400);
             expect(res.body).toHaveProperty("message");
