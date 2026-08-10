@@ -17,3 +17,6 @@ export const updateSubjectService = async (id, subjectNewTitle) => {
     subject.title = subjectNewTitle;
     return await subject.save();
 };
+
+export const deleteSubjectService = async (id) =>
+    await Subject.findByIdAndDelete(id);

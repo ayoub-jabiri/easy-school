@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    deleteSubject,
     getSingleSubject,
     getSubjects,
     registerSubject,
@@ -53,6 +54,15 @@ router.put(
     requestBodyCheck,
     subjectDataValidation,
     updateSubject
+);
+
+router.delete(
+    "/:subjectId",
+    authenticationCheck,
+    authorizationCheck(["admin"]),
+    paramsIdCheck,
+    subjectExistsCheck,
+    deleteSubject
 );
 
 export default router;

@@ -1,6 +1,7 @@
 import { serverErrorResponse } from "../../utils/server.error.js";
 import {
     createSubject,
+    deleteSubjectService,
     getAllSubjects,
     getSubjectById,
     updateSubjectService,
@@ -53,6 +54,18 @@ export const updateSubject = async (req, res) => {
         );
 
         res.json({ subject });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const deleteSubject = async (req, res) => {
+    try {
+        await deleteSubjectService(req.params.subjectId);
+
+        res.json({
+            message: "Subject has been deleted successfully",
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
