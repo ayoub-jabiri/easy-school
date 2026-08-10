@@ -6,5 +6,7 @@ export const getAllSubjects = async (invoicesLimit, invoicesToSkip) =>
 export const getSubjectByTitle = async (title) =>
     await Subject.findOne({ title });
 
+export const getSubjectById = async (id) => await Subject.findById(id);
+
 export const createSubject = async (subjectData) =>
     await Subject.create(subjectData);

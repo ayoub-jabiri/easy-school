@@ -1,5 +1,9 @@
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { createSubject, getAllSubjects } from "./subject.service.js";
+import {
+    createSubject,
+    getAllSubjects,
+    getSubjectById,
+} from "./subject.service.js";
 
 export const getSubjects = async (req, res) => {
     try {
@@ -25,6 +29,16 @@ export const registerSubject = async (req, res) => {
             message: "Subject registered successfully",
             subject: subject,
         });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getSingleSubject = async (req, res) => {
+    try {
+        const subject = await getSubjectById(req.params.subjectId);
+
+        res.json({ subject });
     } catch (error) {
         serverErrorResponse(res, error);
     }

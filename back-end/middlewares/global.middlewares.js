@@ -1,5 +1,6 @@
 // External Modules
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 // Internal Modules
 import { clientErrorResponse } from "../utils/client.responses.js";
@@ -50,5 +51,12 @@ export const requestBodyCheck = (req, res, next) => {
         return clientErrorResponse(res, 400, "Missing request body");
     }
 
+    next();
+};
+
+export const paramsIdCheck = (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params?.subjectId)) {
+        return clientErrorResponse(res, 400, "Invalid id parameter");
+    }
     next();
 };

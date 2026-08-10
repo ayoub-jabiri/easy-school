@@ -1,8 +1,13 @@
 import { Router } from "express";
-import { getSubjects, registerSubject } from "./subject.controller.js";
+import {
+    getSingleSubject,
+    getSubjects,
+    registerSubject,
+} from "./subject.controller.js";
 import {
     authenticationCheck,
     authorizationCheck,
+    paramsIdCheck,
     requestBodyCheck,
 } from "../../middlewares/global.middlewares.js";
 import {
@@ -26,6 +31,14 @@ router.post(
     subjectDataValidation,
     subjectExistCheck,
     registerSubject
+);
+
+router.get(
+    "/:subjectId",
+    authenticationCheck,
+    authorizationCheck(["admin"]),
+    paramsIdCheck,
+    getSingleSubject
 );
 
 export default router;
