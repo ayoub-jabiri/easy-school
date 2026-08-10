@@ -1,5 +1,5 @@
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { getAllSubjects } from "./subject.service.js";
+import { createSubject, getAllSubjects } from "./subject.service.js";
 
 export const getSubjects = async (req, res) => {
     try {
@@ -10,6 +10,21 @@ export const getSubjects = async (req, res) => {
         const subjects = await getAllSubjects(invoicesLimit, invoicesToSkip);
 
         res.json({ currentPage, invoicesPerPage: invoicesLimit, subjects });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const registerSubject = async (req, res) => {
+    try {
+        const subject = await createSubject({
+            title: req.body.title.toLowerCase(),
+        });
+
+        res.json({
+            message: "Subject registered successfully",
+            subject: subject,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
