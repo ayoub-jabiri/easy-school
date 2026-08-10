@@ -4,6 +4,7 @@ import express from "express";
 // Internal Modules
 import dns from "node:dns";
 import userRouter from "./modules/users/user.router.js";
+import subjectRouter from "./modules/subject/subject.router.js";
 
 // Main Settings
 
@@ -17,5 +18,5 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/users", userRouter);
-
+app.use("/api/subjects", subjectRouter);
 export default app;
