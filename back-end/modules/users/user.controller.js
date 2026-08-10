@@ -1,8 +1,8 @@
-import { userRegister } from "./auth.service.js";
-import { serverErrorResponse } from "../../../utils/server.error.js";
-import { hashPassword, signToken } from "../../../utils/user.utils.js";
-import { getUserByEmail } from "../user.service.js";
-import { excludeUserPassword } from "../../../utils/client.responses.js";
+import { userRegister } from "./user.service.js";
+import { serverErrorResponse } from "../../utils/server.error.js";
+import { hashPassword, signToken } from "../../utils/user.utils.js";
+import { getUserByEmail } from "./user.service.js";
+import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const register = async (req, res) => {
     try {

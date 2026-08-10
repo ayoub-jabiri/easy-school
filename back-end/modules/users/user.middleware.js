@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 // Internal Modules
-import { clientErrorResponse } from "../../../utils/client.responses.js";
-import { serverErrorResponse } from "../../../utils/server.error.js";
-import { getUserByEmail } from "../user.service.js";
-import { userLoginSchema, userRegisterSchema } from "../user.validation.js";
+import { clientErrorResponse } from "../../utils/client.responses.js";
+import { serverErrorResponse } from "../../utils/server.error.js";
+import { getUserByEmail } from "./user.service.js";
+import { userLoginSchema, userRegisterSchema } from "./user.validation.js";
 
 export const registerDataValidationCheck = (req, res, next) => {
     try {

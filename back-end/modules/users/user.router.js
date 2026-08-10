@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { login, profile, register } from "./auth/auth.controller.js";
+import { login, profile, register } from "./user.controller.js";
 import {
     loginDataValidationCheck,
     passwordMatchCheck,
     registerDataValidationCheck,
     userExistCheck,
     userNotExistCheck,
-} from "./auth/auth.middleware.js";
+} from "./user.middleware.js";
 import {
     authenticationCheck,
     authorizationCheck,
