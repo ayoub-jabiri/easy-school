@@ -10,3 +10,10 @@ export const getSubjectById = async (id) => await Subject.findById(id);
 
 export const createSubject = async (subjectData) =>
     await Subject.create(subjectData);
+
+export const updateSubjectService = async (id, subjectNewTitle) => {
+    const subject = await Subject.findById(id);
+
+    subject.title = subjectNewTitle;
+    return await subject.save();
+};

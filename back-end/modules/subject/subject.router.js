@@ -3,6 +3,7 @@ import {
     getSingleSubject,
     getSubjects,
     registerSubject,
+    updateSubject,
 } from "./subject.controller.js";
 import {
     authenticationCheck,
@@ -12,7 +13,8 @@ import {
 } from "../../middlewares/global.middlewares.js";
 import {
     subjectDataValidation,
-    subjectExistCheck,
+    subjectAlreadyExistCheck,
+    subjectExistsCheck,
 } from "./subject.middleware.js";
 
 const router = Router();
@@ -29,7 +31,7 @@ router.post(
     authorizationCheck(["admin"]),
     requestBodyCheck,
     subjectDataValidation,
-    subjectExistCheck,
+    subjectAlreadyExistCheck,
     registerSubject
 );
 
@@ -38,7 +40,19 @@ router.get(
     authenticationCheck,
     authorizationCheck(["admin"]),
     paramsIdCheck,
+    subjectExistsCheck,
     getSingleSubject
+);
+
+router.put(
+    "/:subjectId",
+    authenticationCheck,
+    authorizationCheck(["admin"]),
+    paramsIdCheck,
+    subjectExistsCheck,
+    requestBodyCheck,
+    subjectDataValidation,
+    updateSubject
 );
 
 export default router;

@@ -1,6 +1,6 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { getSubjectByTitle } from "./subject.service.js";
+import { getSubjectById, getSubjectByTitle } from "./subject.service.js";
 import { subjectSchema } from "./subject.validation.js";
 
 export const subjectDataValidation = (req, res, next) => {
@@ -15,7 +15,23 @@ export const subjectDataValidation = (req, res, next) => {
     }
 };
 
-export const subjectExistCheck = async (req, res, next) => {
+export const subjectExistsCheck = async (req, res, next) => {
+    try {
+        const { subjectId } = req.params;
+
+        const subject = await getSubjectById(subjectId);
+
+        if (!subject) {
+            return clientErrorResponse(res, 404, "Subject not found");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const subjectAlreadyExistCheck = async (req, res, next) => {
     try {
         const { title } = req.body;
 

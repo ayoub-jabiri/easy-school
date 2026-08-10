@@ -3,6 +3,7 @@ import {
     createSubject,
     getAllSubjects,
     getSubjectById,
+    updateSubjectService,
 } from "./subject.service.js";
 
 export const getSubjects = async (req, res) => {
@@ -37,6 +38,19 @@ export const registerSubject = async (req, res) => {
 export const getSingleSubject = async (req, res) => {
     try {
         const subject = await getSubjectById(req.params.subjectId);
+
+        res.json({ subject });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const updateSubject = async (req, res) => {
+    try {
+        const subject = await updateSubjectService(
+            req.params.subjectId,
+            req.body.title.toLowerCase()
+        );
 
         res.json({ subject });
     } catch (error) {
