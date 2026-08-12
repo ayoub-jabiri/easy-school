@@ -40,7 +40,7 @@ export const subjectAlreadyExistCheck = async (req, res, next) => {
         if (existingSubject) {
             return clientErrorResponse(
                 res,
-                400,
+                409,
                 "Subject already exists with this title"
             );
         }
