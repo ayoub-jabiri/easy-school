@@ -57,7 +57,7 @@ export const userExistCheck = async (req, res, next) => {
         if (user) {
             return clientErrorResponse(
                 res,
-                400,
+                409,
                 "User already exists with this email"
             );
         }

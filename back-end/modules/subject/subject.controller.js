@@ -27,7 +27,7 @@ export const registerSubject = async (req, res) => {
             title: req.body.title.toLowerCase(),
         });
 
-        res.json({
+        res.status(201).json({
             message: "Subject registered successfully",
             subject: subject,
         });

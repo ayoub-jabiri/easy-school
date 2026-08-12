@@ -87,7 +87,7 @@ describe("user register", () => {
                 })
                 .set("Authorization", `Bearer ${adminTestingToken}`);
 
-            expect(res.statusCode).toEqual(400);
+            expect(res.statusCode).toEqual(409);
             expect(res.body).toHaveProperty("message");
         });
     });
