@@ -4,9 +4,9 @@
     "description": "School management system back end part",
     "author": "Ayoub JABIRI",
     "type": "module",
-    "main": "server.js",
+    "main": "src/server.js",
     "scripts": {
-        "dev": "nodemon --import dotenv/config server.js",
+        "dev": "nodemon --import dotenv/config src/server.js",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config",
         "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config --watch"
     },
@@ -27,10 +27,10 @@
     "jest": {
         "testEnvironment": "node",
         "setupFilesAfterEnv": [
-            "<rootDir>/__tests__/setup.js"
+            "<rootDir>/src/__tests__/setup.js"
         ],
         "testPathIgnorePatterns": [
-            "<rootDir>/__tests__/setup.js"
+            "<rootDir>/src/__tests__/setup.js"
         ]
     }
 }

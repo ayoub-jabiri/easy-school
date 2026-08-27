@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import User from "../modules/users/user.model.js";
-import { hashPassword, signToken } from "../utils/user.utils.js";
+import { signToken } from "../utils/user.utils.js";
 
 let mongoServer;
 export const adminTestingToken = signToken({
