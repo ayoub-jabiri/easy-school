@@ -20,15 +20,11 @@ import {
 
 const router = Router();
 
-router.get(
-    "/",
-    authenticationCheck,
-    authorizationCheck(["admin"]),
-    getSubjects
-);
+router.use(authenticationCheck);
+
+router.get("/", authorizationCheck(["admin"]), getSubjects);
 router.post(
     "/",
-    authenticationCheck,
     authorizationCheck(["admin"]),
     requestBodyCheck,
     subjectDataValidation,
@@ -38,7 +34,6 @@ router.post(
 
 router.get(
     "/:subjectId",
-    authenticationCheck,
     authorizationCheck(["admin"]),
     paramsIdCheck,
     subjectExistsCheck,
@@ -58,7 +53,6 @@ router.put(
 
 router.delete(
     "/:subjectId",
-    authenticationCheck,
     authorizationCheck(["admin"]),
     paramsIdCheck,
     subjectExistsCheck,
