@@ -2,6 +2,7 @@ import { serverErrorResponse } from "../../utils/server.error.js";
 import {
     getSchoolRoomByIdService,
     getSchoolRoomsService,
+    registerSchoolRoomService,
 } from "./room.service.js";
 // import {
 //     createSubject,
@@ -27,20 +28,22 @@ export const getSchoolRooms = async (req, res) => {
     }
 };
 
-// export const registerSubject = async (req, res) => {
-//     try {
-//         const subject = await createSubject({
-//             title: req.body.title.toLowerCase(),
-//         });
+export const registerSchoolRoom = async (req, res) => {
+    try {
+        const { roomNumber } = req.body;
 
-//         res.status(201).json({
-//             message: "Subject registered successfully",
-//             subject: subject,
-//         });
-//     } catch (error) {
-//         serverErrorResponse(res, error);
-//     }
-// };
+        const schoolRoom = await registerSchoolRoomService({
+            roomNumber,
+        });
+
+        res.status(201).json({
+            message: "School room registered successfully",
+            schoolRoom,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
 
 export const getSingleSchoolRoom = async (req, res) => {
     try {

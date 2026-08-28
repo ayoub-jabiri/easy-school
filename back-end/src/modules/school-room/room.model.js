@@ -4,6 +4,7 @@ const schoolRoomSchema = new Schema({
     roomNumber: {
         type: Number,
         required: true,
+        unique: true,
     },
     classes: [
         {
