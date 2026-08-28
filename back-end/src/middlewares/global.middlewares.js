@@ -54,9 +54,15 @@ export const requestBodyCheck = (req, res, next) => {
     next();
 };
 
-export const paramsIdCheck = (req, res, next) => {
-    if (!mongoose.Types.ObjectId.isValid(req.params?.subjectId)) {
-        return clientErrorResponse(res, 400, "Invalid id parameter");
-    }
-    next();
+export const paramsIdCheck = (paramName) => {
+    return (req, res, next) => {
+        if (!req.params?.[paramName]) {
+            return clientErrorResponse(res, 400, "Missing id parameter");
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(req.params?.[paramName])) {
+            return clientErrorResponse(res, 400, "Invalid id parameter");
+        }
+        next();
+    };
 };
