@@ -35,16 +35,15 @@ router.post(
 router.get(
     "/:subjectId",
     authorizationCheck(["admin"]),
-    paramsIdCheck,
+    paramsIdCheck("subjectId"),
     subjectExistsCheck,
     getSingleSubject
 );
 
 router.put(
     "/:subjectId",
-    authenticationCheck,
     authorizationCheck(["admin"]),
-    paramsIdCheck,
+    paramsIdCheck("subjectId"),
     subjectExistsCheck,
     requestBodyCheck,
     subjectDataValidation,
@@ -54,7 +53,7 @@ router.put(
 router.delete(
     "/:subjectId",
     authorizationCheck(["admin"]),
-    paramsIdCheck,
+    paramsIdCheck("subjectId"),
     subjectExistsCheck,
     deleteSubject
 );
