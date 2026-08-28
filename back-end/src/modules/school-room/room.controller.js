@@ -3,13 +3,8 @@ import {
     getSchoolRoomByIdService,
     getSchoolRoomsService,
     registerSchoolRoomService,
+    updateSchoolRoomService,
 } from "./room.service.js";
-// import {
-//     createSubject,
-//     deleteSubjectService,
-//     getSubjectById,
-//     updateSubjectService,
-// } from "./subject.service.js";
 
 export const getSchoolRooms = async (req, res) => {
     try {
@@ -57,18 +52,18 @@ export const getSingleSchoolRoom = async (req, res) => {
     }
 };
 
-// export const updateSubject = async (req, res) => {
-//     try {
-//         const subject = await updateSubjectService(
-//             req.params.subjectId,
-//             req.body.title.toLowerCase()
-//         );
+export const updateSchoolRoom = async (req, res) => {
+    try {
+        const schoolRoom = await updateSchoolRoomService(
+            req.params.schoolRoomId,
+            req.body
+        );
 
-//         res.json({ subject });
-//     } catch (error) {
-//         serverErrorResponse(res, error);
-//     }
-// };
+        res.json({ message: "School room updated successfully", schoolRoom });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
 
 // export const deleteSubject = async (req, res) => {
 //     try {

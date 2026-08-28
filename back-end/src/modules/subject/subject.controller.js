@@ -53,7 +53,7 @@ export const updateSubject = async (req, res) => {
             req.body.title.toLowerCase()
         );
 
-        res.json({ subject });
+        res.json({ message: "Subject updated successfully", subject });
     } catch (error) {
         serverErrorResponse(res, error);
     }

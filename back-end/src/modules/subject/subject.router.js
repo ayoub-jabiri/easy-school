@@ -42,7 +42,6 @@ router.get(
 
 router.put(
     "/:subjectId",
-    authenticationCheck,
     authorizationCheck(["admin"]),
     paramsIdCheck("subjectId"),
     subjectExistsCheck,

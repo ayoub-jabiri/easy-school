@@ -9,6 +9,7 @@ import {
     getSchoolRooms,
     getSingleSchoolRoom,
     registerSchoolRoom,
+    updateSchoolRoom,
 } from "./room.controller.js";
 import {
     schoolRoomDataValidation,
@@ -36,6 +37,15 @@ router.get(
     paramsIdCheck("schoolRoomId"),
     schoolRoomExistsCheck,
     getSingleSchoolRoom
+);
+router.put(
+    "/:schoolRoomId",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("schoolRoomId"),
+    requestBodyCheck,
+    schoolRoomDataValidation,
+    schoolRoomExistsCheck,
+    updateSchoolRoom
 );
 
 export default router;

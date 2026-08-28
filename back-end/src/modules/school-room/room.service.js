@@ -11,3 +11,11 @@ export const getSchoolRoomByIdService = async (roomId) =>
 
 export const registerSchoolRoomService = async (roomData) =>
     await SchoolRoom.create(roomData);
+
+export const updateSchoolRoomService = async (roomId, roomData) => {
+    const schoolRoom = await SchoolRoom.findById(roomId);
+
+    schoolRoom.roomNumber = roomData.roomNumber;
+
+    return await schoolRoom.save();
+};
