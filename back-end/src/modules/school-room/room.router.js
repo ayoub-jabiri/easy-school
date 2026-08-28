@@ -14,6 +14,7 @@ import {
 } from "./room.controller.js";
 import {
     schoolRoomDataValidation,
+    schoolRoomDeleteCheck,
     schoolRoomExistsCheck,
     schoolRoomNumberExistsCheck,
 } from "./room.middleware.js";
@@ -53,6 +54,7 @@ router.delete(
     authorizationCheck(["admin"]),
     paramsIdCheck("schoolRoomId"),
     schoolRoomExistsCheck,
+    schoolRoomDeleteCheck,
     deleteSchoolRoom
 );
 
