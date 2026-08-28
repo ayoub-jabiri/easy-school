@@ -1,5 +1,6 @@
 import { serverErrorResponse } from "../../utils/server.error.js";
 import {
+    deleteSchoolRoomService,
     getSchoolRoomByIdService,
     getSchoolRoomsService,
     registerSchoolRoomService,
@@ -32,7 +33,7 @@ export const registerSchoolRoom = async (req, res) => {
         });
 
         res.status(201).json({
-            message: "School room registered successfully",
+            message: "School room has been registered successfully",
             schoolRoom,
         });
     } catch (error) {
@@ -59,20 +60,23 @@ export const updateSchoolRoom = async (req, res) => {
             req.body
         );
 
-        res.json({ message: "School room updated successfully", schoolRoom });
+        res.json({
+            message: "School room has been updated successfully",
+            schoolRoom,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
 };
 
-// export const deleteSubject = async (req, res) => {
-//     try {
-//         await deleteSubjectService(req.params.subjectId);
+export const deleteSchoolRoom = async (req, res) => {
+    try {
+        await deleteSchoolRoomService(req.params.schoolRoomId);
 
-//         res.json({
-//             message: "Subject has been deleted successfully",
-//         });
-//     } catch (error) {
-//         serverErrorResponse(res, error);
-//     }
-// };
+        res.json({
+            message: "School room has been deleted successfully",
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};

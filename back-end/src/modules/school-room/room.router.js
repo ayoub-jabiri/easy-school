@@ -6,6 +6,7 @@ import {
     requestBodyCheck,
 } from "../../middlewares/global.middlewares.js";
 import {
+    deleteSchoolRoom,
     getSchoolRooms,
     getSingleSchoolRoom,
     registerSchoolRoom,
@@ -46,6 +47,13 @@ router.put(
     schoolRoomDataValidation,
     schoolRoomExistsCheck,
     updateSchoolRoom
+);
+router.delete(
+    "/:schoolRoomId",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("schoolRoomId"),
+    schoolRoomExistsCheck,
+    deleteSchoolRoom
 );
 
 export default router;

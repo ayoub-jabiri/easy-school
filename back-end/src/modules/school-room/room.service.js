@@ -19,3 +19,6 @@ export const updateSchoolRoomService = async (roomId, roomData) => {
 
     return await schoolRoom.save();
 };
+
+export const deleteSchoolRoomService = async (roomId) =>
+    await SchoolRoom.findByIdAndDelete(roomId);
