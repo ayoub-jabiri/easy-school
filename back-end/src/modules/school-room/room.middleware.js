@@ -43,8 +43,28 @@ export const schoolRoomNumberExistsCheck = async (req, res, next) => {
         if (schoolRoom) {
             return clientErrorResponse(
                 res,
-                400,
+                409,
                 "School room already registered"
+            );
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const schoolRoomDeleteCheck = async (req, res, next) => {
+    try {
+        const { schoolRoomId } = req.params;
+
+        const schoolRoom = await getSchoolRoomByIdService(schoolRoomId);
+
+        if (schoolRoom?.classes?.length > 0) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete school room with associated classes"
             );
         }
 
