@@ -1,7 +1,6 @@
 import request from "supertest";
 import app from "../../app.js";
 import { adminTestingToken, teacherTestingToken } from "../setup.js";
-import Room from "../../modules/school-room/room.model.js";
 
 let roomId;
 
