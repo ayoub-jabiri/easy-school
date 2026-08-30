@@ -43,7 +43,7 @@ export const schoolRoomNumberExistsCheck = async (req, res, next) => {
         if (schoolRoom) {
             return clientErrorResponse(
                 res,
-                400,
+                409,
                 "School room already registered"
             );
         }
