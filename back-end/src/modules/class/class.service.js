@@ -5,5 +5,19 @@ export const getClassesService = async (classesLimit, classesToSkip) =>
 
 export const getClassByQuery = async (query) => await Class.findOne(query);
 
+export const getClassByIdService = async (classId) =>
+    await Class.findById(classId);
+
 export const registerClassService = async (classData) =>
     await Class.create(classData);
+
+export const updateClassService = async (classId, classData) => {
+    const currentClass = await getClassByIdService(classId);
+
+    currentClass.subjectTitle = classData.subjectTitle.toLowerCase();
+    currentClass.level = classData.level;
+    currentClass.levelYear = classData.levelYear;
+    currentClass.schoolRoomId = classData.schoolRoomId;
+
+    return await currentClass.save();
+};

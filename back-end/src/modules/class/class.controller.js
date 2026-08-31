@@ -1,4 +1,9 @@
-import { getClassesService, registerClassService } from "./class.service.js";
+import {
+    getClassByIdService,
+    getClassesService,
+    registerClassService,
+    updateClassService,
+} from "./class.service.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 
 export const getClasses = async (req, res) => {
@@ -29,6 +34,32 @@ export const registerClass = async (req, res) => {
         res.status(201).json({
             message: "Class has been registered successfully",
             class: newClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getSingleClass = async (req, res) => {
+    try {
+        const currentClass = await getClassByIdService(req.params.classId);
+
+        res.json({ class: currentClass });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const updateClass = async (req, res) => {
+    try {
+        const currentClass = await updateClassService(
+            req.params.classId,
+            req.body
+        );
+
+        res.json({
+            message: "Class has been updated successfully",
+            class: currentClass,
         });
     } catch (error) {
         serverErrorResponse(res, error);

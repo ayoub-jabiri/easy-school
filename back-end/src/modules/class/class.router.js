@@ -2,10 +2,17 @@ import { Router } from "express";
 import {
     authenticationCheck,
     authorizationCheck,
+    paramsIdCheck,
     requestBodyCheck,
 } from "../../middlewares/global.middlewares.js";
-import { getClasses, registerClass } from "./class.controller.js";
 import {
+    getClasses,
+    getSingleClass,
+    registerClass,
+    updateClass,
+} from "./class.controller.js";
+import {
+    classAlreadyExistsCheck,
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
@@ -21,9 +28,27 @@ router.post(
     authorizationCheck(["admin"]),
     requestBodyCheck,
     classDataValidation,
-    classExistsCheck,
+    classAlreadyExistsCheck,
     schoolRoomExistsCheck,
     registerClass
 );
 
+router.get(
+    "/:classId",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getSingleClass
+);
+router.put(
+    "/:classId",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    requestBodyCheck,
+    classDataValidation,
+    classAlreadyExistsCheck,
+    classExistsCheck,
+    schoolRoomExistsCheck,
+    updateClass
+);
 export default router;
