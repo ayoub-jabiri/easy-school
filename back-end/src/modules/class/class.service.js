@@ -21,3 +21,6 @@ export const updateClassService = async (classId, classData) => {
 
     return await currentClass.save();
 };
+
+export const deleteClassService = async (classId) =>
+    await Class.findByIdAndDelete(classId);

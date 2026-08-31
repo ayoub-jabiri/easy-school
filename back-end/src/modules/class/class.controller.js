@@ -1,4 +1,5 @@
 import {
+    deleteClassService,
     getClassByIdService,
     getClassesService,
     registerClassService,
@@ -60,6 +61,18 @@ export const updateClass = async (req, res) => {
         res.json({
             message: "Class has been updated successfully",
             class: currentClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const deleteClass = async (req, res) => {
+    try {
+        await deleteClassService(req.params.classId);
+
+        res.json({
+            message: "Class has been deleted successfully",
         });
     } catch (error) {
         serverErrorResponse(res, error);
