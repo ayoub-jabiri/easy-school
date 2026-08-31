@@ -7,6 +7,7 @@ import {
 import { getClasses, registerClass } from "./class.controller.js";
 import {
     classDataValidation,
+    classExistsCheck,
     schoolRoomExistsCheck,
 } from "./class.middleware.js";
 
@@ -20,6 +21,7 @@ router.post(
     authorizationCheck(["admin"]),
     requestBodyCheck,
     classDataValidation,
+    classExistsCheck,
     schoolRoomExistsCheck,
     registerClass
 );

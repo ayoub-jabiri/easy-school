@@ -1,6 +1,7 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
+import { getClassByQuery } from "./class.service.js";
 import { classSchema } from "./class.validation.js";
 
 export const classDataValidation = (req, res, next) => {
@@ -8,6 +9,26 @@ export const classDataValidation = (req, res, next) => {
         const { subjectTitle, level, levelYear, schoolRoomId } = req.body;
 
         classSchema.parse({ subjectTitle, level, levelYear, schoolRoomId });
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const classExistsCheck = async (req, res, next) => {
+    try {
+        const { subjectTitle, level, levelYear } = req.body;
+
+        const schoolRoom = await getClassByQuery({
+            subjectTitle: subjectTitle.toLowerCase(),
+            level,
+            levelYear,
+        });
+
+        if (schoolRoom) {
+            return clientErrorResponse(res, 409, "Class already registered");
+        }
 
         next();
     } catch (error) {

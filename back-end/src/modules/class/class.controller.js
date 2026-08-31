@@ -1,4 +1,4 @@
-import { getClassesService } from "./class.service.js";
+import { getClassesService, registerClassService } from "./class.service.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 
 export const getClasses = async (req, res) => {
@@ -17,8 +17,18 @@ export const getClasses = async (req, res) => {
 
 export const registerClass = async (req, res) => {
     try {
+        const { subjectTitle, level, levelYear, schoolRoomId } = req.body;
+
+        const newClass = await registerClassService({
+            subjectTitle: subjectTitle.toLowerCase(),
+            level,
+            levelYear,
+            schoolRoomId,
+        });
+
         res.status(201).json({
-            message: "School room has been registered successfully",
+            message: "Class has been registered successfully",
+            class: newClass,
         });
     } catch (error) {
         serverErrorResponse(res, error);
