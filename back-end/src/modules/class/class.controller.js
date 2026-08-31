@@ -14,3 +14,13 @@ export const getClasses = async (req, res) => {
         serverErrorResponse(res, error);
     }
 };
+
+export const registerClass = async (req, res) => {
+    try {
+        res.status(201).json({
+            message: "School room has been registered successfully",
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
