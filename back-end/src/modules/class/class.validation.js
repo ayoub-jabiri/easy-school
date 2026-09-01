@@ -67,3 +67,24 @@ export const classSchema = z
             });
         }
     });
+
+export const assignTeacherSchema = z
+    .object({
+        teacherId: z.string({
+            error: (iss) => ({
+                message:
+                    iss.input == undefined
+                        ? "The teacher ID is required"
+                        : "The teacher ID must be a string",
+            }),
+        }),
+    })
+    .superRefine(({ teacherId }, ctx) => {
+        if (!mongoose.Types.ObjectId.isValid(teacherId)) {
+            ctx.addIssue({
+                code: "custom",
+                message: "Invalid teacher ID",
+                path: ["teacherId"],
+            });
+        }
+    });

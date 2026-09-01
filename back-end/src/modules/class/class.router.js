@@ -6,6 +6,7 @@ import {
     requestBodyCheck,
 } from "../../middlewares/global.middlewares.js";
 import {
+    assignTeacherToClass,
     deleteClass,
     getClasses,
     getSingleClass,
@@ -13,7 +14,9 @@ import {
     updateClass,
 } from "./class.controller.js";
 import {
+    assignTeacherDataValidation,
     classAlreadyExistsCheck,
+    classAlreadyHasTeacherCheck,
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
@@ -57,8 +60,17 @@ router.delete(
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
     classExistsCheck,
-    classExistsCheck,
     // classDeleteCheck,
     deleteClass
+);
+router.post(
+    "/:classId/assign-teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    requestBodyCheck,
+    classAlreadyHasTeacherCheck,
+    assignTeacherDataValidation,
+    assignTeacherToClass
 );
 export default router;

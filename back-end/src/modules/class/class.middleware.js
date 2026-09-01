@@ -1,8 +1,9 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
+import { getUserByIdService } from "../users/user.service.js";
 import { getClassByIdService, getClassByQuery } from "./class.service.js";
-import { classSchema } from "./class.validation.js";
+import { assignTeacherSchema, classSchema } from "./class.validation.js";
 
 export const classDataValidation = (req, res, next) => {
     try {
@@ -60,6 +61,48 @@ export const classExistsCheck = async (req, res, next) => {
 
         if (!currentClass) {
             return clientErrorResponse(res, 404, "Class not found");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const classAlreadyHasTeacherCheck = async (req, res, next) => {
+    try {
+        const { classId } = req.params;
+
+        const currentClass = await getClassByIdService(classId);
+
+        if (currentClass?.teacherId) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Class already has a teacher assigned"
+            );
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const assignTeacherDataValidation = async (req, res, next) => {
+    try {
+        const { teacherId } = req.body;
+
+        assignTeacherSchema.parse({ teacherId });
+
+        const teacher = await getUserByIdService(teacherId);
+
+        if (!teacher) {
+            return clientErrorResponse(res, 404, "Teacher not found");
+        }
+
+        if (teacher?.role !== "teacher") {
+            return clientErrorResponse(res, 400, "The user is not a teacher");
         }
 
         next();
