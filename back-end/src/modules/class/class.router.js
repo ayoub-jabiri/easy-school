@@ -6,17 +6,21 @@ import {
     requestBodyCheck,
 } from "../../middlewares/global.middlewares.js";
 import {
+    assignTeacherToClass,
     deleteClass,
     getClasses,
     getSingleClass,
     registerClass,
+    unassignTeacherToClass,
     updateClass,
 } from "./class.controller.js";
 import {
+    assignTeacherDataValidation,
     classAlreadyExistsCheck,
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
+    teacherAssignmentCheck,
 } from "./class.middleware.js";
 
 const router = Router();
@@ -57,8 +61,26 @@ router.delete(
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
     classExistsCheck,
-    classExistsCheck,
     // classDeleteCheck,
     deleteClass
 );
+router.patch(
+    "/:classId/assign-teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    teacherAssignmentCheck("hasTeacher"),
+    requestBodyCheck,
+    assignTeacherDataValidation,
+    assignTeacherToClass
+);
+router.patch(
+    "/:classId/unassign-teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    teacherAssignmentCheck("doesNotHaveTeacher"),
+    unassignTeacherToClass
+);
+
 export default router;

@@ -24,3 +24,19 @@ export const updateClassService = async (classId, classData) => {
 
 export const deleteClassService = async (classId) =>
     await Class.findByIdAndDelete(classId);
+
+export const handleTeacherAssignmentService = async (
+    action,
+    classId,
+    teacherId = null
+) => {
+    const currentClass = await getClassByIdService(classId);
+
+    if (action === "assign") {
+        currentClass.teacherId = teacherId;
+    } else if (action === "unassign") {
+        currentClass.teacherId = null;
+    }
+
+    return await currentClass.save();
+};
