@@ -11,15 +11,16 @@ import {
     getClasses,
     getSingleClass,
     registerClass,
+    unassignTeacherToClass,
     updateClass,
 } from "./class.controller.js";
 import {
     assignTeacherDataValidation,
     classAlreadyExistsCheck,
-    classAlreadyHasTeacherCheck,
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
+    teacherAssignmentCheck,
 } from "./class.middleware.js";
 
 const router = Router();
@@ -63,14 +64,23 @@ router.delete(
     // classDeleteCheck,
     deleteClass
 );
-router.post(
+router.patch(
     "/:classId/assign-teacher",
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
     classExistsCheck,
+    teacherAssignmentCheck("hasTeacher"),
     requestBodyCheck,
-    classAlreadyHasTeacherCheck,
     assignTeacherDataValidation,
     assignTeacherToClass
 );
+router.patch(
+    "/:classId/unassign-teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    teacherAssignmentCheck("doesNotHaveTeacher"),
+    unassignTeacherToClass
+);
+
 export default router;

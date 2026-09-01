@@ -1,8 +1,8 @@
 import {
-    assignTeacherToClassService,
     deleteClassService,
     getClassByIdService,
     getClassesService,
+    handleTeacherAssignmentService,
     registerClassService,
     updateClassService,
 } from "./class.service.js";
@@ -85,13 +85,33 @@ export const assignTeacherToClass = async (req, res) => {
         const { classId } = req.params;
         const { teacherId } = req.body;
 
-        const currentClass = await assignTeacherToClassService(
+        const currentClass = await handleTeacherAssignmentService(
+            "assign",
             classId,
             teacherId
         );
 
         res.json({
             message: "Assignment of teacher to class completed successfully",
+            class: currentClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const unassignTeacherToClass = async (req, res) => {
+    try {
+        const { classId } = req.params;
+
+        const currentClass = await handleTeacherAssignmentService(
+            "unassign",
+            classId
+        );
+
+        res.json({
+            message:
+                "Unassignment of teacher from class completed successfully",
             class: currentClass,
         });
     } catch (error) {

@@ -69,24 +69,37 @@ export const classExistsCheck = async (req, res, next) => {
     }
 };
 
-export const classAlreadyHasTeacherCheck = async (req, res, next) => {
-    try {
-        const { classId } = req.params;
+export const teacherAssignmentCheck = (checkType) => {
+    return async (req, res, next) => {
+        try {
+            const { classId } = req.params;
 
-        const currentClass = await getClassByIdService(classId);
+            const currentClass = await getClassByIdService(classId);
 
-        if (currentClass?.teacherId) {
-            return clientErrorResponse(
-                res,
-                400,
-                "Class already has a teacher assigned"
-            );
+            if (checkType === "hasTeacher" && currentClass?.teacherId) {
+                return clientErrorResponse(
+                    res,
+                    400,
+                    "Class already has a teacher assigned"
+                );
+            }
+
+            if (
+                checkType === "doesNotHaveTeacher" &&
+                currentClass?.teacherId == null
+            ) {
+                return clientErrorResponse(
+                    res,
+                    400,
+                    "Class does not have a teacher assigned"
+                );
+            }
+
+            next();
+        } catch (error) {
+            serverErrorResponse(res, error);
         }
-
-        next();
-    } catch (error) {
-        serverErrorResponse(res, error);
-    }
+    };
 };
 
 export const assignTeacherDataValidation = async (req, res, next) => {
