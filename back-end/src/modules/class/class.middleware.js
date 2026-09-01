@@ -3,7 +3,11 @@ import { serverErrorResponse } from "../../utils/server.error.js";
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
 import { getUserByIdService } from "../users/user.service.js";
 import { getClassByIdService, getClassByQuery } from "./class.service.js";
-import { assignTeacherSchema, classSchema } from "./class.validation.js";
+import {
+    assignTeacherSchema,
+    classSchema,
+    studentRegistrationSchema,
+} from "./class.validation.js";
 
 export const classDataValidation = (req, res, next) => {
     try {
@@ -122,4 +126,63 @@ export const assignTeacherDataValidation = async (req, res, next) => {
     } catch (error) {
         serverErrorResponse(res, error);
     }
+};
+
+export const studentRegistrationDataValidation = async (req, res, next) => {
+    try {
+        const { studentId } = req.body;
+
+        studentRegistrationSchema.parse({ studentId });
+
+        const student = await getUserByIdService(studentId);
+
+        if (!student) {
+            return clientErrorResponse(res, 404, "Student not found");
+        }
+
+        if (student?.role !== "student") {
+            return clientErrorResponse(res, 400, "The user is not a student");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const studentRegistrationCheck = (checkType) => {
+    return async (req, res, next) => {
+        try {
+            const { classId } = req.params;
+            const { studentId } = req.body;
+
+            const currentClass = await getClassByIdService(classId);
+
+            if (
+                checkType === "isRegistered" &&
+                currentClass?.students?.includes(studentId)
+            ) {
+                return clientErrorResponse(
+                    res,
+                    400,
+                    "Student is already registered in this class"
+                );
+            }
+
+            if (
+                checkType === "isNotRegistered" &&
+                !currentClass?.students?.includes(studentId)
+            ) {
+                return clientErrorResponse(
+                    res,
+                    400,
+                    "Student is not registered in this class"
+                );
+            }
+
+            next();
+        } catch (error) {
+            serverErrorResponse(res, error);
+        }
+    };
 };

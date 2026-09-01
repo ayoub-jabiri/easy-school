@@ -40,3 +40,21 @@ export const handleTeacherAssignmentService = async (
 
     return await currentClass.save();
 };
+
+export const handleStudentRegistrationService = async (
+    action,
+    classId,
+    studentId
+) => {
+    const currentClass = await getClassByIdService(classId);
+
+    if (action === "register") {
+        currentClass.students.push(studentId);
+    } else if (action === "unregister") {
+        currentClass.students = currentClass.students.filter(
+            (id) => id.toString() !== studentId.toString()
+        );
+    }
+
+    return await currentClass.save();
+};

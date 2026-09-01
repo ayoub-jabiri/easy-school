@@ -11,7 +11,9 @@ import {
     getClasses,
     getSingleClass,
     registerClass,
+    registerStudentToClass,
     unassignTeacherToClass,
+    unregisterStudentToClass,
     updateClass,
 } from "./class.controller.js";
 import {
@@ -20,6 +22,8 @@ import {
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
+    studentRegistrationCheck,
+    studentRegistrationDataValidation,
     teacherAssignmentCheck,
 } from "./class.middleware.js";
 
@@ -64,6 +68,7 @@ router.delete(
     // classDeleteCheck,
     deleteClass
 );
+
 router.patch(
     "/:classId/assign-teacher",
     authorizationCheck(["admin"]),
@@ -81,6 +86,28 @@ router.patch(
     classExistsCheck,
     teacherAssignmentCheck("doesNotHaveTeacher"),
     unassignTeacherToClass
+);
+
+router.patch(
+    "/:classId/register-student",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    requestBodyCheck,
+    studentRegistrationDataValidation,
+    studentRegistrationCheck("isRegistered"),
+    registerStudentToClass
+);
+
+router.patch(
+    "/:classId/unregister-student",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    requestBodyCheck,
+    studentRegistrationDataValidation,
+    studentRegistrationCheck("isNotRegistered"),
+    unregisterStudentToClass
 );
 
 export default router;
