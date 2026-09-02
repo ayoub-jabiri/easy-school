@@ -9,6 +9,9 @@ import {
     assignTeacherToClass,
     deleteClass,
     getClasses,
+    getClassSchoolRoom,
+    getClassStudents,
+    getClassTeacher,
     getSingleClass,
     registerClass,
     registerStudentToClass,
@@ -108,6 +111,28 @@ router.patch(
     studentRegistrationDataValidation,
     studentRegistrationCheck("isNotRegistered"),
     unregisterStudentToClass
+);
+
+router.get(
+    "/:classId/school-room",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassSchoolRoom
+);
+router.get(
+    "/:classId/teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassTeacher
+);
+router.get(
+    "/:classId/students",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassStudents
 );
 
 export default router;

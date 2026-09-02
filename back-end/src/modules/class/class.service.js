@@ -1,3 +1,5 @@
+import { getSchoolRoomByIdService } from "../school-room/room.service.js";
+import { getUserByIdService, getUsersService } from "../users/user.service.js";
 import Class from "./class.model.js";
 
 export const getClassesService = async (classesLimit, classesToSkip) =>
@@ -57,4 +59,22 @@ export const handleStudentRegistrationService = async (
     }
 
     return await currentClass.save();
+};
+
+export const getClassSchoolRoomService = async (classId) => {
+    const currentClass = await getClassByIdService(classId);
+
+    return await getSchoolRoomByIdService(currentClass.schoolRoomId);
+};
+
+export const getClassTeacherService = async (classId) => {
+    const currentClass = await getClassByIdService(classId);
+
+    return await getUserByIdService(currentClass.teacherId);
+};
+
+export const getClassStudentsService = async (classId) => {
+    const currentClass = await getClassByIdService(classId);
+
+    return await getUsersService(currentClass.students);
 };
