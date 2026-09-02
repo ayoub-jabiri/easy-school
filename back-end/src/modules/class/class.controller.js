@@ -2,11 +2,16 @@ import {
     deleteClassService,
     getClassByIdService,
     getClassesService,
+    getClassSchoolRoomService,
+    getClassStudentsService,
+    getClassTeacherService,
+    handleStudentRegistrationService,
     handleTeacherAssignmentService,
     registerClassService,
     updateClassService,
 } from "./class.service.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
+import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const getClasses = async (req, res) => {
     try {
@@ -92,7 +97,7 @@ export const assignTeacherToClass = async (req, res) => {
         );
 
         res.json({
-            message: "Assignment of teacher to class completed successfully",
+            message: "The teacher has been assigned to the class successfully",
             class: currentClass,
         });
     } catch (error) {
@@ -111,8 +116,85 @@ export const unassignTeacherToClass = async (req, res) => {
 
         res.json({
             message:
-                "Unassignment of teacher from class completed successfully",
+                "The teacher has been unassigned from the class successfully",
             class: currentClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const registerStudentToClass = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const { studentId } = req.body;
+
+        const currentClass = await handleStudentRegistrationService(
+            "register",
+            classId,
+            studentId
+        );
+
+        res.json({
+            message:
+                "The student has been registered to the class successfully",
+            class: currentClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const unregisterStudentToClass = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const { studentId } = req.body;
+
+        const currentClass = await handleStudentRegistrationService(
+            "unregister",
+            classId,
+            studentId
+        );
+
+        res.json({
+            message:
+                "The student has been unregistered from the class successfully",
+            class: currentClass,
+        });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getClassSchoolRoom = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const schoolRoom = await getClassSchoolRoomService(classId);
+
+        res.json({ schoolRoom });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getClassTeacher = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const teacher = await getClassTeacherService(classId);
+
+        res.json({ teacher: excludeUserPassword(teacher) });
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const getClassStudents = async (req, res) => {
+    try {
+        const { classId } = req.params;
+        const students = await getClassStudentsService(classId);
+
+        res.json({
+            students: students.map((student) => excludeUserPassword(student)),
         });
     } catch (error) {
         serverErrorResponse(res, error);

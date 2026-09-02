@@ -9,9 +9,14 @@ import {
     assignTeacherToClass,
     deleteClass,
     getClasses,
+    getClassSchoolRoom,
+    getClassStudents,
+    getClassTeacher,
     getSingleClass,
     registerClass,
+    registerStudentToClass,
     unassignTeacherToClass,
+    unregisterStudentToClass,
     updateClass,
 } from "./class.controller.js";
 import {
@@ -20,6 +25,8 @@ import {
     classDataValidation,
     classExistsCheck,
     schoolRoomExistsCheck,
+    studentRegistrationCheck,
+    studentRegistrationDataValidation,
     teacherAssignmentCheck,
 } from "./class.middleware.js";
 
@@ -49,10 +56,9 @@ router.put(
     "/:classId",
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
+    classExistsCheck,
     requestBodyCheck,
     classDataValidation,
-    classAlreadyExistsCheck,
-    classExistsCheck,
     schoolRoomExistsCheck,
     updateClass
 );
@@ -64,6 +70,7 @@ router.delete(
     // classDeleteCheck,
     deleteClass
 );
+
 router.patch(
     "/:classId/assign-teacher",
     authorizationCheck(["admin"]),
@@ -81,6 +88,50 @@ router.patch(
     classExistsCheck,
     teacherAssignmentCheck("doesNotHaveTeacher"),
     unassignTeacherToClass
+);
+
+router.patch(
+    "/:classId/register-student",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    requestBodyCheck,
+    studentRegistrationDataValidation,
+    studentRegistrationCheck("isRegistered"),
+    registerStudentToClass
+);
+
+router.patch(
+    "/:classId/unregister-student",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    requestBodyCheck,
+    studentRegistrationDataValidation,
+    studentRegistrationCheck("isNotRegistered"),
+    unregisterStudentToClass
+);
+
+router.get(
+    "/:classId/school-room",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassSchoolRoom
+);
+router.get(
+    "/:classId/teacher",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassTeacher
+);
+router.get(
+    "/:classId/students",
+    authorizationCheck(["admin"]),
+    paramsIdCheck("classId"),
+    classExistsCheck,
+    getClassStudents
 );
 
 export default router;
