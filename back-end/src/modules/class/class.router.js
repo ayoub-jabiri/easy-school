@@ -56,10 +56,9 @@ router.put(
     "/:classId",
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
+    classExistsCheck,
     requestBodyCheck,
     classDataValidation,
-    classAlreadyExistsCheck,
-    classExistsCheck,
     schoolRoomExistsCheck,
     updateClass
 );
