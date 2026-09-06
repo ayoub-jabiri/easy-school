@@ -8,7 +8,7 @@ export const hashPassword = async (password) => {
 export const signToken = (user) => {
     const token = jwt.sign(
         {
-            userId: user._id,
+            id: user._id,
             email: user.email,
             role: user.role,
         },

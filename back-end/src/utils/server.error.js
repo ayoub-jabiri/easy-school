@@ -7,6 +7,9 @@ export const serverErrorResponse = (res, error) => {
             errors: JSON.parse(error),
         });
     }
+
+    console.error("Server Error:", error);
+
     res.status(500).json({
         message: "An internal server error occurred",
         error: error.message,
