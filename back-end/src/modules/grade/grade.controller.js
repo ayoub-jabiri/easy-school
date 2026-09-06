@@ -16,10 +16,10 @@ export const getGrades = async (req, res) => {
         const gradesLimit = +req?.query?.limit || 15;
         const gradesToSkip = (currentPage - 1) * gradesLimit;
 
-        const userRole = req.user.role;
+        const user = req.user;
 
         const grades = await getAllGradesService(
-            userRole,
+            user,
             gradesLimit,
             gradesToSkip
         );

@@ -1,20 +1,15 @@
-import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService } from "../users/user.service.js";
 import Grade from "./grade.model.js";
 
-export const getAllGradesService = async (
-    userRole,
-    gradesLimit,
-    gradesToSkip
-) => {
-    if (userRole === "admin") {
+export const getAllGradesService = async (user, gradesLimit, gradesToSkip) => {
+    if (user.role === "admin") {
         return await Grade.find().limit(gradesLimit).skip(gradesToSkip);
-    } else if (userRole === "teacher") {
-        return await Grade.find({ teacherId: req.user.id })
+    } else if (user.role === "teacher") {
+        return await Grade.find({ teacherId: user.id })
             .limit(gradesLimit)
             .skip(gradesToSkip);
-    } else if (userRole === "students") {
-        return await Grade.find({ studentId: req.user.id })
+    } else if (user.role === "student") {
+        return await Grade.find({ studentId: user.id })
             .limit(gradesLimit)
             .skip(gradesToSkip);
     }
