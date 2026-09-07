@@ -9,6 +9,7 @@ import schoolRoomRouter from "./modules/school-room/room.router.js";
 import classRouter from "./modules/class/class.router.js";
 import announcementRouter from "./modules/announcement/announcement.router.js";
 import gradeRouter from "./modules/grade/grade.router.js";
+import homeworkRouter from "./modules/homework/homework.router.js";
 
 // Main Settings
 
@@ -27,4 +28,5 @@ app.use("/api/school-rooms", schoolRoomRouter);
 app.use("/api/classes", classRouter);
 app.use("/api/announcements", announcementRouter);
 app.use("/api/grades", gradeRouter);
+app.use("/api/homeworks", homeworkRouter);
 export default app;
