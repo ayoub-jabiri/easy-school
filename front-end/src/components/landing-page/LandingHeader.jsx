@@ -1,135 +1,116 @@
+import { useState } from "react";
+import { GraduationCap, ArrowRight, Menu, X } from "lucide-react";
 import { Link } from "react-router";
 
 export default function LandingHeader() {
+    const [isOpen, setIsOpen] = useState(false);
+
     const navLinks = [
-        { name: "Home", href: "#", active: true },
-        { name: "Courses", href: "#" },
-        { name: "Mentors", href: "#" },
-        { name: "About Us", href: "#" },
-        { name: "Reviews", href: "#" },
-        { name: "FAQ", href: "#" },
+        { label: "Home", href: "#", active: true },
+        { label: "Courses", href: "#" },
+        { label: "Mentors", href: "#" },
+        { label: "About Us", href: "#" },
+        { label: "Reviews", href: "#" },
+        { label: "FAQ", href: "#" },
     ];
 
     return (
-        <header className="w-full bg-white py-4 border-b border-[#F1F5F9] sticky top-0 z-50">
-            <div className="container mx-auto flex items-center justify-between">
-                <Link to="/">
-                    <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-md shadow-blue-200">
-                            <svg
-                                className="w-7 h-7"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12 14l9-5-9-5-9 5 9 5z"
-                                />
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 01-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-                                />
-                            </svg>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <div className="flex items-center">
-                                <span className="text-xl font-bold text-slate-900 tracking-tight">
-                                    EasySchool
-                                </span>
-                                <span className="w-2 h-2 ml-1 bg-orange-500 rounded-full inline-block"></span>
-                            </div>
-                            <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase -mt-0.5">
-                                ONLINE ACADEMY
+        <header className="w-full border-b border-slate-100 bg-white sticky top-0 z-50">
+            <div className="container flex h-16 items-center justify-between">
+                <Link to="/" className="flex items-center gap-2.5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+                        <GraduationCap className="h-5 w-5" />
+                    </span>
+                    <div className="leading-tight">
+                        <div className="flex items-center gap-1">
+                            <span className="text-sm font-extrabold text-slate-900">
+                                EasySchool
                             </span>
+                            <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
                         </div>
+                        <p className="text-[10px] font-medium tracking-wide text-slate-400">
+                            ONLINE ACADEMY
+                        </p>
                     </div>
                 </Link>
 
-                <nav className="hidden md:flex items-center space-x-8">
+                <nav className="hidden items-center gap-8 lg:flex">
                     {navLinks.map((link) => (
                         <a
-                            key={link.name}
-                            href="#"
-                            className={`flex items-center space-x-2 hover:text-blue-600 font-semibold text-sm main-transition ${
-                                link.active ? "text-blue-600" : ""
+                            key={link.label}
+                            href={link.href}
+                            className={`flex items-center gap-1.5 text-sm font-medium main-transition ${
+                                link.active
+                                    ? "text-blue-600"
+                                    : "hover:text-blue-600"
                             }`}
                         >
                             {link.active && (
-                                <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
                             )}
-                            <span>{link.name}</span>
+                            {link.label}
                         </a>
                     ))}
-
-                    {/* <a
-                        href="#"
-                        className="flex items-center space-x-2 text-blue-600 font-semibold text-sm"
-                    >
-                        <span className="w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-                        <span>Home</span>
-                    </a>
-                    <a
-                        href="#"
-                        className="text-slate-600 hover:text-slate-900 font-medium text-sm transition-colors"
-                    >
-                        Courses
-                    </a>
-                    <a
-                        href="#"
-                        className="text-slate-600 hover:text-slate-900 font-medium text-sm transition-colors"
-                    >
-                        Mentors
-                    </a>
-                    <a
-                        href="#"
-                        className="text-slate-600 hover:text-slate-900 font-medium text-sm transition-colors"
-                    >
-                        About Us
-                    </a>
-                    <a
-                        href="#"
-                        className="text-slate-600 hover:text-slate-900 font-medium text-sm transition-colors"
-                    >
-                        Reviews
-                    </a>
-                    <a
-                        href="#"
-                        className="text-slate-600 hover:text-slate-900 font-medium text-sm transition-colors"
-                    >
-                        FAQ
-                    </a> */}
                 </nav>
 
-                <div className="flex items-center space-x-6">
+                <div className="hidden items-center gap-6 lg:flex">
                     <a
                         href="#"
-                        className="text-slate-700 hover:text-slate-900 font-semibold text-sm transition-colors"
+                        className="text-sm font-medium text-slate-600 hover:text-slate-900"
                     >
                         Sign In
                     </a>
-                    <button className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm px-6 py-3 rounded-2xl flex items-center space-x-2 transition-all shadow-sm">
-                        <span>Join Now</span>
-                        <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                            />
-                        </svg>
+                    <button className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800">
+                        Join Now
+                        <ArrowRight className="h-4 w-4" />
                     </button>
                 </div>
+
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-700 lg:hidden cursor-pointer"
+                >
+                    {isOpen ? (
+                        <X className="h-5 w-5" />
+                    ) : (
+                        <Menu className="h-5 w-5" />
+                    )}
+                </button>
             </div>
+
+            {isOpen && (
+                <div className="border-t border-slate-100 pb-6 pt-4 lg:hidden">
+                    <nav className="flex flex-col gap-1">
+                        {navLinks.map((link) => (
+                            <a
+                                key={link.label}
+                                href={link.href}
+                                className={`flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium ${
+                                    link.active
+                                        ? "bg-blue-50 text-blue-600"
+                                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                                }`}
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                    </nav>
+
+                    <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 px-3 pt-4">
+                        <a
+                            href="#"
+                            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                        >
+                            Sign In
+                        </a>
+                        <button className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
+                            Join Now
+                            <ArrowRight className="h-4 w-4" />
+                        </button>
+                    </div>
+                </div>
+            )}
         </header>
     );
 }
