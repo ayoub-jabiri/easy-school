@@ -6,4 +6,5 @@ export const userSlice = createSlice({
         user: null,
         token: localStorage.getItem("accessToken") || null,
     },
+    reducers: {},
 });
