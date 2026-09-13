@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../store/slices/auth.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 export default function AppLayout({ children }) {
     const { user, loading, error } = useSelector((state) => state.user);
@@ -25,8 +27,13 @@ export default function AppLayout({ children }) {
 
     return (
         <>
-            <h1>Hello World!</h1>
-            <main>{children}</main>
+            <div className="flex">
+                <Sidebar role="student" />
+                <div>
+                    <Header />
+                    <main className="flex-1">{children}</main>
+                </div>
+            </div>
         </>
     );
 }
