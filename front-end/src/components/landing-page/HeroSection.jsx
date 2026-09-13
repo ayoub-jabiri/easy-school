@@ -11,7 +11,7 @@ export default function HeroSection() {
 
     return (
         <section className="w-full bg-gradient-to-br from-orange-50 via-white to-teal-50 py-16 md:py-24">
-            <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2">
+            <div className="container grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
                 <div className="container">
                     <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
                         Inspiring Minds

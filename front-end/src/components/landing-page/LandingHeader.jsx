@@ -98,12 +98,12 @@ export default function LandingHeader() {
                     </nav>
 
                     <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 px-3 pt-4">
-                        <a
-                            href="#"
+                        <Link
+                            to="/login"
                             className="text-sm font-medium text-slate-600 hover:text-slate-900"
                         >
                             Sign In
-                        </a>
+                        </Link>
                         <button className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
                             Join Now
                             <ArrowRight className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GraduationCap, User, Lock } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +9,7 @@ import InputError from "../../components/global/InputError";
 import { getInputError } from "../../lib/input.errors";
 
 export default function LoginPage() {
-    const { user, loading, error, accessToken } = useSelector(
-        (state) => state.user
-    );
+    const { loading, error, accessToken } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -25,9 +23,6 @@ export default function LoginPage() {
         email: "",
         password: "",
     });
-
-    console.log("User credentials:", user);
-    console.log("User accessToken:", accessToken);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -134,7 +129,7 @@ export default function LoginPage() {
                 <img
                     src="/imgs/login.png"
                     alt="Students studying illustration"
-                    className="relative z-10 w-[1000px] max-w-full px-12"
+                    className="relative z-10 w-250 max-w-full px-12"
                 />
             </div>
         </div>
