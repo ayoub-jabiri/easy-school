@@ -1,5 +1,6 @@
 // External Modules
 import express from "express";
+import cors from "cors";
 
 // Internal Modules
 import dns from "node:dns";
@@ -12,6 +13,7 @@ import gradeRouter from "./modules/grade/grade.router.js";
 import homeworkRouter from "./modules/homework/homework.router.js";
 import guardianRouter from "./modules/guardian/guardian.router.js";
 import parentRouter from "./modules/parent/parent.router.js";
+import { clientErrorResponse } from "./utils/client.responses.js";
 
 // Main Settings
 
@@ -21,6 +23,8 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 // App Settings
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -33,4 +37,11 @@ app.use("/api/grades", gradeRouter);
 app.use("/api/homeworks", homeworkRouter);
 app.use("/api/guardians", guardianRouter);
 app.use("/api/parent", parentRouter);
+app.use((req, res) => {
+    return clientErrorResponse(
+        res,
+        404,
+        `Cannot find ${req.originalUrl} on this server`
+    );
+});
 export default app;
