@@ -28,8 +28,6 @@ api.interceptors.response.use(
     },
     (error) => {
         if (error.response && error.response.status === 401) {
-            console.log("ddddd");
-
             localStorage.removeItem("accessToken");
             router.navigate("/login");
         }

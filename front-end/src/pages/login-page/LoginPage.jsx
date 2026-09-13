@@ -31,7 +31,7 @@ export default function LoginPage() {
     };
 
     useEffect(() => {
-        if (error) {
+        if (error && error.statusCode !== 401) {
             dispatch(setErrorAlert(error.message));
         }
     }, [dispatch, error]);

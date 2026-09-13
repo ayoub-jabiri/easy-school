@@ -12,6 +12,7 @@ export const userLogin = createAsyncThunk(
         } catch (error) {
             let currentError = {
                 message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
             };
 
             if (error.response?.data?.errors) {
@@ -38,6 +39,7 @@ export const getUserProfile = createAsyncThunk(
                     error.response?.data?.message ||
                     error.message ||
                     "An error occurred",
+                statusCode: error.response?.status,
             };
 
             if (error.response?.data?.errors) {
@@ -59,7 +61,15 @@ export const userSlice = createSlice({
         error: null,
         accessToken: localStorage.getItem("accessToken") || null,
     },
-    reducers: {},
+    reducers: {
+        userLogOut: (state) => {
+            console.log("dispatched userLogOut");
+
+            state.user = null;
+            state.accessToken = null;
+            localStorage.removeItem("accessToken");
+        },
+    },
     extraReducers: (builder) => {
         // Handle user login actions
         builder
@@ -94,5 +104,7 @@ export const userSlice = createSlice({
             });
     },
 });
+
+export const { userLogOut } = userSlice.actions;
 
 export default userSlice.reducer;
