@@ -1,20 +1,53 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { GraduationCap, User, Lock } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import InputLoading from "../../components/global/InputLoading";
+import { userLogin } from "../../store/slices/auth.slice";
+import { setErrorAlert } from "../../store/slices/alert.slice";
+import InputError from "../../components/global/InputError";
+import { getInputError } from "../../lib/input.errors";
 
 export default function LoginPage() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const { user, loading, error, accessToken } = useSelector(
+        (state) => state.user
+    );
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (accessToken) {
+            navigate("/dashboard", { replace: true });
+        }
+    }, [navigate, accessToken]);
+
+    const [userCredentials, setUserCredentials] = useState({
+        email: "",
+        password: "",
+    });
+
+    console.log("User credentials:", user);
+    console.log("User accessToken:", accessToken);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        dispatch(userLogin(userCredentials));
     };
+
+    useEffect(() => {
+        if (error) {
+            dispatch(setErrorAlert(error.message));
+        }
+    }, [dispatch, error]);
+
+    const inputErros = error?.errors ? getInputError(error.errors) : {};
 
     return (
         <div className="flex min-h-screen w-full bg-white">
             <div className="flex w-full flex-col justify-center px-6 py-12 sm:px-12 lg:w-1/2 lg:px-20 xl:px-28">
                 <div className="mx-auto w-full max-w-sm">
-                    <Link to="/" className="flex items-center gap-3">
+                    <Link to="/" className="flex items-center gap-3  w-fit">
                         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 text-white">
                             <GraduationCap className="h-6 w-6" />
                         </span>
@@ -33,30 +66,50 @@ export default function LoginPage() {
                     </h1>
 
                     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                        <div className="relative">
-                            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                                <User className="h-4 w-4" />
-                            </span>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                placeholder="Email"
-                                className="w-full rounded-lg bg-slate-100 py-3 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
-                            />
+                        <div>
+                            <div className="relative">
+                                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                                    <User className="h-4 w-4" />
+                                </span>
+                                <input
+                                    type="text"
+                                    value={userCredentials.email}
+                                    onChange={(e) =>
+                                        setUserCredentials({
+                                            ...userCredentials,
+                                            email: e.target.value,
+                                        })
+                                    }
+                                    placeholder="Email"
+                                    className="w-full rounded-lg bg-slate-100 py-3 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                />
+                            </div>
+                            {inputErros.email && (
+                                <InputError message={inputErros.email} />
+                            )}
                         </div>
 
-                        <div className="relative">
-                            <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                                <Lock className="h-4 w-4" />
-                            </span>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                className="w-full rounded-lg bg-slate-100 py-3 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
-                            />
+                        <div>
+                            <div className="relative">
+                                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                                    <Lock className="h-4 w-4" />
+                                </span>
+                                <input
+                                    type="password"
+                                    value={userCredentials.password}
+                                    onChange={(e) =>
+                                        setUserCredentials({
+                                            ...userCredentials,
+                                            password: e.target.value,
+                                        })
+                                    }
+                                    placeholder="Password"
+                                    className="w-full rounded-lg bg-slate-100 py-3 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                />
+                            </div>
+                            {inputErros.password && (
+                                <InputError message={inputErros.password} />
+                            )}
                         </div>
 
                         <span
@@ -71,7 +124,7 @@ export default function LoginPage() {
                             type="submit"
                             className="w-full rounded-lg bg-slate-900 py-3 text-sm font-semibold text-white hover:bg-slate-800"
                         >
-                            Login
+                            {loading ? <InputLoading /> : "Login"}
                         </button>
                     </form>
                 </div>
