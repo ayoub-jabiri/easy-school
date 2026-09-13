@@ -1,8 +1,10 @@
 import axios from "axios";
 import router from "../routes/router";
 
+const VITE_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: VITE_API_BASE_URL,
 });
 
 api.interceptors.request.use(
