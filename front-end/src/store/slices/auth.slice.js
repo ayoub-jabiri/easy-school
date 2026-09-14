@@ -63,8 +63,6 @@ export const userSlice = createSlice({
     },
     reducers: {
         userLogOut: (state) => {
-            console.log("dispatched userLogOut");
-
             state.user = null;
             state.accessToken = null;
             localStorage.removeItem("accessToken");

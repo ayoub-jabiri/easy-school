@@ -13,7 +13,7 @@ import {
     X,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { userLogOut } from "../../store/slices/auth.slice";
 
 const menuItems = [
@@ -122,14 +122,14 @@ export default function Sidebar({
                 } max-lg:z-10 main-transition md:sticky top-0 md:flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white px-4 py-5`}
             >
                 <div className="flex items-center justify-between px-1">
-                    <a href="/" className="flex items-center gap-2">
+                    <Link href="/" className="flex items-center gap-2">
                         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-purple-400 via-pink-400 to-orange-300 text-sm">
                             🎓
                         </span>
                         <span className="text-base font-bold text-slate-900">
                             EasySchool
                         </span>
-                    </a>
+                    </Link>
 
                     {isSidebarOpen && (
                         <button
@@ -172,8 +172,8 @@ export default function Sidebar({
                                 }
 
                                 return (
-                                    <a
-                                        key={item.label}
+                                    <Link
+                                        to={item.href}
                                         href={item.href}
                                         className={`flex items-center gap-3 rounded-lg px-2 py-2 transition-colors ${
                                             isActive
@@ -183,7 +183,7 @@ export default function Sidebar({
                                     >
                                         <Icon className="h-4 w-4 shrink-0" />
                                         <span>{item.label}</span>
-                                    </a>
+                                    </Link>
                                 );
                             })}
                         </div>

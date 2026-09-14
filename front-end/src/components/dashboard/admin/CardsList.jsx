@@ -32,7 +32,7 @@ export default function CardsList() {
     return (
         <div className="col-span-12 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {summaryCards.map((card) => (
-                <DashboardCard card={card} />
+                <DashboardCard card={card} key={card.label} />
             ))}
         </div>
     );

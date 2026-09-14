@@ -1,7 +1,6 @@
 export default function DashboardCard({ card }) {
     return (
         <div
-            key={card.label}
             className={`flex justify-between items-center rounded-2xl p-4 ${card.bg}`}
         >
             <div>

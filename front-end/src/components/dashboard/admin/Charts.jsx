@@ -10,6 +10,7 @@ import {
     YAxis,
 } from "recharts";
 import CardShell from "../CardShell";
+import { User } from "lucide-react";
 
 const studentsData = [
     { name: "Boys", value: 1234, fill: "#7dd3fc" },
@@ -45,7 +46,7 @@ export default function Charts() {
                         </RadialBarChart>
                     </ResponsiveContainer>
                     <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-3xl">
-                        🧑‍🤝‍🧑
+                        <User />
                     </div>
                 </div>
                 <div className="mt-4 flex items-center justify-center gap-8">
