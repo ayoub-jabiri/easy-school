@@ -17,7 +17,9 @@ export default function AppLayout({ children }) {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    if (loading) {
+    console.log("loading", loading);
+
+    if (loading || !user) {
         return <PageLoading />;
     }
 
@@ -33,7 +35,7 @@ export default function AppLayout({ children }) {
                     isSidebarOpen={isSidebarOpen}
                     hideSidebar={() => setIsSidebarOpen(false)}
                 />
-                <div className="flex-1 px-6">
+                <div className="flex-1">
                     <Header
                         user={user}
                         openSidebar={() => setIsSidebarOpen(true)}
