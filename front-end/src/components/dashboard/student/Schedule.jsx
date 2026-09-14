@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
 const scheduleData = [
