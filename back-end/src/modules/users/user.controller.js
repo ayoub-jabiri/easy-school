@@ -6,7 +6,8 @@ import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const register = async (req, res) => {
     try {
-        const { fullName, phoneNumber, email, role, password } = req.body;
+        const { fullName, phoneNumber, email, gender, role, password } =
+            req.body;
 
         const hashedPassword = await hashPassword(password);
 
@@ -14,6 +15,7 @@ export const register = async (req, res) => {
             fullName,
             phoneNumber,
             email,
+            gender,
             role,
             password: hashedPassword,
         });

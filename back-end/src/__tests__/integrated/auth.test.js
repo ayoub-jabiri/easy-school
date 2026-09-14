@@ -131,7 +131,7 @@ describe("user login", () => {
                 password: "12345678",
             });
 
-            expect(res.statusCode).toEqual(401);
+            expect(res.statusCode).toEqual(400);
             expect(res.body).toHaveProperty("message");
         });
 
@@ -141,7 +141,7 @@ describe("user login", () => {
                 password: "wrongpassword",
             });
 
-            expect(res.statusCode).toEqual(401);
+            expect(res.statusCode).toEqual(400);
             expect(res.body).toHaveProperty("message");
         });
     });

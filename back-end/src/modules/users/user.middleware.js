@@ -1,6 +1,5 @@
 // External Modules
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 // Internal Modules
 import { clientErrorResponse } from "../../utils/client.responses.js";
@@ -14,6 +13,7 @@ export const registerDataValidationCheck = (req, res, next) => {
             fullName,
             phoneNumber,
             email,
+            gender,
             role,
             password,
             passwordConfirm,
@@ -23,6 +23,7 @@ export const registerDataValidationCheck = (req, res, next) => {
             fullName,
             phoneNumber,
             email,
+            gender,
             role,
             password,
             passwordConfirm,
@@ -74,7 +75,7 @@ export const userNotExistCheck = async (req, res, next) => {
         const user = await getUserByEmail(email);
 
         if (!user) {
-            return clientErrorResponse(res, 401, "Invalid email or password");
+            return clientErrorResponse(res, 400, "Invalid email or password");
         }
     } catch (error) {
         return serverErrorResponse(res, error);
@@ -91,7 +92,7 @@ export const passwordMatchCheck = async (req, res, next) => {
         const isPasswordMatch = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatch) {
-            return clientErrorResponse(res, 401, "Invalid email or password");
+            return clientErrorResponse(res, 400, "Invalid email or password");
         }
     } catch (error) {
         return serverErrorResponse(res, error);

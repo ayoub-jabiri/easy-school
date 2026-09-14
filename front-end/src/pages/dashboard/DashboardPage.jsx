@@ -1,7 +1,26 @@
+import { useSelector } from "react-redux";
+import AdminDashboard from "./AdminDashboard";
+import StudentDashboard from "./StudentDashboard";
+import TeacherDashboard from "./TeacherDashboard";
+import ParentDashboard from "./ParentDashboard";
+
 export default function DashboardPage() {
-    return (
-        <div>
-            <h1>DashboardPage</h1>
-        </div>
-    );
+    // const { user } = useSelector((state) => state.user);
+    const user = { role: "parent" };
+
+    if (user?.role === "admin") {
+        return <AdminDashboard />;
+    }
+
+    if (user?.role === "teacher") {
+        return <TeacherDashboard />;
+    }
+
+    if (user?.role === "student") {
+        return <StudentDashboard />;
+    }
+
+    if (user?.role === "parent") {
+        return <ParentDashboard />;
+    }
 }

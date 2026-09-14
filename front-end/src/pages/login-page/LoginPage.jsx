@@ -107,11 +107,8 @@ export default function LoginPage() {
                             )}
                         </div>
 
-                        <span
-                            href="#"
-                            className="inline-block text-sm text-slate-500"
-                        >
-                            Forget password? Rsequest the school administration
+                        <span className="inline-block text-sm text-slate-500">
+                            Forget password? Request the school administration
                             to reset your password.
                         </span>
 

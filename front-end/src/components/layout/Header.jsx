@@ -2,7 +2,7 @@ import { Search, Bell, MenuIcon } from "lucide-react";
 
 export default function Header({ user, openSidebar }) {
     return (
-        <header className="flex w-full items-center justify-between gap-4 bg-slate-50 py-4">
+        <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-slate-50 border-b px-6 py-4">
             <button
                 onClick={openSidebar}
                 className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-slate-600 shadow-sm md:hidden cursor-pointer"

@@ -4,20 +4,22 @@ import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AppLayout({ children }) {
     const { user, loading, error } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
-    if (user === null) {
-        dispatch(getUserProfile());
-    }
+    useEffect(() => {
+        if (user === null) {
+            dispatch(getUserProfile());
+        }
+    }, []);
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    if (loading) {
+    if (loading || !user) {
         return <PageLoading />;
     }
 
@@ -33,7 +35,7 @@ export default function AppLayout({ children }) {
                     isSidebarOpen={isSidebarOpen}
                     hideSidebar={() => setIsSidebarOpen(false)}
                 />
-                <div className="flex-1 px-6">
+                <div className="flex-1">
                     <Header
                         user={user}
                         openSidebar={() => setIsSidebarOpen(true)}
