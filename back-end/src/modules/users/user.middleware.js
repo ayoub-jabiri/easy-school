@@ -1,6 +1,5 @@
 // External Modules
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 // Internal Modules
 import { clientErrorResponse } from "../../utils/client.responses.js";
@@ -14,6 +13,7 @@ export const registerDataValidationCheck = (req, res, next) => {
             fullName,
             phoneNumber,
             email,
+            gender,
             role,
             password,
             passwordConfirm,
@@ -23,6 +23,7 @@ export const registerDataValidationCheck = (req, res, next) => {
             fullName,
             phoneNumber,
             email,
+            gender,
             role,
             password,
             passwordConfirm,

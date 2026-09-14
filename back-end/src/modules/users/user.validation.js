@@ -27,6 +27,12 @@ export const userRegisterSchema = z
                     ? "The user email is required"
                     : "The user email must be a valid email address",
         }),
+        gender: z.enum(["male", "female"], {
+            error: (iss) =>
+                iss.input == undefined
+                    ? "The user gender is required"
+                    : "The user gender must be either 'male' or 'female'",
+        }),
         role: z.enum(["admin", "teacher", "student", "parent"], {
             error: (iss) =>
                 iss.input == undefined

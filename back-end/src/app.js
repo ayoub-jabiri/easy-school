@@ -13,6 +13,7 @@ import gradeRouter from "./modules/grade/grade.router.js";
 import homeworkRouter from "./modules/homework/homework.router.js";
 import guardianRouter from "./modules/guardian/guardian.router.js";
 import parentRouter from "./modules/parent/parent.router.js";
+import dashboardRouter from "./modules/dashboard/dashboard.router.js";
 import { clientErrorResponse } from "./utils/client.responses.js";
 
 // Main Settings
@@ -37,6 +38,8 @@ app.use("/api/grades", gradeRouter);
 app.use("/api/homeworks", homeworkRouter);
 app.use("/api/guardians", guardianRouter);
 app.use("/api/parent", parentRouter);
+app.use("/api/dashboard", dashboardRouter);
+
 app.use((req, res) => {
     return clientErrorResponse(
         res,
