@@ -29,13 +29,14 @@ export const getClasses = async (req, res) => {
 
 export const registerClass = async (req, res) => {
     try {
-        const { subjectTitle, level, levelYear, schoolRoomId } = req.body;
+        const { level, levelYear, group, schoolRoomId, subjectId } = req.body;
 
         const newClass = await registerClassService({
-            subjectTitle: subjectTitle.toLowerCase(),
             level,
             levelYear,
+            group,
             schoolRoomId,
+            subjectId,
         });
 
         res.status(201).json({

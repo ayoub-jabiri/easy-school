@@ -1,10 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
+import { number } from "zod";
 
 const classSchema = new Schema({
-    subjectTitle: {
-        type: String,
-        required: true,
-    },
     level: {
         type: String,
         required: true,
@@ -26,6 +23,11 @@ const classSchema = new Schema({
         },
         message: "Invalid year of the selected school level",
     },
+    group: {
+        type: Number,
+        required: true,
+        min: 1,
+    },
     teacherId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -41,6 +43,19 @@ const classSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "SchoolRoom",
         required: true,
+    },
+    subjectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subject",
+        required: true,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now,
     },
     createdAt: {
         type: Date,

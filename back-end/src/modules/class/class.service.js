@@ -1,4 +1,5 @@
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
+import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService, getUsersService } from "../users/user.service.js";
 import Class from "./class.model.js";
 
@@ -10,8 +11,16 @@ export const getClassByQuery = async (query) => await Class.findOne(query);
 export const getClassByIdService = async (classId) =>
     await Class.findById(classId);
 
-export const registerClassService = async (classData) =>
-    await Class.create(classData);
+export const registerClassService = async (classData) => {
+    const newClass = await Class.create(classData);
+
+    const subject = await getSubjectById(classData.subjectId);
+
+    subject.classes.push(newClass._id);
+    await subject.save();
+
+    return newClass;
+};
 
 export const updateClassService = async (classId, classData) => {
     const currentClass = await getClassByIdService(classId);

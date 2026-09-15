@@ -1,6 +1,7 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import { getSchoolRoomByIdService } from "../school-room/room.service.js";
+import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService } from "../users/user.service.js";
 import { getClassByIdService, getClassByQuery } from "./class.service.js";
 import {
@@ -11,9 +12,15 @@ import {
 
 export const classDataValidation = (req, res, next) => {
     try {
-        const { subjectTitle, level, levelYear, schoolRoomId } = req.body;
+        const { level, levelYear, group, schoolRoomId, subjectId } = req.body;
 
-        classSchema.parse({ subjectTitle, level, levelYear, schoolRoomId });
+        classSchema.parse({
+            level,
+            levelYear,
+            group,
+            schoolRoomId,
+            subjectId,
+        });
 
         next();
     } catch (error) {
@@ -23,15 +30,18 @@ export const classDataValidation = (req, res, next) => {
 
 export const classAlreadyExistsCheck = async (req, res, next) => {
     try {
-        const { subjectTitle, level, levelYear } = req.body;
+        const { level, levelYear, group, subjectId } = req.body;
 
-        const schoolRoom = await getClassByQuery({
-            subjectTitle: subjectTitle.toLowerCase(),
+        const currentClass = await getClassByQuery({
             level,
             levelYear,
+            group,
+            subjectId,
         });
 
-        if (schoolRoom) {
+        console.log(currentClass);
+
+        if (currentClass) {
             return clientErrorResponse(res, 409, "Class already registered");
         }
 
@@ -49,6 +59,22 @@ export const schoolRoomExistsCheck = async (req, res, next) => {
 
         if (!schoolRoom) {
             return clientErrorResponse(res, 404, "School room not found");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const subjectExistsCheck = async (req, res, next) => {
+    try {
+        const { subjectId } = req.body;
+
+        const subject = await getSubjectById(subjectId);
+
+        if (!subject) {
+            return clientErrorResponse(res, 404, "Subject not found");
         }
 
         next();
