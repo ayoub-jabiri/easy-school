@@ -75,38 +75,3 @@ export const getAdminDashboardService = async () => {
         latestRegisteredStudents,
     };
 };
-
-export const getAdminUsersService = async ({ page, limit, search, role }) => {
-    const skip = (page - 1) * limit;
-
-    const filter = {};
-
-    if (search.trim()) {
-        const regex = new RegExp(search.trim(), "i");
-
-        filter.$or = [
-            { fullName: regex },
-            { email: regex },
-            { phoneNumber: regex },
-        ];
-    }
-
-    if (role.trim()) {
-        filter.role = role.trim();
-    }
-
-    const [users, totalUsers] = await Promise.all([
-        User.find(filter)
-            .select("-password")
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit),
-
-        User.countDocuments(filter),
-    ]);
-
-    return {
-        users,
-        totalUsers,
-    };
-};
