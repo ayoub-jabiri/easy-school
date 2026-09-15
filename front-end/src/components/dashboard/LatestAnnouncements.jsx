@@ -1,8 +1,8 @@
 import { Link } from "react-router";
-import CardShell from "../CardShell";
-import NoDataAvailable from "../../global/NoDataAvailable";
+import CardShell from "./CardShell";
+import NoDataAvailable from "../global/NoDataAvailable";
 
-export default function LatestAnnouncements({ data }) {
+export default function LatestAnnouncements({ data = [] }) {
     return (
         <CardShell
             title="Announcements"

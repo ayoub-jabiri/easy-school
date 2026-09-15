@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import CardShell from "../CardShell";
-import Avatar from "../../global/Avatar";
-import NoDataAvailable from "../../global/NoDataAvailable";
+import CardShell from "./CardShell";
+import Avatar from "../global/Avatar";
+import NoDataAvailable from "../global/NoDataAvailable";
 
-export default function LatestGrades({ data }) {
+export default function LatestGrades({ data = [] }) {
     return (
         <CardShell
             title="Latest Grades"
@@ -31,7 +31,7 @@ export default function LatestGrades({ data }) {
                             <div className="flex items-center gap-3">
                                 <Avatar name={item.studentId.fullName} />
                                 <div>
-                                    <p className="text-sm font-semibold text-slate-800 hover:underline">
+                                    <p className="text-sm font-semibold text-slate-800">
                                         {item.studentId.fullName}
                                     </p>
                                     <p className="text-xs text-slate-400">
@@ -41,10 +41,10 @@ export default function LatestGrades({ data }) {
                                 </div>
                             </div>
                             <div className="text-right">
-                                <p className="text-sm font-bold text-slate-900 capitalize">
+                                <p className="text-sm font-bold text-slate-900">
                                     {item.grade}
                                 </p>
-                                <p className="text-xs text-slate-400">
+                                <p className="text-xs text-slate-400 capitalize">
                                     {item.evaluation}
                                 </p>
                             </div>

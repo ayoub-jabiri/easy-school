@@ -1,13 +1,14 @@
 import LatestRegisteredStudents from "../../components/dashboard/admin/LatestRegisteredStudents";
 import CardsList from "../../components/dashboard/admin/CardsList";
 import Charts from "../../components/dashboard/admin/Charts";
-import LatestAnnouncements from "../../components/dashboard/admin/LatestAnnouncements";
-import LatestGrades from "../../components/dashboard/admin/LatestGardes";
+import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
+import LatestGrades from "../../components/dashboard/LatestGardes";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import PageLoading from "../../components/global/PageLoading";
 import PageError from "../../components/global/PageError";
 import { getAdminDashboard } from "../../store/slices/dashboard.slice";
+import NoDataAvailable from "../../components/global/NoDataAvailable";
 
 export default function AdminDashboard() {
     const { adminDashboardData, loading, error } = useSelector(
@@ -18,14 +19,22 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         dispatch(getAdminDashboard());
-    }, []);
+    }, [dispatch]);
 
-    if ((loading || !adminDashboardData) && !error) {
+    if (loading) {
         return <PageLoading />;
     }
 
     if (error) {
         return <PageError message={error.message} />;
+    }
+
+    if (!adminDashboardData) {
+        return (
+            <div className="h-100">
+                <NoDataAvailable message="No data available for the admin dashboard." />
+            </div>
+        );
     }
 
     return (

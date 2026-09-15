@@ -1,24 +1,22 @@
-import { Search, Bell, MenuIcon } from "lucide-react";
+import { Bell, MenuIcon } from "lucide-react";
+import { useLocation } from "react-router";
 
 export default function Header({ user, openSidebar }) {
+    const { pathname } = useLocation();
+
     return (
         <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-slate-50 border-b px-6 py-4">
-            <button
-                onClick={openSidebar}
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-slate-600 shadow-sm md:hidden cursor-pointer"
-            >
-                <MenuIcon className="h-5 w-5" />
-            </button>
+            <div className="max-md:flex max-md:items-center max-md:gap-5">
+                <button
+                    onClick={openSidebar}
+                    className="flex h-10 w-10 items-center justify-center rounded-lg bg-white text-slate-600 shadow-sm md:hidden cursor-pointer"
+                >
+                    <MenuIcon className="h-5 w-5" />
+                </button>
 
-            <div className="relative max-md:w-[calc(100%-225px)] md:w-full md:max-w-xs">
-                <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                    <Search className="h-4 w-4" />
-                </span>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full rounded-full bg-white py-2 pl-9 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
-                />
+                <div className="font-bold capitalize">
+                    {pathname.split("/")[1]}
+                </div>
             </div>
 
             <div className="flex items-center gap-4">

@@ -1,6 +1,6 @@
 import Schedule from "../../components/dashboard/student/Schedule";
-import LatestAnnouncements from "../../components/dashboard/admin/LatestAnnouncements";
-import LatestGrades from "../../components/dashboard/admin/LatestGardes";
+import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
+import LatestGrades from "../../components/dashboard/LatestGardes";
 
 export default function StudentDashboard() {
     return (

@@ -28,7 +28,9 @@ export default function Charts({ data }) {
 
     function getGenderPercentage(value) {
         if (value) {
-            return (value * 100) / data?.students;
+            return `${(value * 100) / data?.students}`.includes(".")
+                ? ((value * 100) / data?.students).toFixed(2)
+                : (value * 100) / data?.students;
         } else {
             return "N/A";
         }

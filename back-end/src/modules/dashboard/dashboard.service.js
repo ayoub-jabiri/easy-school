@@ -75,3 +75,46 @@ export const getAdminDashboardService = async () => {
         latestRegisteredStudents,
     };
 };
+
+export const getTeacherDashboardService = async (teacherId) => {
+    const [classes, students, subjects, pendingHomeworks] = await Promise.all([
+        Class.countDocuments({ teacherId }),
+
+        Class.distinct("students", { teacherId }),
+
+        Class.distinct("subjectTitle", { teacherId }),
+
+        Homework.countDocuments({
+            teacherId,
+            dueDate: { $gt: new Date() },
+        }),
+    ]);
+
+    const teacherClasses = await Class.find({ teacherId }).populate(
+        "schoolRoomId",
+        "roomNumber"
+    );
+
+    const [recentAnnouncements, recentGrades] = await Promise.all([
+        Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),
+
+        Grade.find({ teacherId })
+            .sort({ createdAt: -1 })
+            .limit(itemsLimit)
+            .populate("studentId", "fullName email")
+            .populate("teacherId", "fullName email")
+            .populate("classId", "subjectTitle level levelYear"),
+    ]);
+
+    return {
+        stats: {
+            classes,
+            students: students?.length || 0,
+            subjects: subjects.length,
+            pendingHomeworks,
+        },
+        teacherClasses,
+        recentAnnouncements,
+        recentGrades,
+    };
+};

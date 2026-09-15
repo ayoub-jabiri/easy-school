@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import LatestAnnouncements from "../../components/dashboard/admin/LatestAnnouncements";
-import LatestGrades from "../../components/dashboard/admin/LatestGardes";
+import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
+import LatestGrades from "../../components/dashboard/LatestGardes";
 import ParentSchedule from "../../components/parent/ParentSchedule";
 
 const children = [
