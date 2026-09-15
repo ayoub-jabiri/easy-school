@@ -3,12 +3,6 @@ import { z } from "zod";
 
 export const classSchema = z
     .object({
-        subjectTitle: z.string({
-            error: (iss) =>
-                iss.input == undefined
-                    ? "The subject title is required"
-                    : "The subject title must be a string",
-        }),
         level: z.enum(["primary", "middle", "high"], {
             error: (iss) => ({
                 message:
@@ -27,6 +21,14 @@ export const classSchema = z
                         : "The school level year must be a number",
             }),
         }),
+        group: z.number({
+            error: (iss) => ({
+                message:
+                    iss.input == undefined
+                        ? "The class group number is required"
+                        : "The class group number must be a number",
+            }),
+        }),
         schoolRoomId: z.string({
             error: (iss) => ({
                 message:
@@ -35,8 +37,16 @@ export const classSchema = z
                         : "The school room ID must be a string",
             }),
         }),
+        subjectId: z.string({
+            error: (iss) => ({
+                message:
+                    iss.input == undefined
+                        ? "The subject ID is required"
+                        : "The subject ID must be a string",
+            }),
+        }),
     })
-    .superRefine(({ level, levelYear, schoolRoomId }, ctx) => {
+    .superRefine(({ level, levelYear, schoolRoomId, subjectId }, ctx) => {
         if (level == "primary") {
             if (![1, 2, 3, 4, 5, 6].includes(levelYear)) {
                 ctx.addIssue({
@@ -64,6 +74,14 @@ export const classSchema = z
                 code: "custom",
                 message: "Invalid school room ID",
                 path: ["schoolRoomId"],
+            });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(subjectId)) {
+            ctx.addIssue({
+                code: "custom",
+                message: "Invalid subject ID",
+                path: ["subjectId"],
             });
         }
     });

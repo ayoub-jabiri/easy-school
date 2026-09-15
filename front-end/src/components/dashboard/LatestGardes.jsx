@@ -34,9 +34,10 @@ export default function LatestGrades({ data = [] }) {
                                     <p className="text-sm font-semibold text-slate-800">
                                         {item.studentId.fullName}
                                     </p>
-                                    <p className="text-xs text-slate-400">
-                                        {item.classId.subjectTitle} &middot;{" "}
-                                        {item.createdAt.split("T")[0]}
+                                    <p className="text-xs text-slate-400 capitalize">
+                                        {item?.classId?.subjectId?.title ||
+                                            "N/A"}{" "}
+                                        &middot; {item.createdAt.split("T")[0]}
                                     </p>
                                 </div>
                             </div>

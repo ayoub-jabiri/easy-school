@@ -27,6 +27,7 @@ import {
     schoolRoomExistsCheck,
     studentRegistrationCheck,
     studentRegistrationDataValidation,
+    subjectExistsCheck,
     teacherAssignmentCheck,
 } from "./class.middleware.js";
 
@@ -40,8 +41,9 @@ router.post(
     authorizationCheck(["admin"]),
     requestBodyCheck,
     classDataValidation,
-    classAlreadyExistsCheck,
     schoolRoomExistsCheck,
+    subjectExistsCheck,
+    classAlreadyExistsCheck,
     registerClass
 );
 

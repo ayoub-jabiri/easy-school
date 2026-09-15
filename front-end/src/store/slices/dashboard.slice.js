@@ -23,9 +23,21 @@ export const getTeacherDashboard = createAsyncThunk(
     }
 );
 
+export const getStudentDashboard = createAsyncThunk(
+    "dashboard/getStudentDashboard",
+    async (_, { rejectWithValue }) => {
+        try {
+            return await api.get("/dashboard/student/stats");
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 const initialState = {
     adminDashboardData: null,
     teacherDashboardData: null,
+    studentDashboardData: null,
     loading: false,
     error: null,
 };
@@ -63,6 +75,22 @@ const dashboardSlice = createSlice({
                 state.error = null;
             })
             .addCase(getTeacherDashboard.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            });
+
+        // Student Dashboard
+        builder
+            .addCase(getStudentDashboard.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getStudentDashboard.fulfilled, (state, action) => {
+                state.loading = false;
+                state.studentDashboardData = action.payload;
+                state.error = null;
+            })
+            .addCase(getStudentDashboard.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

@@ -47,7 +47,11 @@ export const getAdminDashboardService = async () => {
                 .limit(itemsLimit)
                 .populate("studentId", "fullName email")
                 .populate("teacherId", "fullName email")
-                .populate("classId", "subjectTitle level levelYear"),
+                .populate({
+                    path: "classId",
+                    select: "level levelYear subjectId",
+                    populate: { path: "subjectId", select: "title" },
+                }),
 
             User.find({ role: "student" })
                 .sort({ createdAt: -1 })
@@ -103,7 +107,11 @@ export const getTeacherDashboardService = async (teacherId) => {
             .limit(itemsLimit)
             .populate("studentId", "fullName email")
             .populate("teacherId", "fullName email")
-            .populate("classId", "subjectTitle level levelYear"),
+            .populate({
+                path: "classId",
+                select: "level levelYear subjectId",
+                populate: { path: "subjectId", select: "title" },
+            }),
     ]);
 
     return {
@@ -114,6 +122,51 @@ export const getTeacherDashboardService = async (teacherId) => {
             pendingHomeworks,
         },
         teacherClasses,
+        recentAnnouncements,
+        recentGrades,
+    };
+};
+
+export const getStudentDashboardService = async (studentId) => {
+    const [classes, subjects, teachers] = await Promise.all([
+        Class.countDocuments({ students: studentId }),
+
+        Class.distinct("subjectTitle", { students: studentId }),
+
+        Class.distinct("teacherId", { students: studentId }),
+    ]);
+
+    const studentClassIds = await Class.distinct("_id", {
+        students: studentId,
+    });
+
+    const pendingHomeworks = await Homework.countDocuments({
+        classId: { $in: studentClassIds },
+        dueDate: { $gt: new Date() },
+    });
+
+    const [recentAnnouncements, recentGrades] = await Promise.all([
+        Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),
+
+        Grade.find({ studentId })
+            .sort({ createdAt: -1 })
+            .limit(itemsLimit)
+            .populate("studentId", "fullName email")
+            .populate("teacherId", "fullName email")
+            .populate({
+                path: "classId",
+                select: "level levelYear subjectId",
+                populate: { path: "subjectId", select: "title" },
+            }),
+    ]);
+
+    return {
+        stats: {
+            classes,
+            subjects: subjects.length,
+            teachers: teachers.length,
+            pendingHomeworks,
+        },
         recentAnnouncements,
         recentGrades,
     };
