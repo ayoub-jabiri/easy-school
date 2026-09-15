@@ -1,6 +1,8 @@
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { getAdminUsersService } from "./dashboard.service.js";
-import { getAdminDashboardService } from "./dashboard.service.js";
+import {
+    getAdminDashboardService,
+    getTeacherDashboardService,
+} from "./dashboard.service.js";
 
 export const getAdminDashboard = async (req, res) => {
     try {
@@ -12,26 +14,11 @@ export const getAdminDashboard = async (req, res) => {
     }
 };
 
-export const getAdminUsers = async (req, res) => {
+export const getTeacherDashboard = async (req, res) => {
     try {
-        const { page = 1, limit = 15, search = "", role = "" } = req.query;
+        const dashboard = await getTeacherDashboardService(req.user.id);
 
-        const currentPage = +page;
-        const usersLimit = +limit;
-
-        const { users, totalUsers } = await getAdminUsersService({
-            page: currentPage,
-            limit: usersLimit,
-            search,
-            role,
-        });
-
-        res.json({
-            currentPage,
-            usersPerPage: usersLimit,
-            totalUsers,
-            users,
-        });
+        res.json(dashboard);
     } catch (error) {
         serverErrorResponse(res, error);
     }

@@ -76,37 +76,45 @@ export const getAdminDashboardService = async () => {
     };
 };
 
-export const getAdminUsersService = async ({ page, limit, search, role }) => {
-    const skip = (page - 1) * limit;
+export const getTeacherDashboardService = async (teacherId) => {
+    const [classes, students, subjects, pendingHomeworks] = await Promise.all([
+        Class.countDocuments({ teacherId }),
 
-    const filter = {};
+        Class.distinct("students", { teacherId }),
 
-    if (search.trim()) {
-        const regex = new RegExp(search.trim(), "i");
+        Class.distinct("subjectTitle", { teacherId }),
 
-        filter.$or = [
-            { fullName: regex },
-            { email: regex },
-            { phoneNumber: regex },
-        ];
-    }
+        Homework.countDocuments({
+            teacherId,
+            dueDate: { $gt: new Date() },
+        }),
+    ]);
 
-    if (role.trim()) {
-        filter.role = role.trim();
-    }
+    const teacherClasses = await Class.find({ teacherId }).populate(
+        "schoolRoomId",
+        "roomNumber"
+    );
 
-    const [users, totalUsers] = await Promise.all([
-        User.find(filter)
-            .select("-password")
+    const [recentAnnouncements, recentGrades] = await Promise.all([
+        Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),
+
+        Grade.find({ teacherId })
             .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit),
-
-        User.countDocuments(filter),
+            .limit(itemsLimit)
+            .populate("studentId", "fullName email")
+            .populate("teacherId", "fullName email")
+            .populate("classId", "subjectTitle level levelYear"),
     ]);
 
     return {
-        users,
-        totalUsers,
+        stats: {
+            classes,
+            students: students?.length || 0,
+            subjects: subjects.length,
+            pendingHomeworks,
+        },
+        teacherClasses,
+        recentAnnouncements,
+        recentGrades,
     };
 };

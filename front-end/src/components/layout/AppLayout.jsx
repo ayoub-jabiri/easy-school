@@ -19,7 +19,7 @@ export default function AppLayout({ children }) {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    if (loading || !user) {
+    if ((loading || !user) && !error) {
         return <PageLoading />;
     }
 

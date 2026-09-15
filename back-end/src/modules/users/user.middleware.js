@@ -4,8 +4,12 @@ import bcrypt from "bcrypt";
 // Internal Modules
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { getUserByEmail } from "./user.service.js";
-import { userLoginSchema, userRegisterSchema } from "./user.validation.js";
+import { getUserByEmail, getUserByIdService } from "./user.service.js";
+import {
+    userLoginSchema,
+    userRegisterSchema,
+    userUpdateSchema,
+} from "./user.validation.js";
 
 export const registerDataValidationCheck = (req, res, next) => {
     try {
@@ -99,4 +103,55 @@ export const passwordMatchCheck = async (req, res, next) => {
     }
 
     next();
+};
+
+export const userExistsByIdCheck = async (req, res, next) => {
+    try {
+        const user = await getUserByIdService(req.params.userId);
+
+        if (!user) {
+            return clientErrorResponse(res, 404, "User not found");
+        }
+
+        req.targetUser = user;
+        next();
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
+};
+
+export const userUpdateDataValidationCheck = (req, res, next) => {
+    try {
+        const { fullName, phoneNumber, email, gender, role } = req.body;
+
+        userUpdateSchema.parse({
+            fullName,
+            phoneNumber,
+            email,
+            gender,
+            role,
+        });
+
+        next();
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
+};
+
+export const userUpdateExistCheck = async (req, res, next) => {
+    try {
+        const user = await getUserByEmail(req.body.email);
+
+        if (user && user._id.toString() !== req.params.userId) {
+            return clientErrorResponse(
+                res,
+                409,
+                "User already exists with this email"
+            );
+        }
+
+        next();
+    } catch (error) {
+        return serverErrorResponse(res, error);
+    }
 };
