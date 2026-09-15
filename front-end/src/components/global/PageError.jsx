@@ -1,6 +1,6 @@
 import { AlertCircle, RotateCw } from "lucide-react";
 
-export default function GlobalError({ message = "An error occurred" }) {
+export default function PageError({ message = "An error occurred" }) {
     return (
         <div className="flex min-h-screen w-full flex-col items-center justify-center gap-4 bg-white px-6 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500">

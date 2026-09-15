@@ -12,11 +12,6 @@ import {
 import CardShell from "../CardShell";
 import { User } from "lucide-react";
 
-const studentsData = [
-    { name: "Boys", value: 1234, fill: "#7dd3fc" },
-    { name: "Girls", value: 1134, fill: "#fde047" },
-];
-
 const attendanceData = [
     { day: "Mon", present: 60, absent: 45 },
     { day: "Tue", present: 55, absent: 60 },
@@ -25,7 +20,20 @@ const attendanceData = [
     { day: "Fri", present: 55, absent: 60 },
 ];
 
-export default function Charts() {
+export default function Charts({ data }) {
+    const studentsData = [
+        { name: "Boys", value: data?.boys || 0, fill: "#7dd3fc" },
+        { name: "Girls", value: data?.girls || 0, fill: "#fde047" },
+    ];
+
+    function getGenderPercentage(value) {
+        if (value) {
+            return (value * 100) / data?.students;
+        } else {
+            return "N/A";
+        }
+    }
+
     return (
         <div className="grid grid-cols-12 gap-6 ">
             <CardShell title="Students" className="col-span-12 lg:col-span-5">
@@ -53,16 +61,21 @@ export default function Charts() {
                     <div className="text-center">
                         <span className="mx-auto mb-1 block h-2.5 w-2.5 rounded-full bg-sky-300" />
                         <p className="text-sm font-bold text-slate-800">
-                            1,234
+                            {data?.boys || "N/A"}
                         </p>
-                        <p className="text-xs text-slate-400">Boys (55%)</p>
+                        <p className="text-xs text-slate-400">
+                            Boys ({getGenderPercentage(data?.boys)}%)
+                        </p>
                     </div>
                     <div className="text-center">
                         <span className="mx-auto mb-1 block h-2.5 w-2.5 rounded-full bg-yellow-300" />
                         <p className="text-sm font-bold text-slate-800">
-                            1,134
+                            {data?.girls || "N/A"}
                         </p>
-                        <p className="text-xs text-slate-400">Girls (45%)</p>
+                        <p className="text-xs text-slate-400">
+                            Girls ({getGenderPercentage(data?.girls)}
+                            %)
+                        </p>
                     </div>
                 </div>
             </CardShell>

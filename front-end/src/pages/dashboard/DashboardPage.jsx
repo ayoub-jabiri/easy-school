@@ -5,8 +5,7 @@ import TeacherDashboard from "./TeacherDashboard";
 import ParentDashboard from "./ParentDashboard";
 
 export default function DashboardPage() {
-    // const { user } = useSelector((state) => state.user);
-    const user = { role: "parent" };
+    const { user } = useSelector((state) => state.user);
 
     if (user?.role === "admin") {
         return <AdminDashboard />;
