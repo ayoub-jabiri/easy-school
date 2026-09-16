@@ -4,6 +4,7 @@ import LoginPage from "../pages/login-page/LoginPage";
 import AppLayout from "../components/layout/AppLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import UsersPage from "../pages/users/UsersPage";
+import GuardiansPage from "../pages/guardians/GuardiansPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -29,6 +30,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/users">
                 <UsersPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/guardians",
+        element: (
+            <AppLayout activeHref="/guardians">
+                <GuardiansPage />
             </AppLayout>
         ),
     },
