@@ -25,10 +25,30 @@ export const registerUser = createAsyncThunk(
     }
 );
 
+export const getUsers = createAsyncThunk(
+    "users/getUsers",
+    async (params = {}, { rejectWithValue }) => {
+        try {
+            return await api.get("/users", {
+                params,
+            });
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 const initialState = {
-    message: null,
-    registering: false,
-    error: null,
+    registerData: {
+        message: null,
+        registering: false,
+        error: null,
+    },
+    users: {
+        data: null,
+        loading: false,
+        error: null,
+    },
 };
 
 const usersSlice = createSlice({
@@ -36,30 +56,45 @@ const usersSlice = createSlice({
     initialState,
     reducers: {
         clearUsersMessage(state) {
-            state.message = null;
+            state.registerData.message = null;
         },
         clearUsersError(state) {
-            state.message = null;
-            state.error = null;
+            state.registerData.error = null;
         },
     },
     extraReducers: (builder) => {
         // Register User
         builder
             .addCase(registerUser.pending, (state) => {
-                state.message = null;
-                state.registering = true;
-                state.error = null;
+                state.registerData.message = null;
+                state.registerData.registering = true;
+                state.registerData.error = null;
             })
             .addCase(registerUser.fulfilled, (state, action) => {
-                state.message = action.payload.message;
-                state.registering = false;
-                state.error = null;
+                state.registerData.message = action.payload.message;
+                state.registerData.registering = false;
+                state.registerData.error = null;
             })
             .addCase(registerUser.rejected, (state, action) => {
-                state.message = null;
-                state.registering = false;
-                state.error = action.payload;
+                state.registerData.message = null;
+                state.registerData.registering = false;
+                state.registerData.error = action.payload;
+            });
+
+        // Get Users
+        builder
+            .addCase(getUsers.pending, (state) => {
+                state.users.loading = true;
+                state.users.error = null;
+            })
+            .addCase(getUsers.fulfilled, (state, action) => {
+                state.users.loading = false;
+                state.users.data = action.payload;
+                state.users.error = null;
+            })
+            .addCase(getUsers.rejected, (state, action) => {
+                state.users.loading = false;
+                state.users.error = action.payload;
             });
     },
 });

@@ -7,6 +7,7 @@ import {
     registerUser,
     clearUsersError,
     clearUsersMessage,
+    getUsers,
 } from "../../store/slices/users.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
 import { getInputError } from "../../lib/input.errors";
@@ -22,19 +23,23 @@ const initialFormState = {
 };
 
 export default function RegisterUserForm({ onClose }) {
-    const { message, registering, error } = useSelector((state) => state.users);
+    const { message, registering, error } = useSelector(
+        (state) => state.users.registerData
+    );
     const dispatch = useDispatch();
 
     const [form, setForm] = useState(initialFormState);
 
     useEffect(() => {
-        if (error) {
+        if (error && !error.errors) {
             dispatch(setErrorAlert(error.message));
         }
         if (message) {
             dispatch(setSuccessAlert(message));
 
             onClose();
+
+            dispatch(getUsers());
 
             dispatch(clearUsersError());
             dispatch(clearUsersMessage());
@@ -185,7 +190,7 @@ export default function RegisterUserForm({ onClose }) {
             <button
                 type="submit"
                 disabled={registering}
-                className="w-full rounded-md bg-slate-900 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60 cursor-pointer"
+                className="w-full rounded-md bg-blue-400 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60 cursor-pointer"
             >
                 {registering ? <InputLoading /> : "Register"}
             </button>

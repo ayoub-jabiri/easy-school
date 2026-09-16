@@ -14,7 +14,7 @@ function App() {
         if (success || error) {
             setTimeout(() => {
                 dispatch(clearAlerts());
-            }, 3000);
+            }, 4000);
         }
     }, [dispatch, success, error]);
 
