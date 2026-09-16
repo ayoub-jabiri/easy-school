@@ -1,20 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
+import CardsList from "../../components/dashboard/parent/CardsList";
 import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
 import LatestGrades from "../../components/dashboard/LatestGardes";
 import ParentSchedule from "../../components/parent/ParentSchedule";
+import PageLoading from "../../components/global/PageLoading";
+import PageError from "../../components/global/PageError";
+import NoDataAvailable from "../../components/global/NoDataAvailable";
+import { getParentDashboard } from "../../store/slices/dashboard.slice";
 
 const children = [
-    {
-        id: 1,
-        name: "Amina Benali",
-        className: "4A",
-    },
-    {
-        id: 2,
-        name: "Karim Benali",
-        className: "5A",
-    },
+    { id: 1, name: "Amina Benali", className: "4A" },
+    { id: 2, name: "Karim Benali", className: "5A" },
 ];
 
 const schedules = {
@@ -148,15 +146,43 @@ const schedules = {
 export default function ParentDashboard() {
     const [selectedChildId, setSelectedChildId] = useState(children[0].id);
 
+    const { parentDashboardData, loading, error } = useSelector(
+        (state) => state.dashboard
+    );
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getParentDashboard());
+    }, [dispatch]);
+
     const selectedChild = children.find(
         (child) => child.id === Number(selectedChildId)
     );
 
     const selectedSchedule = schedules[selectedChildId];
 
+    if (loading) {
+        return <PageLoading />;
+    }
+
+    if (error) {
+        return <PageError message={error.message} />;
+    }
+
+    if (!parentDashboardData) {
+        return (
+            <div className="h-100">
+                <NoDataAvailable message="No data available for the parent dashboard." />
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
             <div className="mx-auto grid max-w-full grid-cols-12 gap-6">
+                <CardsList stats={parentDashboardData.stats} />
+
                 <div className="col-span-12 flex flex-col gap-6 xl:col-span-9">
                     <ParentSchedule
                         child={selectedChild}
@@ -168,9 +194,11 @@ export default function ParentDashboard() {
                 </div>
 
                 <div className="col-span-12 flex flex-col gap-6 xl:col-span-3">
-                    <LatestAnnouncements />
+                    <LatestAnnouncements
+                        data={parentDashboardData.recentAnnouncements}
+                    />
 
-                    <LatestGrades />
+                    <LatestGrades data={parentDashboardData.recentGrades} />
                 </div>
             </div>
         </div>

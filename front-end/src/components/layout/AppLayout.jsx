@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useEffect, useState } from "react";
 
-export default function AppLayout({ children }) {
+export default function AppLayout({ activeHref, children }) {
     const { user, loading, error } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
@@ -32,6 +32,7 @@ export default function AppLayout({ children }) {
             <div className="flex">
                 <Sidebar
                     role={user.role}
+                    activeHref={activeHref}
                     isSidebarOpen={isSidebarOpen}
                     hideSidebar={() => setIsSidebarOpen(false)}
                 />
