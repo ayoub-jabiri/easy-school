@@ -2,13 +2,9 @@ import UsersTable from "../../components/users/UsersTable";
 import TableActions from "../../components/users/TableActions";
 
 import { useSelector } from "react-redux";
-import { useState } from "react";
 
 export default function UsersPage() {
-    const { data } = useSelector((state) => state.users.users);
-
-    const [targetedRole, setTargetedRole] = useState("");
-    const [limit, setLimit] = useState(data?.usersPerPage || 15);
+    const { data } = useSelector((state) => state.users.usersList);
 
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
@@ -18,19 +14,10 @@ export default function UsersPage() {
                         All Users ({data?.totalUsers || 0})
                     </h1>
 
-                    <TableActions
-                        targetedRole={targetedRole}
-                        setTargetedRole={setTargetedRole}
-                        limit={limit}
-                    />
+                    <TableActions />
                 </div>
 
-                <UsersTable
-                    data={data}
-                    role={targetedRole}
-                    limit={limit}
-                    setLimit={setLimit}
-                />
+                <UsersTable />
             </div>
         </div>
     );

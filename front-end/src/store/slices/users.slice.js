@@ -44,10 +44,16 @@ const initialState = {
         registering: false,
         error: null,
     },
-    users: {
+    usersList: {
         data: null,
         loading: false,
         error: null,
+        tableActions: {
+            search: "",
+            role: "",
+            page: 1,
+            limit: 15,
+        },
     },
 };
 
@@ -60,6 +66,26 @@ const usersSlice = createSlice({
         },
         clearUsersError(state) {
             state.registerData.error = null;
+        },
+        handleTableActions(state, action) {
+            const { key, value } = action.payload;
+
+            switch (key) {
+                case "search":
+                    state.usersList.tableActions.search = value;
+                    break;
+                case "role":
+                    state.usersList.tableActions.role = value;
+                    break;
+                case "page":
+                    state.usersList.tableActions.page = value;
+                    break;
+                case "limit":
+                    state.usersList.tableActions.limit = value;
+                    break;
+                default:
+                    break;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -84,21 +110,22 @@ const usersSlice = createSlice({
         // Get Users
         builder
             .addCase(getUsers.pending, (state) => {
-                state.users.loading = true;
-                state.users.error = null;
+                state.usersList.loading = true;
+                state.usersList.error = null;
             })
             .addCase(getUsers.fulfilled, (state, action) => {
-                state.users.loading = false;
-                state.users.data = action.payload;
-                state.users.error = null;
+                state.usersList.loading = false;
+                state.usersList.data = action.payload;
+                state.usersList.error = null;
             })
             .addCase(getUsers.rejected, (state, action) => {
-                state.users.loading = false;
-                state.users.error = action.payload;
+                state.usersList.loading = false;
+                state.usersList.error = action.payload;
             });
     },
 });
 
-export const { clearUsersMessage, clearUsersError } = usersSlice.actions;
+export const { clearUsersMessage, clearUsersError, handleTableActions } =
+    usersSlice.actions;
 
 export default usersSlice.reducer;

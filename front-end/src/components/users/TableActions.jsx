@@ -2,11 +2,15 @@ import { Check, Plus, Search, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import RegisterUserForm from "./RegisterUserForm";
 import Modal from "../global/Modal";
-import { useDispatch } from "react-redux";
-import { getUsers } from "../../store/slices/users.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { handleTableActions } from "../../store/slices/users.slice";
 
-export default function TableActions({ targetedRole, setTargetedRole, limit }) {
-    const [search, setSearch] = useState("");
+export default function TableActions() {
+    const { search, role } = useSelector(
+        (state) => state.users.usersList.tableActions
+    );
+    const dispatch = useDispatch();
+
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -18,13 +22,9 @@ export default function TableActions({ targetedRole, setTargetedRole, limit }) {
         { value: "parent", label: "Parent" },
     ];
 
-    const dispatch = useDispatch();
-
     function handleChangeRoleFilter(value) {
-        setTargetedRole(value);
+        dispatch(handleTableActions({ key: "role", value }));
         setIsFilterOpen(false);
-
-        dispatch(getUsers({ role: value, limit }));
     }
 
     return (
@@ -35,9 +35,16 @@ export default function TableActions({ targetedRole, setTargetedRole, limit }) {
 
                     <input
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search from table..."
-                        className="w-56 rounded-full border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                        onChange={(e) =>
+                            dispatch(
+                                handleTableActions({
+                                    key: "search",
+                                    value: e.target.value,
+                                })
+                            )
+                        }
+                        placeholder="Search by name, email, or phone..."
+                        className="w-70 rounded-full border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                     />
                 </div>
 
@@ -69,13 +76,13 @@ export default function TableActions({ targetedRole, setTargetedRole, limit }) {
                                             handleChangeRoleFilter(option.value)
                                         }
                                         className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-sm transition hover:bg-slate-50 cursor-pointer ${
-                                            targetedRole === option.value
+                                            role === option.value
                                                 ? "font-semibold text-slate-900"
                                                 : "text-slate-600"
                                         }`}
                                     >
                                         {option.label}
-                                        {targetedRole === option.value && (
+                                        {role === option.value && (
                                             <Check className="h-3.5 w-3.5 text-sky-500" />
                                         )}
                                     </button>

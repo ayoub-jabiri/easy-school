@@ -3,7 +3,7 @@ import Avatar from "../global/Avatar";
 import NoDataAvailable from "../global/NoDataAvailable";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getUsers } from "../../store/slices/users.slice";
+import { getUsers, handleTableActions } from "../../store/slices/users.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
 import { useEffect } from "react";
@@ -15,24 +15,36 @@ const roleBadgeClasses = {
     parent: "bg-emerald-100 text-emerald-700",
 };
 
-export default function UsersTable({ role, limit, setLimit }) {
+export default function UsersTable() {
     const dispatch = useDispatch();
-    const { data, loading, error } = useSelector((state) => state.users.users);
+    const {
+        data,
+        loading,
+        error,
+        tableActions: { search, role, page, limit },
+    } = useSelector((state) => state.users.usersList);
 
     useEffect(() => {
-        dispatch(getUsers());
-    }, [dispatch]);
+        dispatch(getUsers({ search, role, page, limit }));
+    }, [dispatch, search, role, page, limit]);
 
     function handlePaginationActions(action) {
         switch (action) {
             case "prev":
                 dispatch(
-                    getUsers({ page: data.currentPage - 1, limit: limit, role })
+                    handleTableActions({
+                        key: "page",
+                        value: data.currentPage - 1,
+                    })
                 );
+
                 break;
             case "next":
                 dispatch(
-                    getUsers({ page: data.currentPage + 1, limit: limit, role })
+                    handleTableActions({
+                        key: "page",
+                        value: data.currentPage + 1,
+                    })
                 );
         }
     }
@@ -40,9 +52,7 @@ export default function UsersTable({ role, limit, setLimit }) {
     function handleChangeUserLimit(e) {
         const newLimit = +e.target.value || 15;
 
-        setLimit(newLimit);
-
-        dispatch(getUsers({ limit: newLimit, role }));
+        dispatch(handleTableActions({ key: "limit", value: newLimit }));
     }
 
     return (
@@ -186,7 +196,6 @@ export default function UsersTable({ role, limit, setLimit }) {
                         name="usersPerPage"
                         id="usersPerPage"
                         onChange={handleChangeUserLimit}
-                        // defaultValue={data?.usersPerPage || 15}
                         value={limit}
                     >
                         <option value="5">5</option>
