@@ -3,6 +3,7 @@ import LandingPage from "../pages/landing-page/LandingPage";
 import LoginPage from "../pages/login-page/LoginPage";
 import AppLayout from "../components/layout/AppLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
+import UsersPage from "../pages/users/UsersPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout>
                 <DashboardPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/users",
+        element: (
+            <AppLayout>
+                <UsersPage />
             </AppLayout>
         ),
     },

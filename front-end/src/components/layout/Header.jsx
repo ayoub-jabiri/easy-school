@@ -5,7 +5,7 @@ export default function Header({ user, openSidebar }) {
     const { pathname } = useLocation();
 
     return (
-        <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-slate-50 px-6 py-4 border-b border-slate-100">
+        <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-white px-6 py-4 border-b border-slate-100">
             <div className="max-md:flex max-md:items-center max-md:gap-5">
                 <button
                     onClick={openSidebar}
