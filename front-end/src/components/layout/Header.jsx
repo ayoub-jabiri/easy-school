@@ -1,11 +1,11 @@
 import { Bell, MenuIcon } from "lucide-react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export default function Header({ user, openSidebar }) {
     const { pathname } = useLocation();
 
     return (
-        <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-slate-50 border-b px-6 py-4">
+        <header className="sticky top-0 z-1 flex w-full items-center justify-between gap-4 bg-slate-50 px-6 py-4 border-b border-slate-100">
             <div className="max-md:flex max-md:items-center max-md:gap-5">
                 <button
                     onClick={openSidebar}
@@ -27,12 +27,14 @@ export default function Header({ user, openSidebar }) {
                     </span>
                 </button>
 
-                <div className="flex items-center gap-3">
+                <Link to="/profile" className="flex items-center gap-3">
                     <div className="text-right leading-tight">
-                        <p className="text-sm font-semibold text-slate-800">
+                        <p className="text-sm font-semibold text-slate-800 capitalize">
                             {user.fullName}
                         </p>
-                        <p className="text-xs text-slate-400">{user.role}</p>
+                        <p className="text-xs text-slate-400 capitalize">
+                            {user.role}
+                        </p>
                     </div>
 
                     {user.avatarUrl ? (
@@ -46,7 +48,7 @@ export default function Header({ user, openSidebar }) {
                             {user.fullName[0].toUpperCase()}
                         </span>
                     )}
-                </div>
+                </Link>
             </div>
         </header>
     );

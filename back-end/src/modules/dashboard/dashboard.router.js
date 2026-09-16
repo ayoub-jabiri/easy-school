@@ -5,6 +5,7 @@ import {
 } from "../../middlewares/global.middlewares.js";
 import {
     getAdminDashboard,
+    getParentDashboard,
     getStudentDashboard,
     getTeacherDashboard,
 } from "./dashboard.controller.js";
@@ -24,5 +25,5 @@ router.get(
     authorizationCheck(["student"]),
     getStudentDashboard
 );
-
+router.get("/parent/stats", authorizationCheck(["parent"]), getParentDashboard);
 export default router;

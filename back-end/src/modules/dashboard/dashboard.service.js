@@ -171,3 +171,51 @@ export const getStudentDashboardService = async (studentId) => {
         recentGrades,
     };
 };
+
+export const getParentDashboardService = async (parentId) => {
+    const guardians = await Guardian.find({ parentId });
+    const studentIds = guardians.map((guardian) => guardian.studentId);
+
+    const [students, classes, grades] = await Promise.all([
+        studentIds.length,
+
+        Class.countDocuments({ students: { $in: studentIds } }),
+
+        Grade.countDocuments({ studentId: { $in: studentIds } }),
+    ]);
+
+    const childrenClassIds = await Class.distinct("_id", {
+        students: { $in: studentIds },
+    });
+
+    const pendingHomeworks = await Homework.countDocuments({
+        classId: { $in: childrenClassIds },
+        dueDate: { $gt: new Date() },
+    });
+
+    const [recentAnnouncements, recentGrades] = await Promise.all([
+        Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),
+
+        Grade.find({ studentId: { $in: studentIds } })
+            .sort({ createdAt: -1 })
+            .limit(itemsLimit)
+            .populate("studentId", "fullName email")
+            .populate("teacherId", "fullName email")
+            .populate({
+                path: "classId",
+                select: "level levelYear subjectId",
+                populate: { path: "subjectId", select: "title" },
+            }),
+    ]);
+
+    return {
+        stats: {
+            students,
+            classes,
+            grades,
+            pendingHomeworks,
+        },
+        recentAnnouncements,
+        recentGrades,
+    };
+};
