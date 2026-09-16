@@ -29,50 +29,50 @@ const menuItems = [
             {
                 icon: Users,
                 label: "Users",
-                href: "users",
+                href: "/users",
                 visible: ["admin"],
             },
             {
                 icon: UserRound,
                 label: "Guardians",
-                href: "guardians",
+                href: "/guardians",
                 visible: ["admin"],
             },
             {
                 icon: BookOpen,
                 label: "Subjects",
-                href: "subjects",
+                href: "/subjects",
                 visible: ["admin"],
             },
 
             {
                 icon: DoorClosed,
                 label: "School Rooms",
-                href: "school-rooms",
+                href: "/school-rooms",
                 visible: ["admin"],
             },
             {
                 icon: School,
                 label: "Classes",
-                href: "classes",
+                href: "/classes",
                 visible: ["admin", "teacher"],
             },
             {
                 icon: ClipboardCheck,
                 label: "Homework",
-                href: "homework",
+                href: "/homework",
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
                 icon: Award,
                 label: "Grades",
-                href: "grades",
+                href: "/grades",
                 visible: ["admin", "teacher", "student", "parent"],
             },
             {
                 icon: Megaphone,
                 label: "Announcements",
-                href: "announcements",
+                href: "/announcements",
                 visible: ["admin", "teacher", "student", "parent"],
             },
         ],
@@ -173,7 +173,7 @@ export default function Sidebar({
 
                                 return (
                                     <Link
-                                        to={`/${item.href}`}
+                                        to={item.href}
                                         href={item.href}
                                         className={`flex items-center gap-3 rounded-lg px-2 py-2 transition-colors ${
                                             isActive

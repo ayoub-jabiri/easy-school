@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: (
-            <AppLayout>
+            <AppLayout activeHref="/dashboard">
                 <DashboardPage />
             </AppLayout>
         ),
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
     {
         path: "/users",
         element: (
-            <AppLayout>
+            <AppLayout activeHref="/users">
                 <UsersPage />
             </AppLayout>
         ),
