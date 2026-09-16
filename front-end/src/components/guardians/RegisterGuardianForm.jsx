@@ -22,19 +22,19 @@ export default function RegisterGuardianForm({ onClose }) {
     const { message, registering, error } = useSelector(
         (state) => state.guardians.registerData
     );
-    const { data: users } = useSelector((state) => state.users.usersList);
+    // const { data: users } = useSelector((state) => state.users.usersList);
     const dispatch = useDispatch();
 
     const [form, setForm] = useState(initialFormState);
 
-    useEffect(() => {
-        dispatch(getUsers({ page: 1, limit: 1000 }));
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(getUsers({ page: 1, limit: 1000 }));
+    // }, [dispatch]);
 
-    const parents =
-        users?.users?.filter((user) => user.role === "parent") || [];
-    const students =
-        users?.users?.filter((user) => user.role === "student") || [];
+    // const parents =
+    //     users?.users?.filter((user) => user.role === "parent") || [];
+    // const students =
+    //     users?.users?.filter((user) => user.role === "student") || [];
 
     useEffect(() => {
         if (error && !error.errors) {
