@@ -5,6 +5,7 @@ import AppLayout from "../components/layout/AppLayout";
 import DashboardPage from "../pages/dashboard/DashboardPage";
 import UsersPage from "../pages/users/UsersPage";
 import GuardiansPage from "../pages/guardians/GuardiansPage";
+import UserDetailsPage from "../pages/users/UserDetailsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/users">
                 <UsersPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/users/:id",
+        element: (
+            <AppLayout activeHref="/users">
+                <UserDetailsPage />
             </AppLayout>
         ),
     },

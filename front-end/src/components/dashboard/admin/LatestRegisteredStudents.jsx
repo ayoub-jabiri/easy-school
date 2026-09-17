@@ -47,7 +47,7 @@ export default function LatestRegisteredStudents({ data }) {
                                             <Avatar name={student.fullName} />
                                             <div>
                                                 <Link
-                                                    to={`/students/${student.id}`}
+                                                    to={`/users/${student.id}`}
                                                     className="font-semibold text-slate-800 hover:underline"
                                                 >
                                                     {student.fullName}

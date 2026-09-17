@@ -1,12 +1,14 @@
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import Avatar from "../global/Avatar";
 import NoDataAvailable from "../global/NoDataAvailable";
+import Modal from "../global/Modal";
+import UpdateUserForm from "./UpdateUserForm";
 import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, handleTableActions } from "../../store/slices/users.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const roleBadgeClasses = {
     admin: "bg-violet-100 text-violet-700",
@@ -55,11 +57,14 @@ export default function UsersTable() {
         dispatch(handleTableActions({ key: "limit", value: newLimit }));
     }
 
+    // Handle Update User
+    const [userToUpdate, setUserToUpdate] = useState(null);
+
     return (
         <>
             <div className="mt-5 overflow-x-auto">
                 {loading && <PageLoading />}
-                {error && <PageError error={error.message} />}
+                {error && <PageError message={error.message} />}
 
                 {(!data || !data?.users?.length) && (
                     <NoDataAvailable message="No users available." />
@@ -139,7 +144,13 @@ export default function UsersTable() {
                                                 <Eye className="h-3.5 w-3.5" />
                                             </Link>
 
-                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer">
+                                            <button
+                                                onClick={() =>
+                                                    setUserToUpdate(user)
+                                                }
+                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                title="Update User"
+                                            >
                                                 <Pencil className="h-3.5 w-3.5" />
                                             </button>
 
@@ -207,6 +218,22 @@ export default function UsersTable() {
                     </select>
                 </div>
             </div>
+
+            {userToUpdate && (
+                <Modal
+                    isOpen={!!userToUpdate}
+                    onClose={() => setUserToUpdate(null)}
+                    title="Update User"
+                >
+                    <UpdateUserForm
+                        onClose={() => setUserToUpdate(null)}
+                        userToUpdate={userToUpdate}
+                        onUpdate={() =>
+                            dispatch(getUsers({ search, role, page, limit }))
+                        }
+                    />
+                </Modal>
+            )}
         </>
     );
 }
