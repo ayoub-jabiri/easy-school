@@ -7,6 +7,7 @@ import UsersPage from "../pages/users/UsersPage";
 import GuardiansPage from "../pages/guardians/GuardiansPage";
 import UserDetailsPage from "../pages/users/UserDetailsPage";
 import SubjectsPage from "../pages/subjects/SubjectsPage";
+import RoomsPage from "../pages/rooms/RoomsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -56,6 +57,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/subjects">
                 <SubjectsPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/school-rooms",
+        element: (
+            <AppLayout activeHref="/school-rooms">
+                <RoomsPage />
             </AppLayout>
         ),
     },

@@ -9,16 +9,24 @@ import {
 
 export const getSchoolRooms = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const roomsLimit = +req?.query?.limit || 15;
-        const roomsToSkip = (currentPage - 1) * roomsLimit;
+        const { page = 1, limit = 15, search = "" } = req.query;
 
-        const schoolRooms = await getSchoolRoomsService(
-            roomsLimit,
-            roomsToSkip
-        );
+        const currentPage = +page;
+        const roomsLimit = +limit;
 
-        res.json({ currentPage, roomsPerPage: roomsLimit, schoolRooms });
+        const { rooms, totalRooms } = await getSchoolRoomsService({
+            page: currentPage,
+            limit: roomsLimit,
+            search,
+        });
+
+        res.json({
+            currentPage,
+            roomsPerPage: roomsLimit,
+            totalPages: Math.ceil(totalRooms / roomsLimit),
+            totalRooms,
+            rooms,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
@@ -26,9 +34,10 @@ export const getSchoolRooms = async (req, res) => {
 
 export const registerSchoolRoom = async (req, res) => {
     try {
-        const { roomNumber } = req.body;
+        const { title, roomNumber } = req.body;
 
         const schoolRoom = await registerSchoolRoomService({
+            title,
             roomNumber,
         });
 

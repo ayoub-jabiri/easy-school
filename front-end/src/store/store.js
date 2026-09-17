@@ -5,6 +5,7 @@ import dashboardReducer from "./slices/dashboard.slice";
 import usersReducer from "./slices/users.slice";
 import guardianReducer from "./slices/guardian.slice";
 import subjectsReducer from "./slices/subjects.slice";
+import roomsReducer from "./slices/rooms.slice";
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         users: usersReducer,
         guardians: guardianReducer,
         subjects: subjectsReducer,
+        rooms: roomsReducer,
     },
 });
 
