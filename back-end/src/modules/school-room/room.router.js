@@ -17,6 +17,7 @@ import {
     schoolRoomDeleteCheck,
     schoolRoomExistsCheck,
     schoolRoomNumberExistsCheck,
+    schoolRoomRegisterCheck,
 } from "./room.middleware.js";
 
 const router = Router();
@@ -44,9 +45,10 @@ router.put(
     "/:schoolRoomId",
     authorizationCheck(["admin"]),
     paramsIdCheck("schoolRoomId"),
+    schoolRoomExistsCheck,
     requestBodyCheck,
     schoolRoomDataValidation,
-    schoolRoomExistsCheck,
+    schoolRoomRegisterCheck,
     updateSchoolRoom
 );
 router.delete(

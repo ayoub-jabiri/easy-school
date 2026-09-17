@@ -8,9 +8,9 @@ import { schoolRoomSchema } from "./room.validation.js";
 
 export const schoolRoomDataValidation = (req, res, next) => {
     try {
-        const { roomNumber } = req.body;
+        const { title, roomNumber } = req.body;
 
-        schoolRoomSchema.parse({ roomNumber });
+        schoolRoomSchema.parse({ title, roomNumber });
 
         next();
     } catch (error) {
@@ -26,6 +26,28 @@ export const schoolRoomExistsCheck = async (req, res, next) => {
 
         if (!schoolRoom) {
             return clientErrorResponse(res, 404, "School room not found");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const schoolRoomRegisterCheck = async (req, res, next) => {
+    try {
+        const { roomNumber } = req.body;
+        const schoolRoom = await getSchoolRoomByRoomNumberService(roomNumber);
+
+        if (
+            schoolRoom &&
+            schoolRoom._id.toString() !== req.params.schoolRoomId
+        ) {
+            return clientErrorResponse(
+                res,
+                409,
+                "There is a school room with this room number"
+            );
         }
 
         next();
