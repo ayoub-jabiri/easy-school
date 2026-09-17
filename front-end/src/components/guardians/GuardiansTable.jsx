@@ -7,13 +7,15 @@ import { useEffect, useState } from "react";
 import {
     deleteGuardian,
     clearGuardianDeleteError,
+    clearGuardianDeleteMessage,
     getGuardians,
     handleTableActions,
-    clearGuardianDeleteMessage,
 } from "../../store/slices/guardian.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
+import Modal from "../global/Modal";
+import UpdateGuardianForm from "./UpdateGuardianForm";
 
 export default function GuardiansTable() {
     const dispatch = useDispatch();
@@ -29,23 +31,10 @@ export default function GuardiansTable() {
         error: deleteError,
     } = useSelector((state) => state.guardians.deleteData);
 
-    const [guardianToDelete, setGuardianToDelete] = useState(null);
-
+    // Handle Fetch Guardians
     useEffect(() => {
         dispatch(getGuardians({ search, page, limit }));
     }, [dispatch, search, page, limit]);
-
-    useEffect(() => {
-        if (message) {
-            dispatch(setSuccessAlert(message));
-            dispatch(clearGuardianDeleteMessage());
-        }
-
-        if (deleteError) {
-            dispatch(setErrorAlert(deleteError.message));
-            dispatch(clearGuardianDeleteError());
-        }
-    }, [message, deleteError, dispatch]);
 
     function handlePaginationActions(action) {
         const value =
@@ -60,11 +49,29 @@ export default function GuardiansTable() {
         dispatch(handleTableActions({ key: "limit", value: newLimit }));
     }
 
+    // Handle Delete Guardian
+    const [guardianToDelete, setGuardianToDelete] = useState(null);
+
+    useEffect(() => {
+        if (message) {
+            dispatch(setSuccessAlert(message));
+            dispatch(clearGuardianDeleteMessage());
+        }
+
+        if (deleteError) {
+            dispatch(setErrorAlert(deleteError.message));
+            dispatch(clearGuardianDeleteError());
+        }
+    }, [message, deleteError, dispatch]);
+
     async function handleConfirmDelete() {
         dispatch(deleteGuardian(guardianToDelete._id));
 
         setGuardianToDelete(null);
     }
+
+    // Handle Update Guardian
+    const [guardianToUpdate, setGuardianToUpdate] = useState(null);
 
     return (
         <>
@@ -127,17 +134,26 @@ export default function GuardiansTable() {
 
                                     <td className="py-3 pr-4">
                                         <div className="flex items-center gap-2">
-                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer">
+                                            <button
+                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                onClick={() =>
+                                                    setGuardianToUpdate(
+                                                        guardian
+                                                    )
+                                                }
+                                                title="Update Guardian"
+                                            >
                                                 <Pencil className="h-3.5 w-3.5" />
                                             </button>
 
                                             <button
+                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
                                                 onClick={() =>
                                                     setGuardianToDelete(
                                                         guardian
                                                     )
                                                 }
-                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                                title="Delete Guardian"
                                             >
                                                 <Trash2 className="h-3.5 w-3.5" />
                                             </button>
@@ -202,6 +218,22 @@ export default function GuardiansTable() {
                     </select>
                 </div>
             </div>
+
+            {guardianToUpdate && (
+                <Modal
+                    isOpen={guardianToUpdate}
+                    onClose={() => setGuardianToUpdate(null)}
+                    title="Update Guardian"
+                >
+                    <UpdateGuardianForm
+                        onClose={() => setGuardianToUpdate(null)}
+                        guardianToUpdate={guardianToUpdate}
+                        onUpdated={() =>
+                            dispatch(getGuardians({ search, page, limit }))
+                        }
+                    />
+                </Modal>
+            )}
 
             <ConfirmModal
                 isOpen={!!guardianToDelete}

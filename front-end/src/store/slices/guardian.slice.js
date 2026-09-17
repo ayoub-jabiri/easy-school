@@ -52,6 +52,33 @@ export const deleteGuardian = createAsyncThunk(
     }
 );
 
+export const updateGuardian = createAsyncThunk(
+    "guardians/updateGuardian",
+    async ({ guardianId, ...guardianData }, { rejectWithValue }) => {
+        try {
+            const response = await api.put(
+                `/guardians/${guardianId}`,
+                guardianData
+            );
+
+            return response;
+        } catch (error) {
+            let currentError = {
+                message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
+            };
+
+            if (error.response?.data?.errors) {
+                currentError.errors = error.response?.data?.errors;
+            }
+
+            return rejectWithValue({
+                ...currentError,
+            });
+        }
+    }
+);
+
 const initialState = {
     registerData: {
         message: null,
@@ -61,6 +88,11 @@ const initialState = {
     deleteData: {
         message: null,
         deleting: false,
+        error: null,
+    },
+    updateData: {
+        message: null,
+        updating: false,
         error: null,
     },
     guardiansList: {
@@ -90,6 +122,12 @@ const guardianSlice = createSlice({
         },
         clearGuardianDeleteError(state) {
             state.deleteData.error = null;
+        },
+        clearGuardianUpdateMessage(state) {
+            state.updateData.message = null;
+        },
+        clearGuardianUpdateError(state) {
+            state.updateData.error = null;
         },
         handleTableActions(state, action) {
             const { key, value } = action.payload;
@@ -166,6 +204,24 @@ const guardianSlice = createSlice({
                 state.deleteData.message = null;
                 state.deleteData.error = action.payload;
             });
+
+        // Update Guardian
+        builder
+            .addCase(updateGuardian.pending, (state) => {
+                state.updateData.updating = true;
+                state.updateData.message = null;
+                state.updateData.error = null;
+            })
+            .addCase(updateGuardian.fulfilled, (state, action) => {
+                state.updateData.updating = false;
+                state.updateData.message = action.payload.message;
+                state.updateData.error = null;
+            })
+            .addCase(updateGuardian.rejected, (state, action) => {
+                state.updateData.updating = false;
+                state.updateData.message = null;
+                state.updateData.error = action.payload;
+            });
     },
 });
 
@@ -174,6 +230,8 @@ export const {
     clearGuardiansError,
     clearGuardianDeleteMessage,
     clearGuardianDeleteError,
+    clearGuardianUpdateMessage,
+    clearGuardianUpdateError,
     handleTableActions,
 } = guardianSlice.actions;
 
