@@ -16,6 +16,7 @@ import {
     subjectDataValidation,
     subjectAlreadyExistCheck,
     subjectExistsCheck,
+    subjectDeleteCheck,
 } from "./subject.middleware.js";
 
 const router = Router();
@@ -55,6 +56,7 @@ router.delete(
     authorizationCheck(["admin"]),
     paramsIdCheck("subjectId"),
     subjectExistsCheck,
+    subjectDeleteCheck,
     deleteSubject
 );
 

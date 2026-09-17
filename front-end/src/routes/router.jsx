@@ -6,6 +6,7 @@ import DashboardPage from "../pages/dashboard/DashboardPage";
 import UsersPage from "../pages/users/UsersPage";
 import GuardiansPage from "../pages/guardians/GuardiansPage";
 import UserDetailsPage from "../pages/users/UserDetailsPage";
+import SubjectsPage from "../pages/subjects/SubjectsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/guardians">
                 <GuardiansPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/subjects",
+        element: (
+            <AppLayout activeHref="/subjects">
+                <SubjectsPage />
             </AppLayout>
         ),
     },

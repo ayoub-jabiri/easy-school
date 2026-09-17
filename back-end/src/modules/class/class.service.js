@@ -19,6 +19,10 @@ export const registerClassService = async (classData) => {
     subject.classes.push(newClass._id);
     await subject.save();
 
+    const schoolRoom = await getSchoolRoomByIdService(classData.schoolRoomId);
+    schoolRoom.classes.push(newClass._id);
+    await schoolRoom.save();
+
     return newClass;
 };
 

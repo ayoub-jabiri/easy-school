@@ -9,13 +9,24 @@ import {
 
 export const getSubjects = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const invoicesLimit = +req?.query?.limit || 15;
-        const invoicesToSkip = (currentPage - 1) * invoicesLimit;
+        const { page = 1, limit = 15, search = "", role = "" } = req.query;
 
-        const subjects = await getAllSubjects(invoicesLimit, invoicesToSkip);
+        const currentPage = +page;
+        const subjectsLimit = +limit;
 
-        res.json({ currentPage, invoicesPerPage: invoicesLimit, subjects });
+        const { subjects, totalSubjects } = await getAllSubjects({
+            page: currentPage,
+            limit: subjectsLimit,
+            search,
+        });
+
+        res.json({
+            currentPage,
+            subjectsPerPage: subjectsLimit,
+            totalPages: Math.ceil(totalSubjects / subjectsLimit),
+            totalSubjects,
+            subjects,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
