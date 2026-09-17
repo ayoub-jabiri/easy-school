@@ -12,18 +12,22 @@ import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const getGuardians = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const guardiansLimit = +req?.query?.limit || 15;
-        const guardiansToSkip = (currentPage - 1) * guardiansLimit;
+        const { page = 1, limit = 15, search = "" } = req.query;
 
-        const guardians = await getGuardiansService(
-            guardiansLimit,
-            guardiansToSkip
-        );
+        const currentPage = +page;
+        const guardiansLimit = +limit;
+
+        const { guardians, totalGuardians } = await getGuardiansService({
+            page: currentPage,
+            limit: guardiansLimit,
+            search,
+        });
 
         res.json({
             currentPage,
             guardiansPerPage: guardiansLimit,
+            totalPages: Math.ceil(totalGuardians / guardiansLimit),
+            totalGuardians,
             guardians,
         });
     } catch (error) {

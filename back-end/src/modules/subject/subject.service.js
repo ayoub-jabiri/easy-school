@@ -1,7 +1,27 @@
 import Subject from "./subject.model.js";
 
-export const getAllSubjects = async (invoicesLimit, invoicesToSkip) =>
-    await Subject.find().limit(invoicesLimit).skip(invoicesToSkip);
+export const getAllSubjects = async ({ page, limit, search }) => {
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+    if (search.trim()) {
+        const regex = new RegExp(search.trim(), "i");
+
+        filter.title = regex;
+    }
+
+    const [subjects, totalSubjects] = await Promise.all([
+        Subject.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+
+        Subject.countDocuments(filter),
+    ]);
+
+    return {
+        subjects,
+        totalSubjects,
+    };
+};
 
 export const getSubjectByTitle = async (title) =>
     await Subject.findOne({ title });

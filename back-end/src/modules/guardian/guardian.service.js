@@ -1,11 +1,46 @@
 import { getUserByIdService } from "../users/user.service.js";
 import Guardian from "./guardian.model.js";
+import User from "../users/user.model.js";
 
-export const getGuardiansService = async (guardiansLimit, guardiansToSkip) =>
-    await Guardian.find()
+export const getGuardiansService = async ({ page, limit, search }) => {
+    const skip = (page - 1) * limit;
+
+    const filter = { role: "parent" };
+
+    if (search.trim()) {
+        const regex = new RegExp(search.trim(), "i");
+
+        filter.$or = [
+            { fullName: regex },
+            { email: regex },
+            { phoneNumber: regex },
+        ];
+    }
+
+    const [allGuardians, totalGuardians] = await Promise.all([
+        User.find(filter)
+            .select("-password")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit),
+
+        User.countDocuments(filter),
+    ]);
+
+    const parentIds = allGuardians.map((parent) => parent._id);
+
+    const guardians = await Guardian.find({
+        parentId: { $in: parentIds },
+    })
         .sort({ createdAt: -1 })
-        .limit(guardiansLimit)
-        .skip(guardiansToSkip);
+        .populate("parentId", "fullName email phoneNumber")
+        .populate("studentId", "fullName email phoneNumber");
+
+    return {
+        guardians,
+        totalGuardians,
+    };
+};
 
 export const getGuardianByQuery = async (query) =>
     await Guardian.findOne(query);
