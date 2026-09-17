@@ -36,10 +36,31 @@ export const registerGuardian = createAsyncThunk(
     }
 );
 
+export const deleteGuardian = createAsyncThunk(
+    "guardians/deleteGuardian",
+    async (guardianId, { rejectWithValue }) => {
+        try {
+            const response = await api.delete(`/guardians/${guardianId}`);
+
+            return { ...response, guardianId };
+        } catch (error) {
+            return rejectWithValue({
+                message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
+            });
+        }
+    }
+);
+
 const initialState = {
     registerData: {
         message: null,
         registering: false,
+        error: null,
+    },
+    deleteData: {
+        message: null,
+        deleting: false,
         error: null,
     },
     guardiansList: {
@@ -63,6 +84,12 @@ const guardianSlice = createSlice({
         },
         clearGuardiansError(state) {
             state.registerData.error = null;
+        },
+        clearGuardianDeleteMessage(state) {
+            state.deleteData.message = null;
+        },
+        clearGuardianDeleteError(state) {
+            state.deleteData.error = null;
         },
         handleTableActions(state, action) {
             const { key, value } = action.payload;
@@ -116,12 +143,37 @@ const guardianSlice = createSlice({
                 state.guardiansList.loading = false;
                 state.guardiansList.error = action.payload;
             });
+
+        // Delete Guardian
+        builder
+            .addCase(deleteGuardian.pending, (state) => {
+                state.deleteData.deleting = true;
+                state.deleteData.message = null;
+                state.deleteData.error = null;
+            })
+            .addCase(deleteGuardian.fulfilled, (state, action) => {
+                state.deleteData.deleting = false;
+                state.deleteData.message = action.payload.message;
+                state.deleteData.error = null;
+
+                state.guardiansList.data.guardians =
+                    state.guardiansList.data.guardians.filter(
+                        (guardian) => guardian._id !== action.payload.guardianId
+                    );
+            })
+            .addCase(deleteGuardian.rejected, (state, action) => {
+                state.deleteData.deleting = false;
+                state.deleteData.message = null;
+                state.deleteData.error = action.payload;
+            });
     },
 });
 
 export const {
     clearGuardiansMessage,
     clearGuardiansError,
+    clearGuardianDeleteMessage,
+    clearGuardianDeleteError,
     handleTableActions,
 } = guardianSlice.actions;
 

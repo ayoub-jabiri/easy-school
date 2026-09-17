@@ -11,7 +11,6 @@ import {
 } from "../../store/slices/guardian.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
 import { getInputError } from "../../lib/input.errors";
-import { getUsers } from "../../store/slices/users.slice";
 
 const initialFormState = {
     studentId: "",
@@ -22,19 +21,9 @@ export default function RegisterGuardianForm({ onClose }) {
     const { message, registering, error } = useSelector(
         (state) => state.guardians.registerData
     );
-    // const { data: users } = useSelector((state) => state.users.usersList);
     const dispatch = useDispatch();
 
     const [form, setForm] = useState(initialFormState);
-
-    // useEffect(() => {
-    //     dispatch(getUsers({ page: 1, limit: 1000 }));
-    // }, [dispatch]);
-
-    // const parents =
-    //     users?.users?.filter((user) => user.role === "parent") || [];
-    // const students =
-    //     users?.users?.filter((user) => user.role === "student") || [];
 
     useEffect(() => {
         if (error && !error.errors) {
@@ -83,20 +72,6 @@ export default function RegisterGuardianForm({ onClose }) {
                             placeholder="e.g. 6a96c10d28e659ca5021a76d"
                             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                         />
-                        {/* <select
-                            id="student-select"
-                            value={form.studentId}
-                            onChange={(e) =>
-                                setForm({ ...form, studentId: e.target.value })
-                            }
-                            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                        >
-                            {students.map((student) => (
-                                <option key={student._id} value={student._id}>
-                                    {student.fullName}
-                                </option>
-                            ))}
-                        </select> */}
                         {inputErrors.studentId && (
                             <InputError message={inputErrors.studentId} />
                         )}

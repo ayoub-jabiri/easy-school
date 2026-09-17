@@ -1,12 +1,17 @@
-import { Eye, Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import Avatar from "../global/Avatar";
 import NoDataAvailable from "../global/NoDataAvailable";
+import ConfirmModal from "../global/ConfirmModal";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
+    deleteGuardian,
+    clearGuardianDeleteError,
     getGuardians,
     handleTableActions,
+    clearGuardianDeleteMessage,
 } from "../../store/slices/guardian.slice";
+import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
 
@@ -18,10 +23,29 @@ export default function GuardiansTable() {
         error,
         tableActions: { search, page, limit },
     } = useSelector((state) => state.guardians.guardiansList);
+    const {
+        message,
+        deleting,
+        error: deleteError,
+    } = useSelector((state) => state.guardians.deleteData);
+
+    const [guardianToDelete, setGuardianToDelete] = useState(null);
 
     useEffect(() => {
         dispatch(getGuardians({ search, page, limit }));
     }, [dispatch, search, page, limit]);
+
+    useEffect(() => {
+        if (message) {
+            dispatch(setSuccessAlert(message));
+            dispatch(clearGuardianDeleteMessage());
+        }
+
+        if (deleteError) {
+            dispatch(setErrorAlert(deleteError.message));
+            dispatch(clearGuardianDeleteError());
+        }
+    }, [message, deleteError, dispatch]);
 
     function handlePaginationActions(action) {
         const value =
@@ -34,6 +58,12 @@ export default function GuardiansTable() {
         const newLimit = +e.target.value || 15;
 
         dispatch(handleTableActions({ key: "limit", value: newLimit }));
+    }
+
+    async function handleConfirmDelete() {
+        dispatch(deleteGuardian(guardianToDelete._id));
+
+        setGuardianToDelete(null);
     }
 
     return (
@@ -97,12 +127,19 @@ export default function GuardiansTable() {
 
                                     <td className="py-3 pr-4">
                                         <div className="flex items-center gap-2">
-                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-sky-600 transition hover:bg-sky-200 cursor-pointer">
-                                                <Eye className="h-3.5 w-3.5" />
+                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer">
+                                                <Pencil className="h-3.5 w-3.5" />
                                             </button>
 
-                                            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer">
-                                                <Pencil className="h-3.5 w-3.5" />
+                                            <button
+                                                onClick={() =>
+                                                    setGuardianToDelete(
+                                                        guardian
+                                                    )
+                                                }
+                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
                                             </button>
                                         </div>
                                     </td>
@@ -165,6 +202,20 @@ export default function GuardiansTable() {
                     </select>
                 </div>
             </div>
+
+            <ConfirmModal
+                isOpen={!!guardianToDelete}
+                onClose={() => setGuardianToDelete(null)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Guardian"
+                message={`Are you sure you want to remove ${
+                    guardianToDelete?.parentId?.fullName || "this parent"
+                } as a guardian of ${
+                    guardianToDelete?.studentId?.fullName || "this student"
+                }? This action cannot be undone.`}
+                confirmLabel="Delete"
+                loading={deleting}
+            />
         </>
     );
 }
