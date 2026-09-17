@@ -50,3 +50,22 @@ export const subjectAlreadyExistCheck = async (req, res, next) => {
         serverErrorResponse(res, error);
     }
 };
+
+export const subjectDeleteCheck = async (req, res, next) => {
+    try {
+        const { subjectId } = req.params;
+        const subject = await getSubjectById(subjectId);
+
+        if (subject.classes.length > 0) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete subject with associated classes"
+            );
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};

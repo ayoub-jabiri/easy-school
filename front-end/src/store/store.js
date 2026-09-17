@@ -4,6 +4,7 @@ import alertReducer from "./slices/alert.slice";
 import dashboardReducer from "./slices/dashboard.slice";
 import usersReducer from "./slices/users.slice";
 import guardianReducer from "./slices/guardian.slice";
+import subjectsReducer from "./slices/subjects.slice";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         dashboard: dashboardReducer,
         users: usersReducer,
         guardians: guardianReducer,
+        subjects: subjectsReducer,
     },
 });
 
