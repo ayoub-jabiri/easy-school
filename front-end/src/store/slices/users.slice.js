@@ -38,10 +38,53 @@ export const getUsers = createAsyncThunk(
     }
 );
 
+export const getUserById = createAsyncThunk(
+    "users/getUserById",
+    async (userId, { rejectWithValue }) => {
+        try {
+            return await api.get(`/users/${userId}`);
+        } catch (error) {
+            return rejectWithValue({
+                message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
+            });
+        }
+    }
+);
+
+export const updateUser = createAsyncThunk(
+    "users/updateUser",
+    async ({ userId, ...userData }, { rejectWithValue }) => {
+        try {
+            const response = await api.put(`/users/${userId}`, userData);
+
+            return response;
+        } catch (error) {
+            let currentError = {
+                message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
+            };
+
+            if (error.response?.data?.errors) {
+                currentError.errors = error.response?.data?.errors;
+            }
+
+            return rejectWithValue({
+                ...currentError,
+            });
+        }
+    }
+);
+
 const initialState = {
     registerData: {
         message: null,
         registering: false,
+        error: null,
+    },
+    updateData: {
+        message: null,
+        updating: false,
         error: null,
     },
     usersList: {
@@ -55,6 +98,11 @@ const initialState = {
             limit: 15,
         },
     },
+    userDetails: {
+        data: null,
+        loading: false,
+        error: null,
+    },
 };
 
 const usersSlice = createSlice({
@@ -66,6 +114,12 @@ const usersSlice = createSlice({
         },
         clearUsersError(state) {
             state.registerData.error = null;
+        },
+        clearUsersUpdateMessage(state) {
+            state.updateData.message = null;
+        },
+        clearUsersUpdateError(state) {
+            state.updateData.error = null;
         },
         handleTableActions(state, action) {
             const { key, value } = action.payload;
@@ -122,10 +176,53 @@ const usersSlice = createSlice({
                 state.usersList.loading = false;
                 state.usersList.error = action.payload;
             });
+
+        // Get User By Id
+        builder
+            .addCase(getUserById.pending, (state) => {
+                state.userDetails.loading = true;
+                state.userDetails.error = null;
+            })
+            .addCase(getUserById.fulfilled, (state, action) => {
+                state.userDetails.loading = false;
+                state.userDetails.data = action.payload.user;
+                state.userDetails.error = null;
+            })
+            .addCase(getUserById.rejected, (state, action) => {
+                state.userDetails.loading = false;
+                state.userDetails.error = action.payload;
+            });
+
+        // Update User
+        builder
+            .addCase(updateUser.pending, (state) => {
+                state.updateData.updating = true;
+                state.updateData.message = null;
+                state.updateData.error = null;
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                state.updateData.updating = false;
+                state.updateData.message = action.payload.message;
+                state.updateData.error = null;
+
+                if (state.userDetails.data?._id === action.payload.user._id) {
+                    state.userDetails.data = action.payload.user;
+                }
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.updateData.updating = false;
+                state.updateData.message = null;
+                state.updateData.error = action.payload;
+            });
     },
 });
 
-export const { clearUsersMessage, clearUsersError, handleTableActions } =
-    usersSlice.actions;
+export const {
+    clearUsersMessage,
+    clearUsersError,
+    clearUsersUpdateMessage,
+    clearUsersUpdateError,
+    handleTableActions,
+} = usersSlice.actions;
 
 export default usersSlice.reducer;
