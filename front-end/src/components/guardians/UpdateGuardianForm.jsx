@@ -3,42 +3,49 @@ import { useDispatch, useSelector } from "react-redux";
 
 import InputError from "../global/InputError";
 import InputLoading from "../global/InputLoading";
+
+import { getInputError } from "../../lib/input.errors";
 import {
-    registerGuardian,
-    clearGuardiansError,
-    clearGuardiansMessage,
-    getGuardians,
+    updateGuardian,
+    clearGuardianUpdateMessage,
+    clearGuardianUpdateError,
 } from "../../store/slices/guardian.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
-import { getInputError } from "../../lib/input.errors";
 
-const initialFormState = {
-    studentId: "",
-    parentId: "",
-};
-
-export default function RegisterGuardianForm({ onClose }) {
-    const { message, registering, error } = useSelector(
-        (state) => state.guardians.registerData
-    );
+export default function UpdateGuardianForm({
+    onClose,
+    guardianToUpdate,
+    onUpdated,
+}) {
     const dispatch = useDispatch();
+    const { message, updating, error } = useSelector(
+        (state) => state.guardians.updateData
+    );
 
-    const [form, setForm] = useState(initialFormState);
+    const [form, setForm] = useState({
+        studentId: guardianToUpdate?.studentId?._id || "",
+        parentId: guardianToUpdate?.parentId?._id || "",
+    });
 
     useEffect(() => {
         if (error && !error.errors) {
             dispatch(setErrorAlert(error.message));
         }
+
         if (message) {
             dispatch(setSuccessAlert(message));
 
+            onUpdated?.();
             onClose();
 
-            dispatch(getGuardians());
-
-            dispatch(clearGuardiansError());
-            dispatch(clearGuardiansMessage());
+            dispatch(clearGuardianUpdateMessage());
+            dispatch(clearGuardianUpdateError());
         }
+
+        return () => {
+            dispatch(clearGuardianUpdateMessage());
+            dispatch(clearGuardianUpdateError());
+        };
     }, [dispatch, message, error]);
 
     const inputErrors = error?.errors ? getInputError(error.errors) : {};
@@ -50,7 +57,13 @@ export default function RegisterGuardianForm({ onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        dispatch(registerGuardian(form));
+        dispatch(
+            updateGuardian({
+                guardianId: guardianToUpdate._id,
+                studentId: form.studentId,
+                parentId: form.parentId,
+            })
+        );
     };
 
     return (
@@ -63,7 +76,7 @@ export default function RegisterGuardianForm({ onClose }) {
                 <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                         <label className="mb-1 block text-xs font-medium text-slate-500">
-                            Student
+                            Student ID
                         </label>
                         <input
                             type="text"
@@ -97,10 +110,10 @@ export default function RegisterGuardianForm({ onClose }) {
 
             <button
                 type="submit"
-                disabled={registering}
+                disabled={updating}
                 className="w-full rounded-md bg-slate-900 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60 cursor-pointer"
             >
-                {registering ? <InputLoading /> : "Register"}
+                {updating ? <InputLoading /> : "Update"}
             </button>
         </form>
     );
