@@ -1,5 +1,4 @@
 import mongoose, { Schema, model } from "mongoose";
-import { number } from "zod";
 
 const classSchema = new Schema({
     level: {

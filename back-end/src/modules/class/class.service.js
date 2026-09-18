@@ -3,8 +3,45 @@ import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService, getUsersService } from "../users/user.service.js";
 import Class from "./class.model.js";
 
-export const getClassesService = async (classesLimit, classesToSkip) =>
-    await Class.find().limit(classesLimit).skip(classesToSkip);
+// export const getClassesService = async (classesLimit, classesToSkip) =>
+//     await Class.find().limit(classesLimit).skip(classesToSkip);
+
+export const getClassesService = async ({ page, limit, search, role }) => {
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+
+    if (search.trim()) {
+        if (!isNaN(+search.trim())) {
+            const value = +search.trim();
+
+            filter.$or = [{ levelYear: value }, { group: value }];
+        } else {
+            const regex = new RegExp(search.trim(), "i");
+
+            filter.level = regex;
+        }
+    }
+
+    const [classes, totalClasses] = await Promise.all([
+        Class.find(filter)
+            .select("-password")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate("schoolRoomId", "title roomNumber")
+            .populate("subjectId", "title")
+            .populate("teacherId", "fullName email")
+            .populate("students", "fullName email"),
+
+        Class.countDocuments(filter),
+    ]);
+
+    return {
+        classes,
+        totalClasses,
+    };
+};
 
 export const getClassByQuery = async (query) => await Class.findOne(query);
 
