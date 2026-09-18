@@ -6,6 +6,7 @@ import usersReducer from "./slices/users.slice";
 import guardianReducer from "./slices/guardian.slice";
 import subjectsReducer from "./slices/subjects.slice";
 import roomsReducer from "./slices/rooms.slice";
+import classesReducer from "./slices/classes.slice";
 
 const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
         guardians: guardianReducer,
         subjects: subjectsReducer,
         rooms: roomsReducer,
+        classes: classesReducer,
     },
 });
 

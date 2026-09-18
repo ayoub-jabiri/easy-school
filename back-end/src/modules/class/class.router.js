@@ -23,6 +23,7 @@ import {
     assignTeacherDataValidation,
     classAlreadyExistsCheck,
     classDataValidation,
+    classDeleteCheck,
     classExistsCheck,
     schoolRoomExistsCheck,
     studentRegistrationCheck,
@@ -69,7 +70,7 @@ router.delete(
     authorizationCheck(["admin"]),
     paramsIdCheck("classId"),
     classExistsCheck,
-    // classDeleteCheck,
+    classDeleteCheck,
     deleteClass
 );
 

@@ -5,6 +5,7 @@ import {
     getClassSchoolRoomService,
     getClassStudentsService,
     getClassTeacherService,
+    getSingleClassService,
     handleStudentRegistrationService,
     handleTeacherAssignmentService,
     registerClassService,
@@ -15,7 +16,7 @@ import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const getClasses = async (req, res) => {
     try {
-        const { page = 1, limit = 15, search = "" } = req.query;
+        const { page = 1, limit = 15, search = "", level = "" } = req.query;
 
         const currentPage = +page;
         const classesLimit = +limit;
@@ -24,6 +25,7 @@ export const getClasses = async (req, res) => {
             page: currentPage,
             limit: classesLimit,
             search,
+            level,
         });
 
         res.json({
@@ -61,7 +63,7 @@ export const registerClass = async (req, res) => {
 
 export const getSingleClass = async (req, res) => {
     try {
-        const currentClass = await getClassByIdService(req.params.classId);
+        const currentClass = await getSingleClassService(req.params.classId);
 
         res.json({ class: currentClass });
     } catch (error) {
@@ -193,6 +195,10 @@ export const getClassTeacher = async (req, res) => {
     try {
         const { classId } = req.params;
         const teacher = await getClassTeacherService(classId);
+
+        if (!teacher) {
+            return res.json({ teacher: null });
+        }
 
         res.json({ teacher: excludeUserPassword(teacher) });
     } catch (error) {

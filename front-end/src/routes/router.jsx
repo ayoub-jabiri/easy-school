@@ -8,6 +8,8 @@ import GuardiansPage from "../pages/guardians/GuardiansPage";
 import UserDetailsPage from "../pages/users/UserDetailsPage";
 import SubjectsPage from "../pages/subjects/SubjectsPage";
 import RoomsPage from "../pages/rooms/RoomsPage";
+import ClassesPage from "../pages/classes/ClassesPage";
+import ClassDetailsPage from "../pages/classes/ClassDetailsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -65,6 +67,22 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/school-rooms">
                 <RoomsPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/classes",
+        element: (
+            <AppLayout activeHref="/classes">
+                <ClassesPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/classes/:id",
+        element: (
+            <AppLayout activeHref="/classes">
+                <ClassDetailsPage />
             </AppLayout>
         ),
     },

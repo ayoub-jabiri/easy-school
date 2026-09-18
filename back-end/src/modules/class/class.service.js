@@ -3,10 +3,7 @@ import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService, getUsersService } from "../users/user.service.js";
 import Class from "./class.model.js";
 
-// export const getClassesService = async (classesLimit, classesToSkip) =>
-//     await Class.find().limit(classesLimit).skip(classesToSkip);
-
-export const getClassesService = async ({ page, limit, search, role }) => {
+export const getClassesService = async ({ page, limit, search, level }) => {
     const skip = (page - 1) * limit;
 
     const filter = {};
@@ -22,6 +19,12 @@ export const getClassesService = async ({ page, limit, search, role }) => {
             filter.level = regex;
         }
     }
+
+    if (level) {
+        filter.level = level;
+    }
+
+    console.log(filter);
 
     const [classes, totalClasses] = await Promise.all([
         Class.find(filter)
@@ -48,6 +51,13 @@ export const getClassByQuery = async (query) => await Class.findOne(query);
 export const getClassByIdService = async (classId) =>
     await Class.findById(classId);
 
+export const getSingleClassService = async (classId) =>
+    await Class.findById(classId)
+        .populate("schoolRoomId", "title roomNumber")
+        .populate("subjectId", "title")
+        .populate("teacherId", "fullName email phoneNumber")
+        .populate("students", "fullName email phoneNumber");
+
 export const registerClassService = async (classData) => {
     const newClass = await Class.create(classData);
 
@@ -66,16 +76,33 @@ export const registerClassService = async (classData) => {
 export const updateClassService = async (classId, classData) => {
     const currentClass = await getClassByIdService(classId);
 
-    currentClass.subjectTitle = classData.subjectTitle.toLowerCase();
     currentClass.level = classData.level;
     currentClass.levelYear = classData.levelYear;
     currentClass.schoolRoomId = classData.schoolRoomId;
+    currentClass.group = classData.group;
 
     return await currentClass.save();
 };
 
-export const deleteClassService = async (classId) =>
-    await Class.findByIdAndDelete(classId);
+export const deleteClassService = async (classId) => {
+    const currentClass = await getClassByIdService(classId);
+    const subject = await getSubjectById(currentClass.subjectId);
+
+    subject.classes = subject.classes.filter(
+        (id) => id.toString() !== classId.toString()
+    );
+    await subject.save();
+
+    const schoolRoom = await getSchoolRoomByIdService(
+        currentClass.schoolRoomId
+    );
+    schoolRoom.classes = schoolRoom.classes.filter(
+        (id) => id.toString() !== classId.toString()
+    );
+    await schoolRoom.save();
+
+    return await currentClass.deleteOne();
+};
 
 export const handleTeacherAssignmentService = async (
     action,
@@ -119,6 +146,10 @@ export const getClassSchoolRoomService = async (classId) => {
 
 export const getClassTeacherService = async (classId) => {
     const currentClass = await getClassByIdService(classId);
+
+    if (!currentClass.teacherId) {
+        return null;
+    }
 
     return await getUserByIdService(currentClass.teacherId);
 };
