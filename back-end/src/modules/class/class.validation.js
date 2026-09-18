@@ -21,14 +21,18 @@ export const classSchema = z
                         : "The school level year must be a number",
             }),
         }),
-        group: z.number({
-            error: (iss) => ({
-                message:
-                    iss.input == undefined
-                        ? "The class group number is required"
-                        : "The class group number must be a number",
+        group: z
+            .number({
+                error: (iss) => ({
+                    message:
+                        iss.input == undefined
+                            ? "The class group number is required"
+                            : "The class group number must be a number",
+                }),
+            })
+            .min(1, {
+                message: "The class group number must be at least 1",
             }),
-        }),
         schoolRoomId: z.string({
             error: (iss) => ({
                 message:

@@ -39,8 +39,6 @@ export const classAlreadyExistsCheck = async (req, res, next) => {
             subjectId,
         });
 
-        console.log(currentClass);
-
         if (currentClass) {
             return clientErrorResponse(res, 409, "Class already registered");
         }
@@ -91,6 +89,33 @@ export const classExistsCheck = async (req, res, next) => {
 
         if (!currentClass) {
             return clientErrorResponse(res, 404, "Class not found");
+        }
+
+        next();
+    } catch (error) {
+        serverErrorResponse(res, error);
+    }
+};
+
+export const classDeleteCheck = async (req, res, next) => {
+    try {
+        const { classId } = req.params;
+        const currentClass = await getClassByIdService(classId);
+
+        if (currentClass?.students?.length > 0) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete class with registered students"
+            );
+        }
+
+        if (currentClass?.teacherId) {
+            return clientErrorResponse(
+                res,
+                400,
+                "Cannot delete class with a teacher assigned"
+            );
         }
 
         next();

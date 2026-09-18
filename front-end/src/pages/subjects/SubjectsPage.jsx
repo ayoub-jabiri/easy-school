@@ -11,7 +11,7 @@ export default function SubjectsPage() {
             <div className="mx-auto max-w-full rounded-2xl bg-white p-5 shadow-sm">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <h1 className="text-lg font-bold text-slate-900">
-                        All Subjects ({data?.totalSubjects || 0})
+                        All Subjects ({data?.subjects?.length || 0})
                     </h1>
 
                     <TableActions />

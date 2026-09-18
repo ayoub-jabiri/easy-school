@@ -19,6 +19,7 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
+        console.error("Request error:", error.response);
         return Promise.reject(error);
     }
 );
@@ -28,6 +29,8 @@ api.interceptors.response.use(
         return response.data;
     },
     (error) => {
+        console.error("Response error:", error.response);
+
         if (error.response && error.response.status === 401) {
             localStorage.removeItem("accessToken");
             router.navigate("/login");

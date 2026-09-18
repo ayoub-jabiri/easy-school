@@ -5,6 +5,7 @@ import {
     getClassSchoolRoomService,
     getClassStudentsService,
     getClassTeacherService,
+    getSingleClassService,
     handleStudentRegistrationService,
     handleTeacherAssignmentService,
     registerClassService,
@@ -15,13 +16,25 @@ import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const getClasses = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const classesLimit = +req?.query?.limit || 15;
-        const classesToSkip = (currentPage - 1) * classesLimit;
+        const { page = 1, limit = 15, search = "", level = "" } = req.query;
 
-        const classes = await getClassesService(classesLimit, classesToSkip);
+        const currentPage = +page;
+        const classesLimit = +limit;
 
-        res.json({ currentPage, classesPerPage: classesLimit, classes });
+        const { classes, totalClasses } = await getClassesService({
+            page: currentPage,
+            limit: classesLimit,
+            search,
+            level,
+        });
+
+        res.json({
+            currentPage,
+            classesPerPage: classesLimit,
+            totalPages: Math.ceil(totalClasses / classesLimit),
+            totalClasses,
+            classes,
+        });
     } catch (error) {
         serverErrorResponse(res, error);
     }
@@ -50,7 +63,7 @@ export const registerClass = async (req, res) => {
 
 export const getSingleClass = async (req, res) => {
     try {
-        const currentClass = await getClassByIdService(req.params.classId);
+        const currentClass = await getSingleClassService(req.params.classId);
 
         res.json({ class: currentClass });
     } catch (error) {
@@ -182,6 +195,10 @@ export const getClassTeacher = async (req, res) => {
     try {
         const { classId } = req.params;
         const teacher = await getClassTeacherService(classId);
+
+        if (!teacher) {
+            return res.json({ teacher: null });
+        }
 
         res.json({ teacher: excludeUserPassword(teacher) });
     } catch (error) {
