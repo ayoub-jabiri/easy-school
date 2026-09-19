@@ -24,8 +24,6 @@ export const getClassesService = async ({ page, limit, search, level }) => {
         filter.level = level;
     }
 
-    console.log(filter);
-
     const [classes, totalClasses] = await Promise.all([
         Class.find(filter)
             .select("-password")
