@@ -111,10 +111,8 @@ const guardianSlice = createSlice({
     name: "guardians",
     initialState,
     reducers: {
-        clearGuardiansMessage(state) {
+        clearGuardianRegisterAlerts(state) {
             state.registerData.message = null;
-        },
-        clearGuardiansError(state) {
             state.registerData.error = null;
         },
         clearGuardianDeleteMessage(state) {
@@ -123,10 +121,9 @@ const guardianSlice = createSlice({
         clearGuardianDeleteError(state) {
             state.deleteData.error = null;
         },
-        clearGuardianUpdateMessage(state) {
+
+        clearGuardinaUpdateAlerts(state) {
             state.updateData.message = null;
-        },
-        clearGuardianUpdateError(state) {
             state.updateData.error = null;
         },
         handleTableActions(state, action) {
@@ -226,12 +223,10 @@ const guardianSlice = createSlice({
 });
 
 export const {
-    clearGuardiansMessage,
-    clearGuardiansError,
+    clearGuardianRegisterAlerts,
     clearGuardianDeleteMessage,
     clearGuardianDeleteError,
-    clearGuardianUpdateMessage,
-    clearGuardianUpdateError,
+    clearGuardinaUpdateAlerts,
     handleTableActions,
 } = guardianSlice.actions;
 

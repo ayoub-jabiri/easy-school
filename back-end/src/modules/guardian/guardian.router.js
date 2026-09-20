@@ -55,6 +55,7 @@ router.put(
     guardianDataValidation,
     studentExistsCheck,
     parentExistsCheck,
+    guardianAlreadyExistsCheck,
     updateGuardian
 );
 
