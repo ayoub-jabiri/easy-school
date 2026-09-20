@@ -47,15 +47,3 @@ export const updateHomeworkService = async (homeworkId, homeworkData) => {
 
 export const deleteHomeworkService = async (homeworkId) =>
     await Homework.findByIdAndDelete(homeworkId);
-
-export const getHomeworkClassService = async (homeworkId) => {
-    const homework = await getHomeworkByIdService(homeworkId);
-
-    return await getClassByIdService(homework.classId);
-};
-
-export const getHomeworkTeacherService = async (homeworkId) => {
-    const homework = await getHomeworkByIdService(homeworkId);
-
-    return await getUserByIdService(homework.teacherId);
-};

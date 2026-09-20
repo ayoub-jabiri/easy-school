@@ -4,8 +4,6 @@ import {
     deleteHomeworkService,
     getAllHomeworksService,
     getHomeworkByIdService,
-    getHomeworkClassService,
-    getHomeworkTeacherService,
     registerHomeworkService,
     updateHomeworkService,
 } from "./homework.service.js";
@@ -88,28 +86,6 @@ export const deleteHomework = async (req, res) => {
         res.json({
             message: "Homework has been deleted successfully",
         });
-    } catch (error) {
-        serverErrorResponse(res, error);
-    }
-};
-
-export const getHomeworkClass = async (req, res) => {
-    try {
-        const currentClass = await getHomeworkClassService(
-            req.params.homeworkId
-        );
-
-        res.json({ class: currentClass });
-    } catch (error) {
-        serverErrorResponse(res, error);
-    }
-};
-
-export const getHomeworkTeacher = async (req, res) => {
-    try {
-        const teacher = await getHomeworkTeacherService(req.params.homeworkId);
-
-        res.json({ teacher: excludeUserPassword(teacher) });
     } catch (error) {
         serverErrorResponse(res, error);
     }

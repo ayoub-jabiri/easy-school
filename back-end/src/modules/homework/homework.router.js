@@ -8,8 +8,6 @@ import {
 import {
     deleteHomework,
     getHomeworks,
-    getHomeworkClass,
-    getHomeworkTeacher,
     getSingleHomework,
     registerHomework,
     updateHomework,
@@ -29,7 +27,7 @@ router.use(authenticationCheck);
 
 router.get(
     "/",
-    authorizationCheck(["admin", "teacher", "student"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     getHomeworks
 );
 router.post(
@@ -44,7 +42,7 @@ router.post(
 
 router.get(
     "/:homeworkId",
-    authorizationCheck(["admin", "teacher", "student"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("homeworkId"),
     homeworkExistsCheck,
     homeworkAccessCheck,
@@ -64,29 +62,11 @@ router.put(
 
 router.delete(
     "/:homeworkId",
-    authorizationCheck(["admin", "teacher"]),
+    authorizationCheck(["teacher"]),
     paramsIdCheck("homeworkId"),
     homeworkExistsCheck,
     homeworkAccessCheck,
     deleteHomework
-);
-
-router.get(
-    "/:homeworkId/class",
-    authorizationCheck(["admin", "teacher", "student"]),
-    paramsIdCheck("homeworkId"),
-    homeworkExistsCheck,
-    homeworkAccessCheck,
-    getHomeworkClass
-);
-
-router.get(
-    "/:homeworkId/teacher",
-    authorizationCheck(["admin", "teacher", "student"]),
-    paramsIdCheck("homeworkId"),
-    homeworkExistsCheck,
-    homeworkAccessCheck,
-    getHomeworkTeacher
 );
 
 export default router;
