@@ -136,8 +136,6 @@ export const registerStudentToClass = createAsyncThunk(
 export const unregisterStudentFromClass = createAsyncThunk(
     "classes/unregisterStudentFromClass",
     async ({ classId, studentId }, { rejectWithValue }) => {
-        console.log({ classId, studentId });
-
         try {
             return await api.patch(`/classes/${classId}/unregister-student`, {
                 studentId,
