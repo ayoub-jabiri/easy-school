@@ -76,7 +76,7 @@ export const classSchema = z
         if (!mongoose.Types.ObjectId.isValid(schoolRoomId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid school room ID",
+                message: "Invalid school room",
                 path: ["schoolRoomId"],
             });
         }
@@ -84,7 +84,7 @@ export const classSchema = z
         if (!mongoose.Types.ObjectId.isValid(subjectId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid subject ID",
+                message: "Invalid subject",
                 path: ["subjectId"],
             });
         }
@@ -105,7 +105,7 @@ export const assignTeacherSchema = z
         if (!mongoose.Types.ObjectId.isValid(teacherId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid teacher ID",
+                message: "Invalid teacher",
                 path: ["teacherId"],
             });
         }
@@ -126,7 +126,7 @@ export const studentRegistrationSchema = z
         if (!mongoose.Types.ObjectId.isValid(studentId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid student ID",
+                message: "Invalid student",
                 path: ["studentId"],
             });
         }

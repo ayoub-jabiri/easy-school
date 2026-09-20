@@ -1,30 +1,40 @@
-import { excludeUserPassword } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import {
     deleteHomeworkService,
     getAllHomeworksService,
     getHomeworkByIdService,
+    getSingleHomeworkService,
     registerHomeworkService,
     updateHomeworkService,
 } from "./homework.service.js";
 
 export const getHomeworks = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const homeworksLimit = +req?.query?.limit || 15;
-        const homeworksToSkip = (currentPage - 1) * homeworksLimit;
+        const {
+            page = 1,
+            limit = 15,
+            search = "",
+            classId = "",
+            status = "",
+        } = req.query;
 
-        const user = req.user;
+        const currentPage = +page;
+        const homeworksLimit = +limit;
 
-        const homeworks = await getAllHomeworksService(
-            user,
-            homeworksLimit,
-            homeworksToSkip
-        );
+        const { homeworks, totalHomeworks } = await getAllHomeworksService({
+            user: req.user,
+            page: currentPage,
+            limit: homeworksLimit,
+            search,
+            classId,
+            status,
+        });
 
         res.json({
             currentPage,
             homeworksPerPage: homeworksLimit,
+            totalPages: Math.ceil(totalHomeworks / homeworksLimit) || 1,
+            totalHomeworks,
             homeworks,
         });
     } catch (error) {
@@ -55,7 +65,7 @@ export const registerHomework = async (req, res) => {
 
 export const getSingleHomework = async (req, res) => {
     try {
-        const homework = await getHomeworkByIdService(req.params.homeworkId);
+        const homework = await getSingleHomeworkService(req.params.homeworkId);
 
         res.json({ homework });
     } catch (error) {
