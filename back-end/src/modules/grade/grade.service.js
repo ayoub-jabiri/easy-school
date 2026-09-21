@@ -1,4 +1,3 @@
-import { getUserByIdService } from "../users/user.service.js";
 import Grade from "./grade.model.js";
 
 export const getAllGradesService = async (user, gradesLimit, gradesToSkip) => {
@@ -32,15 +31,3 @@ export const updateGradeService = async (gradeId, gradeData) => {
 
 export const deleteGradeService = async (gradeId) =>
     await Grade.findByIdAndDelete(gradeId);
-
-export const getGradeStudentService = async (gradeId) => {
-    const grade = await getGradeByIdService(gradeId);
-
-    return await getUserByIdService(grade.studentId);
-};
-
-export const getGradeTeacherService = async (gradeId) => {
-    const grade = await getGradeByIdService(gradeId);
-
-    return await getUserByIdService(grade.teacherId);
-};

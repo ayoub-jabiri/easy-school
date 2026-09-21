@@ -1,12 +1,9 @@
-import { excludeUserPassword } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import { registerGradeService } from "./grade.service.js";
 import {
     deleteGradeService,
     getAllGradesService,
     getGradeByIdService,
-    getGradeStudentService,
-    getGradeTeacherService,
     updateGradeService,
 } from "./grade.service.js";
 
@@ -81,26 +78,6 @@ export const deleteGrade = async (req, res) => {
         res.json({
             message: "Grade has been deleted successfully",
         });
-    } catch (error) {
-        serverErrorResponse(res, error);
-    }
-};
-
-export const getGradeStudent = async (req, res) => {
-    try {
-        const student = await getGradeStudentService(req.params.gradeId);
-
-        res.json({ student: excludeUserPassword(student) });
-    } catch (error) {
-        serverErrorResponse(res, error);
-    }
-};
-
-export const getGradeTeacher = async (req, res) => {
-    try {
-        const teacher = await getGradeTeacherService(req.params.gradeId);
-
-        res.json({ teacher: excludeUserPassword(teacher) });
     } catch (error) {
         serverErrorResponse(res, error);
     }
