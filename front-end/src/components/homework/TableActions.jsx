@@ -77,7 +77,7 @@ export default function TableActions() {
                             })
                         )
                     }
-                    className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                    className="w-32.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                 >
                     <option value="">All Classes</option>
                     {filterableClasses.map((currentClass) => (

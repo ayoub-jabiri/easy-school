@@ -11,6 +11,7 @@ import RoomsPage from "../pages/rooms/RoomsPage";
 import ClassesPage from "../pages/classes/ClassesPage";
 import ClassDetailsPage from "../pages/classes/ClassDetailsPage";
 import HomeworkPage from "../pages/homework/HomeworkPage";
+import HomeworkDetailsPage from "../pages/homework/HomeworkDetailsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -92,6 +93,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/homework">
                 <HomeworkPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/homework/:id",
+        element: (
+            <AppLayout activeHref="/homework">
+                <HomeworkDetailsPage />
             </AppLayout>
         ),
     },

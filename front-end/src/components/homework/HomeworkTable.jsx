@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import NoDataAvailable from "../global/NoDataAvailable";
 import ConfirmModal from "../global/ConfirmModal";
 import Modal from "../global/Modal";
@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
     deleteHomework,
-    clearHomeworkDeleteError,
-    clearHomeworkDeleteMessage,
     getHomeworks,
     handleTableActions,
+    clearHomeworkDeleteAtlerts,
 } from "../../store/slices/homework.slice";
 import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
 import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
+import { Link } from "react-router";
 
 export default function HomeworkTable() {
     const dispatch = useDispatch();
@@ -57,12 +57,12 @@ export default function HomeworkTable() {
     useEffect(() => {
         if (message) {
             dispatch(setSuccessAlert(message));
-            dispatch(clearHomeworkDeleteMessage());
+            dispatch(clearHomeworkDeleteAtlerts());
         }
 
         if (deleteError) {
             dispatch(setErrorAlert(deleteError.message));
-            dispatch(clearHomeworkDeleteError());
+            dispatch(clearHomeworkDeleteAtlerts());
         }
     }, [message, deleteError, dispatch]);
 
@@ -94,9 +94,7 @@ export default function HomeworkTable() {
                                 <th className="pb-3 pr-4">Assigned Date</th>
                                 <th className="pb-3 pr-4">Due Date</th>
                                 <th className="pb-3 pr-4">Status</th>
-                                {isTeacher && (
-                                    <th className="pb-3 pr-4">Actions</th>
-                                )}
+                                <th className="pb-3 pr-4">Actions</th>
                             </tr>
                         </thead>
 
@@ -150,35 +148,43 @@ export default function HomeworkTable() {
                                             </span>
                                         </td>
 
-                                        {isTeacher && (
-                                            <td className="py-3 pr-4">
-                                                <div className="flex items-center gap-2">
-                                                    <button
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
-                                                        onClick={() =>
-                                                            setHomeworkToUpdate(
-                                                                homework
-                                                            )
-                                                        }
-                                                        title="Update Homework"
-                                                    >
-                                                        <Pencil className="h-3.5 w-3.5" />
-                                                    </button>
+                                        <td className="py-3 pr-4">
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    to={`/homework/${homework._id}`}
+                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-sky-600 transition hover:bg-sky-200 cursor-pointer"
+                                                >
+                                                    <Eye className="h-3.5 w-3.5" />
+                                                </Link>
+                                                {isTeacher && (
+                                                    <>
+                                                        <button
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                            onClick={() =>
+                                                                setHomeworkToUpdate(
+                                                                    homework
+                                                                )
+                                                            }
+                                                            title="Update Homework"
+                                                        >
+                                                            <Pencil className="h-3.5 w-3.5" />
+                                                        </button>
 
-                                                    <button
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
-                                                        onClick={() =>
-                                                            setHomeworkToDelete(
-                                                                homework
-                                                            )
-                                                        }
-                                                        title="Delete Homework"
-                                                    >
-                                                        <Trash2 className="h-3.5 w-3.5" />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        )}
+                                                        <button
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                                            onClick={() =>
+                                                                setHomeworkToDelete(
+                                                                    homework
+                                                                )
+                                                            }
+                                                            title="Delete Homework"
+                                                        >
+                                                            <Trash2 className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </td>
                                     </tr>
                                 );
                             })}

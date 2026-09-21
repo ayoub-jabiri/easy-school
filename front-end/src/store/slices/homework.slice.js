@@ -12,6 +12,20 @@ export const getHomeworks = createAsyncThunk(
     }
 );
 
+export const getHomeworkById = createAsyncThunk(
+    "homework/getHomeworkById",
+    async (homeworkId, { rejectWithValue }) => {
+        try {
+            return await api.get(`/homeworks/${homeworkId}`);
+        } catch (error) {
+            return rejectWithValue({
+                message: error.response?.data?.message || "An error occurred",
+                statusCode: error.response?.status,
+            });
+        }
+    }
+);
+
 export const createHomework = createAsyncThunk(
     "homework/createHomework",
     async (homeworkData, { rejectWithValue }) => {
@@ -107,6 +121,11 @@ const initialState = {
             limit: 15,
         },
     },
+    homeworkDetails: {
+        data: null,
+        loading: false,
+        error: null,
+    },
 };
 
 const homeworkSlice = createSlice({
@@ -117,10 +136,8 @@ const homeworkSlice = createSlice({
             state.registerData.message = null;
             state.registerData.error = null;
         },
-        clearHomeworkDeleteMessage(state) {
+        clearHomeworkDeleteAtlerts(state) {
             state.deleteData.message = null;
-        },
-        clearHomeworkDeleteError(state) {
             state.deleteData.error = null;
         },
         clearHomeworkUpdateAlerts(state) {
@@ -186,6 +203,22 @@ const homeworkSlice = createSlice({
                 state.homeworksList.error = action.payload;
             });
 
+        // Get Homework By Id
+        builder
+            .addCase(getHomeworkById.pending, (state) => {
+                state.homeworkDetails.loading = true;
+                state.homeworkDetails.error = null;
+            })
+            .addCase(getHomeworkById.fulfilled, (state, action) => {
+                state.homeworkDetails.loading = false;
+                state.homeworkDetails.data = action.payload.homework;
+                state.homeworkDetails.error = null;
+            })
+            .addCase(getHomeworkById.rejected, (state, action) => {
+                state.homeworkDetails.loading = false;
+                state.homeworkDetails.error = action.payload;
+            });
+
         // Delete Homework
         builder
             .addCase(deleteHomework.pending, (state) => {
@@ -234,8 +267,7 @@ const homeworkSlice = createSlice({
 
 export const {
     clearHomeworkRegisterAlerts,
-    clearHomeworkDeleteMessage,
-    clearHomeworkDeleteError,
+    clearHomeworkDeleteAtlerts,
     clearHomeworkUpdateAlerts,
     handleTableActions,
 } = homeworkSlice.actions;
