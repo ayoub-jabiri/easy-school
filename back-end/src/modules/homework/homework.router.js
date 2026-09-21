@@ -8,8 +8,6 @@ import {
 import {
     deleteHomework,
     getHomeworks,
-    getHomeworkClass,
-    getHomeworkTeacher,
     getSingleHomework,
     registerHomework,
     updateHomework,
@@ -64,29 +62,11 @@ router.put(
 
 router.delete(
     "/:homeworkId",
-    authorizationCheck(["admin", "teacher"]),
+    authorizationCheck(["teacher"]),
     paramsIdCheck("homeworkId"),
     homeworkExistsCheck,
     homeworkAccessCheck,
     deleteHomework
-);
-
-router.get(
-    "/:homeworkId/class",
-    authorizationCheck(["admin", "teacher", "student"]),
-    paramsIdCheck("homeworkId"),
-    homeworkExistsCheck,
-    homeworkAccessCheck,
-    getHomeworkClass
-);
-
-router.get(
-    "/:homeworkId/teacher",
-    authorizationCheck(["admin", "teacher", "student"]),
-    paramsIdCheck("homeworkId"),
-    homeworkExistsCheck,
-    homeworkAccessCheck,
-    getHomeworkTeacher
 );
 
 export default router;

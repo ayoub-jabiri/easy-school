@@ -1,0 +1,182 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import Modal from "../global/Modal";
+import InputError from "../global/InputError";
+import InputLoading from "../global/InputLoading";
+import {
+    clearHomeworkRegisterAlerts,
+    createHomework,
+    getHomeworks,
+} from "../../store/slices/homework.slice";
+import { getClasses } from "../../store/slices/classes.slice";
+import { setErrorAlert, setSuccessAlert } from "../../store/slices/alert.slice";
+import { getInputError } from "../../lib/input.errors";
+
+const initialFormState = {
+    title: "",
+    description: "",
+    dueDate: "",
+    classId: "",
+};
+
+export default function CreateHomeworkModal({ isOpen, onClose }) {
+    const dispatch = useDispatch();
+    const { message, registering, error } = useSelector(
+        (state) => state.homework.registerData
+    );
+    const { data: classesData } = useSelector(
+        (state) => state.classes.classesList
+    );
+    const { user } = useSelector((state) => state.user);
+    const {
+        tableActions: { search, classId, status, page, limit },
+    } = useSelector((state) => state.homework.homeworksList);
+
+    const [form, setForm] = useState(initialFormState);
+
+    useEffect(() => {
+        if (isOpen) {
+            dispatch(getClasses({ limit: 100 }));
+        }
+    }, [dispatch, isOpen]);
+
+    useEffect(() => {
+        if (error && !error.errors) {
+            dispatch(setErrorAlert(error.message));
+        }
+
+        if (message) {
+            dispatch(setSuccessAlert(message));
+
+            onClose();
+
+            dispatch(getHomeworks({ search, classId, status, page, limit }));
+
+            dispatch(clearHomeworkRegisterAlerts());
+        }
+    }, [dispatch, message, error]);
+
+    const inputErrors = error?.errors ? getInputError(error.errors) : {};
+
+    const myClasses =
+        classesData?.classes?.filter(
+            (currentClass) => currentClass.teacherId?._id === user?._id
+        ) || [];
+
+    const updateField = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        dispatch(createHomework(form));
+    };
+
+    return (
+        <Modal isOpen={isOpen} onClose={onClose} title="Create New Homework">
+            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                        Homework Details
+                    </p>
+
+                    <div className="mt-3 grid grid-cols-1 gap-4">
+                        <div>
+                            <label className="mb-1 block text-xs font-medium text-slate-500">
+                                Title
+                            </label>
+                            <input
+                                type="text"
+                                value={form.title}
+                                onChange={updateField}
+                                name="title"
+                                placeholder="e.g. Chapter 3 exercises"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            />
+                            {inputErrors.title && (
+                                <InputError message={inputErrors.title} />
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-xs font-medium text-slate-500">
+                                Description
+                            </label>
+                            <textarea
+                                rows={4}
+                                value={form.description}
+                                onChange={updateField}
+                                name="description"
+                                className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            />
+                            {inputErrors.description && (
+                                <InputError message={inputErrors.description} />
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-xs font-medium text-slate-500">
+                                Class
+                            </label>
+                            <select
+                                value={form.classId}
+                                onChange={updateField}
+                                name="classId"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition capitalize focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            >
+                                <option value="">
+                                    Select one of your classes
+                                </option>
+                                {myClasses.map((currentClass) => (
+                                    <option
+                                        key={currentClass._id}
+                                        value={currentClass._id}
+                                    >
+                                        {currentClass.subjectId?.title} —{" "}
+                                        {currentClass.level} Year{" "}
+                                        {currentClass.levelYear} (Group{" "}
+                                        {currentClass.group})
+                                    </option>
+                                ))}
+                            </select>
+                            {inputErrors.classId && (
+                                <InputError message={inputErrors.classId} />
+                            )}
+                            {myClasses.length === 0 && (
+                                <p className="mt-1 text-xs text-slate-400">
+                                    You aren't assigned to any classes yet.
+                                </p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className="mb-1 block text-xs font-medium text-slate-500">
+                                Due Date
+                            </label>
+                            <input
+                                type="date"
+                                value={form.dueDate}
+                                onChange={updateField}
+                                name="dueDate"
+                                className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                            />
+                            {inputErrors.dueDate && (
+                                <InputError message={inputErrors.dueDate} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={registering}
+                    className="w-full rounded-md bg-slate-900 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60 cursor-pointer"
+                >
+                    {registering ? <InputLoading /> : "Create"}
+                </button>
+            </form>
+        </Modal>
+    );
+}

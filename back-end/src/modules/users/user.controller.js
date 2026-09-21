@@ -83,7 +83,7 @@ export const getAdminUsers = async (req, res) => {
         res.json({
             currentPage,
             usersPerPage: usersLimit,
-            totalPages: Math.ceil(totalUsers / usersLimit),
+            totalPages: Math.ceil(totalUsers / usersLimit) || 1,
             totalUsers,
             users,
         });

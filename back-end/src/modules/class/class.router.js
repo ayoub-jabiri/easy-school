@@ -36,7 +36,11 @@ const router = Router();
 
 router.use(authenticationCheck);
 
-router.get("/", authorizationCheck(["admin"]), getClasses);
+router.get(
+    "/",
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    getClasses
+);
 router.post(
     "/",
     authorizationCheck(["admin"]),
@@ -50,7 +54,7 @@ router.post(
 
 router.get(
     "/:classId",
-    authorizationCheck(["admin"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("classId"),
     classExistsCheck,
     getSingleClass

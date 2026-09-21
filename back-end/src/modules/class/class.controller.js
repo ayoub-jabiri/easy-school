@@ -31,7 +31,7 @@ export const getClasses = async (req, res) => {
         res.json({
             currentPage,
             classesPerPage: classesLimit,
-            totalPages: Math.ceil(totalClasses / classesLimit),
+            totalPages: Math.ceil(totalClasses / classesLimit) || 1,
             totalClasses,
             classes,
         });

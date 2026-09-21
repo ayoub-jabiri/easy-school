@@ -49,7 +49,7 @@ export const homeworkSchema = z
         if (!mongoose.Types.ObjectId.isValid(teacherId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid teacher ID",
+                message: "Invalid teacher",
                 path: ["teacherId"],
             });
         }
@@ -57,7 +57,7 @@ export const homeworkSchema = z
         if (!mongoose.Types.ObjectId.isValid(classId)) {
             ctx.addIssue({
                 code: "custom",
-                message: "Invalid class ID",
+                message: "Invalid class",
                 path: ["classId"],
             });
         }

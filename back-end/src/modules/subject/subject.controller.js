@@ -23,7 +23,7 @@ export const getSubjects = async (req, res) => {
         res.json({
             currentPage,
             subjectsPerPage: subjectsLimit,
-            totalPages: Math.ceil(totalSubjects / subjectsLimit),
+            totalPages: Math.ceil(totalSubjects / subjectsLimit) || 1,
             totalSubjects,
             subjects,
         });

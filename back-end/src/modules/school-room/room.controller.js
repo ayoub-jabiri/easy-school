@@ -23,7 +23,7 @@ export const getSchoolRooms = async (req, res) => {
         res.json({
             currentPage,
             roomsPerPage: roomsLimit,
-            totalPages: Math.ceil(totalRooms / roomsLimit),
+            totalPages: Math.ceil(totalRooms / roomsLimit) || 1,
             totalRooms,
             rooms,
         });

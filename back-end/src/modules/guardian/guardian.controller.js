@@ -26,7 +26,7 @@ export const getGuardians = async (req, res) => {
         res.json({
             currentPage,
             guardiansPerPage: guardiansLimit,
-            totalPages: Math.ceil(totalGuardians / guardiansLimit),
+            totalPages: Math.ceil(totalGuardians / guardiansLimit) || 1,
             totalGuardians,
             guardians,
         });
