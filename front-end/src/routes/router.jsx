@@ -13,6 +13,7 @@ import ClassDetailsPage from "../pages/classes/ClassDetailsPage";
 import HomeworkPage from "../pages/homework/HomeworkPage";
 import HomeworkDetailsPage from "../pages/homework/HomeworkDetailsPage";
 import GradesPage from "../pages/grades/GradesPage";
+import GradeDetailsPage from "../pages/grades/GradeDetailsPage";
 
 // import NotFound from "../pages/NotFound";
 
@@ -110,6 +111,14 @@ const router = createBrowserRouter([
         element: (
             <AppLayout activeHref="/grades">
                 <GradesPage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "/grades/:id",
+        element: (
+            <AppLayout activeHref="/grades">
+                <GradeDetailsPage />
             </AppLayout>
         ),
     },

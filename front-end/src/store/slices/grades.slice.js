@@ -26,6 +26,20 @@ export const getGradeById = createAsyncThunk(
     }
 );
 
+// Fetches every grade for a class (optionally scoped to one evaluation
+// name) so the details page can compute class-level statistics without
+// disturbing the paginated gradesList used by GradesPage.
+export const getGradeClassStats = createAsyncThunk(
+    "grades/getGradeClassStats",
+    async (params = {}, { rejectWithValue }) => {
+        try {
+            return await api.get("/grades", { params });
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 export const createGrade = createAsyncThunk(
     "grades/createGrade",
     async (gradeData, { rejectWithValue }) => {
@@ -124,6 +138,11 @@ const initialState = {
         loading: false,
         error: null,
     },
+    classStats: {
+        data: null,
+        loading: false,
+        error: null,
+    },
 };
 
 const gradesSlice = createSlice({
@@ -218,6 +237,22 @@ const gradesSlice = createSlice({
             .addCase(getGradeById.rejected, (state, action) => {
                 state.gradeDetails.loading = false;
                 state.gradeDetails.error = action.payload;
+            });
+
+        // Get Grade Class Stats
+        builder
+            .addCase(getGradeClassStats.pending, (state) => {
+                state.classStats.loading = true;
+                state.classStats.error = null;
+            })
+            .addCase(getGradeClassStats.fulfilled, (state, action) => {
+                state.classStats.loading = false;
+                state.classStats.data = action.payload;
+                state.classStats.error = null;
+            })
+            .addCase(getGradeClassStats.rejected, (state, action) => {
+                state.classStats.loading = false;
+                state.classStats.error = action.payload;
             });
 
         // Delete Grade

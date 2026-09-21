@@ -14,12 +14,7 @@ import PageLoading from "../global/PageLoading";
 import PageError from "../global/PageError";
 import UpdateGradeModal from "./UpdateGradeModal";
 import { Link } from "react-router";
-
-function gradeBadgeStyle(score) {
-    if (score >= 14) return "bg-emerald-100 text-emerald-700";
-    if (score >= 10) return "bg-amber-100 text-amber-700";
-    return "bg-red-100 text-red-700";
-}
+import { getGradeBadgeStyle } from "../../lib/styles.utils";
 
 export default function GradesTable() {
     const dispatch = useDispatch();
@@ -128,7 +123,7 @@ export default function GradesTable() {
 
                                     <td className="py-3 pr-4">
                                         <span
-                                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${gradeBadgeStyle(
+                                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${getGradeBadgeStyle(
                                                 grade.grade
                                             )}`}
                                         >
@@ -145,7 +140,7 @@ export default function GradesTable() {
                                     <td className="py-3 pr-4">
                                         <div className="flex items-center gap-2">
                                             <Link
-                                                to={`/homework/${grade._id}`}
+                                                to={`/grades/${grade._id}`}
                                                 className="flex h-7 w-7 items-center justify-center rounded-full bg-sky-100 text-sky-600 transition hover:bg-sky-200 cursor-pointer"
                                             >
                                                 <Eye className="h-3.5 w-3.5" />
