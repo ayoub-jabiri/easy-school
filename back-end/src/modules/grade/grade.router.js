@@ -8,8 +8,6 @@ import {
 import {
     deleteGrade,
     getGrades,
-    getGradeStudent,
-    getGradeTeacher,
     getSingleGrade,
     registerGrade,
     updateGrade,
@@ -62,29 +60,11 @@ router.put(
 
 router.delete(
     "/:gradeId",
-    authorizationCheck(["admin", "teacher"]),
+    authorizationCheck(["teacher"]),
     paramsIdCheck("gradeId"),
     gradeExistsCheck,
     gradeAccessCheck,
     deleteGrade
-);
-
-router.get(
-    "/:gradeId/student",
-    authorizationCheck(["admin", "teacher"]),
-    paramsIdCheck("gradeId"),
-    gradeExistsCheck,
-    gradeAccessCheck,
-    getGradeStudent
-);
-
-router.get(
-    "/:gradeId/teacher",
-    authorizationCheck(["admin", "teacher"]),
-    paramsIdCheck("gradeId"),
-    gradeExistsCheck,
-    gradeAccessCheck,
-    getGradeTeacher
 );
 
 export default router;

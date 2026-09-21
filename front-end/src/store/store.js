@@ -8,6 +8,7 @@ import subjectsReducer from "./slices/subjects.slice";
 import roomsReducer from "./slices/rooms.slice";
 import classesReducer from "./slices/classes.slice";
 import homeworkReducer from "./slices/homework.slice";
+import gradesReducer from "./slices/grades.slice";
 
 const store = configureStore({
     reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
         rooms: roomsReducer,
         classes: classesReducer,
         homework: homeworkReducer,
+        grades: gradesReducer,
     },
 });
 

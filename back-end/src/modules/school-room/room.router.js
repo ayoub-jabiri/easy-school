@@ -24,7 +24,11 @@ const router = Router();
 
 router.use(authenticationCheck);
 
-router.get("/", authorizationCheck(["admin"]), getSchoolRooms);
+router.get(
+    "/",
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    getSchoolRooms
+);
 router.post(
     "/",
     authorizationCheck(["admin"]),
@@ -36,7 +40,7 @@ router.post(
 
 router.get(
     "/:schoolRoomId",
-    authorizationCheck(["admin"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("schoolRoomId"),
     schoolRoomExistsCheck,
     getSingleSchoolRoom
