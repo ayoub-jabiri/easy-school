@@ -9,18 +9,32 @@ import {
 
 export const getAnnouncements = async (req, res) => {
     try {
-        const currentPage = +req?.query?.page || 1;
-        const announcementsLimit = +req?.query?.limit || 15;
+        const {
+            page = 1,
+            limit = 15,
+            search = "",
+            startDate = "",
+            endDate = "",
+        } = req.query;
+
+        const currentPage = +page;
+        const announcementsLimit = +limit;
         const announcementsToSkip = (currentPage - 1) * announcementsLimit;
 
-        const announcements = await getAllAnnouncementsService(
-            announcementsLimit,
-            announcementsToSkip
-        );
+        const { announcements, totalAnnouncements } =
+            await getAllAnnouncementsService({
+                limit: announcementsLimit,
+                skip: announcementsToSkip,
+                search,
+                startDate,
+                endDate,
+            });
 
         res.json({
             currentPage,
             announcementsPerPage: announcementsLimit,
+            totalPages: Math.ceil(totalAnnouncements / announcementsLimit) || 1,
+            totalAnnouncements,
             announcements,
         });
     } catch (error) {
