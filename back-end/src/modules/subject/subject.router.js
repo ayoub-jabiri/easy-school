@@ -23,7 +23,11 @@ const router = Router();
 
 router.use(authenticationCheck);
 
-router.get("/", authorizationCheck(["admin"]), getSubjects);
+router.get(
+    "/",
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    getSubjects
+);
 router.post(
     "/",
     authorizationCheck(["admin"]),
@@ -35,7 +39,7 @@ router.post(
 
 router.get(
     "/:subjectId",
-    authorizationCheck(["admin"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("subjectId"),
     subjectExistsCheck,
     getSingleSubject
