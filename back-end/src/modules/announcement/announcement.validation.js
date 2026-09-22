@@ -9,10 +9,15 @@ export const announcementSchema = z.object({
                     : "The announcement title must be a string",
         })
         .min(3, "The announcement title must be at least 3 characters long"),
-    description: z.string({
-        error: (iss) =>
-            iss.input == undefined
-                ? "The announcement description is required"
-                : "The announcement description must be a string",
-    }),
+    description: z
+        .string({
+            error: (iss) =>
+                iss.input == undefined
+                    ? "The announcement description is required"
+                    : "The announcement description must be a string",
+        })
+        .min(
+            4,
+            "The announcement description must be at least 4 characters long"
+        ),
 });
