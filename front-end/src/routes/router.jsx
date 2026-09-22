@@ -16,8 +16,8 @@ import GradesPage from "../pages/grades/GradesPage";
 import GradeDetailsPage from "../pages/grades/GradeDetailsPage";
 import AnnouncementsPage from "../pages/announcements/AnnouncementsPage";
 import AnnouncementDetailsPage from "../pages/announcements/AnnouncementDetailsPage";
-
-// import NotFound from "../pages/NotFound";
+import ProfilePage from "../pages/profile/ProfilePage";
+import NotFoundPage from "../pages/not-found/NotFoundPage";
 
 const router = createBrowserRouter([
     {
@@ -31,7 +31,10 @@ const router = createBrowserRouter([
     {
         path: "/dashboard",
         element: (
-            <AppLayout activeHref="/dashboard">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/dashboard"
+            >
                 <DashboardPage />
             </AppLayout>
         ),
@@ -39,7 +42,7 @@ const router = createBrowserRouter([
     {
         path: "/users",
         element: (
-            <AppLayout activeHref="/users">
+            <AppLayout allowedRoles={["admin"]} activeHref="/users">
                 <UsersPage />
             </AppLayout>
         ),
@@ -47,7 +50,7 @@ const router = createBrowserRouter([
     {
         path: "/users/:id",
         element: (
-            <AppLayout activeHref="/users">
+            <AppLayout allowedRoles={["admin"]} activeHref="/users">
                 <UserDetailsPage />
             </AppLayout>
         ),
@@ -55,7 +58,7 @@ const router = createBrowserRouter([
     {
         path: "/guardians",
         element: (
-            <AppLayout activeHref="/guardians">
+            <AppLayout allowedRoles={["admin"]} activeHref="/guardians">
                 <GuardiansPage />
             </AppLayout>
         ),
@@ -63,7 +66,10 @@ const router = createBrowserRouter([
     {
         path: "/subjects",
         element: (
-            <AppLayout activeHref="/subjects">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/subjects"
+            >
                 <SubjectsPage />
             </AppLayout>
         ),
@@ -71,7 +77,10 @@ const router = createBrowserRouter([
     {
         path: "/school-rooms",
         element: (
-            <AppLayout activeHref="/school-rooms">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/school-rooms"
+            >
                 <RoomsPage />
             </AppLayout>
         ),
@@ -79,7 +88,10 @@ const router = createBrowserRouter([
     {
         path: "/classes",
         element: (
-            <AppLayout activeHref="/classes">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/classes"
+            >
                 <ClassesPage />
             </AppLayout>
         ),
@@ -87,7 +99,10 @@ const router = createBrowserRouter([
     {
         path: "/classes/:id",
         element: (
-            <AppLayout activeHref="/classes">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/classes"
+            >
                 <ClassDetailsPage />
             </AppLayout>
         ),
@@ -95,7 +110,10 @@ const router = createBrowserRouter([
     {
         path: "/homework",
         element: (
-            <AppLayout activeHref="/homework">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/homework"
+            >
                 <HomeworkPage />
             </AppLayout>
         ),
@@ -103,7 +121,10 @@ const router = createBrowserRouter([
     {
         path: "/homework/:id",
         element: (
-            <AppLayout activeHref="/homework">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/homework"
+            >
                 <HomeworkDetailsPage />
             </AppLayout>
         ),
@@ -111,7 +132,10 @@ const router = createBrowserRouter([
     {
         path: "/grades",
         element: (
-            <AppLayout activeHref="/grades">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/grades"
+            >
                 <GradesPage />
             </AppLayout>
         ),
@@ -119,7 +143,10 @@ const router = createBrowserRouter([
     {
         path: "/grades/:id",
         element: (
-            <AppLayout activeHref="/grades">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/grades"
+            >
                 <GradeDetailsPage />
             </AppLayout>
         ),
@@ -127,7 +154,10 @@ const router = createBrowserRouter([
     {
         path: "/announcements",
         element: (
-            <AppLayout activeHref="/announcements">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/announcements"
+            >
                 <AnnouncementsPage />
             </AppLayout>
         ),
@@ -135,19 +165,29 @@ const router = createBrowserRouter([
     {
         path: "/announcements/:id",
         element: (
-            <AppLayout activeHref="/announcements">
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/announcements"
+            >
                 <AnnouncementDetailsPage />
             </AppLayout>
         ),
     },
-    // {
-    //     path: "*",
-    //     element: (
-    //         <AppLaout>
-    //             <NotFound />
-    //         </AppLaout>
-    //     ),
-    // },
+    {
+        path: "/profile",
+        element: (
+            <AppLayout
+                allowedRoles={["admin", "teacher", "student", "parent"]}
+                activeHref="/profile"
+            >
+                <ProfilePage />
+            </AppLayout>
+        ),
+    },
+    {
+        path: "*",
+        element: <NotFoundPage />,
+    },
 ]);
 
 export default router;

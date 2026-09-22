@@ -5,8 +5,9 @@ import PageError from "../global/PageError";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { useEffect, useState } from "react";
+import NotFoundPage from "../../pages/not-found/NotFoundPage";
 
-export default function AppLayout({ activeHref, children }) {
+export default function AppLayout({ allowedRoles = [], activeHref, children }) {
     const { user, loading, error } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
@@ -25,6 +26,12 @@ export default function AppLayout({ activeHref, children }) {
 
     if (error) {
         return <PageError message={error.message} />;
+    }
+
+    const isAllowed = allowedRoles.includes(user?.role);
+
+    if (!isAllowed) {
+        return <NotFoundPage />;
     }
 
     return (

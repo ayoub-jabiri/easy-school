@@ -42,14 +42,14 @@ const menuItems = [
                 icon: BookOpen,
                 label: "Subjects",
                 href: "/subjects",
-                visible: ["admin"],
+                visible: ["admin", "teacher", "student", "parent"],
             },
 
             {
                 icon: DoorClosed,
                 label: "School Rooms",
                 href: "/school-rooms",
-                visible: ["admin"],
+                visible: ["admin", "teacher", "student", "parent"],
             },
             {
                 icon: School,
