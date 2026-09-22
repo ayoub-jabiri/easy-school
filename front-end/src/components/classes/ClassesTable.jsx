@@ -17,7 +17,7 @@ import Modal from "../global/Modal";
 import UpdateClassForm from "./UpdateClassForm";
 import { Link } from "react-router";
 
-export default function ClassesTable() {
+export default function ClassesTable({ isAdmin }) {
     const dispatch = useDispatch();
     const {
         data,
@@ -162,29 +162,33 @@ export default function ClassesTable() {
                                                 >
                                                     <Eye className="h-3.5 w-3.5" />
                                                 </Link>
-                                                <button
-                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
-                                                    onClick={() =>
-                                                        setClassToUpdate(
-                                                            currentClass
-                                                        )
-                                                    }
-                                                    title="Update Class"
-                                                >
-                                                    <Pencil className="h-3.5 w-3.5" />
-                                                </button>
+                                                {isAdmin && (
+                                                    <>
+                                                        <button
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                            onClick={() =>
+                                                                setClassToUpdate(
+                                                                    currentClass
+                                                                )
+                                                            }
+                                                            title="Update Class"
+                                                        >
+                                                            <Pencil className="h-3.5 w-3.5" />
+                                                        </button>
 
-                                                <button
-                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
-                                                    onClick={() =>
-                                                        setClassToDelete(
-                                                            currentClass
-                                                        )
-                                                    }
-                                                    title="Delete Class"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5" />
-                                                </button>
+                                                        <button
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                                            onClick={() =>
+                                                                setClassToDelete(
+                                                                    currentClass
+                                                                )
+                                                            }
+                                                            title="Delete Class"
+                                                        >
+                                                            <Trash2 className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </>
+                                                )}
                                             </div>
                                         </td>
                                     </tr>
@@ -248,31 +252,42 @@ export default function ClassesTable() {
                 </div>
             </div>
 
-            {classToUpdate && (
-                <Modal
-                    isOpen={classToUpdate}
-                    onClose={() => setClassToUpdate(null)}
-                    title="Update Class"
-                >
-                    <UpdateClassForm
-                        onClose={() => setClassToUpdate(null)}
-                        classToUpdate={classToUpdate}
-                        onUpdated={() =>
-                            dispatch(getClasses({ search, level, page, limit }))
-                        }
-                    />
-                </Modal>
-            )}
+            {isAdmin && (
+                <>
+                    {classToUpdate && (
+                        <Modal
+                            isOpen={classToUpdate}
+                            onClose={() => setClassToUpdate(null)}
+                            title="Update Class"
+                        >
+                            <UpdateClassForm
+                                onClose={() => setClassToUpdate(null)}
+                                classToUpdate={classToUpdate}
+                                onUpdated={() =>
+                                    dispatch(
+                                        getClasses({
+                                            search,
+                                            level,
+                                            page,
+                                            limit,
+                                        })
+                                    )
+                                }
+                            />
+                        </Modal>
+                    )}
 
-            <ConfirmModal
-                isOpen={!!classToDelete}
-                onClose={() => setClassToDelete(null)}
-                onConfirm={handleConfirmDelete}
-                title="Delete Class"
-                message="Are you sure you want to delete this class? This action cannot be undone."
-                confirmLabel="Delete"
-                loading={deleting}
-            />
+                    <ConfirmModal
+                        isOpen={!!classToDelete}
+                        onClose={() => setClassToDelete(null)}
+                        onConfirm={handleConfirmDelete}
+                        title="Delete Class"
+                        message="Are you sure you want to delete this class? This action cannot be undone."
+                        confirmLabel="Delete"
+                        loading={deleting}
+                    />
+                </>
+            )}
         </>
     );
 }

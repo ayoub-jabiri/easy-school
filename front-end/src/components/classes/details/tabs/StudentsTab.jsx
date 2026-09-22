@@ -18,7 +18,7 @@ import {
 } from "../../../../store/slices/alert.slice";
 import { useEffect } from "react";
 
-export default function StudentsTab({ classId }) {
+export default function StudentsTab({ isAdmin, classId }) {
     const dispatch = useDispatch();
 
     const { data } = useSelector((state) => state.classes.classDetails);
@@ -67,13 +67,15 @@ export default function StudentsTab({ classId }) {
                     </p>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={() => setIsRegisterOpen(true)}
-                    className="rounded-lg bg-violet-100 px-3 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-200 cursor-pointer"
-                >
-                    Register Student
-                </button>
+                {isAdmin && (
+                    <button
+                        type="button"
+                        onClick={() => setIsRegisterOpen(true)}
+                        className="rounded-lg bg-violet-100 px-3 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-200 cursor-pointer"
+                    >
+                        Register Student
+                    </button>
+                )}
             </div>
 
             <div className="mt-5 overflow-x-auto">
@@ -87,7 +89,7 @@ export default function StudentsTab({ classId }) {
 
                                 <th className="pb-3">Phone</th>
 
-                                <th className="pb-3">Action</th>
+                                {isAdmin && <th className="pb-3">Actions</th>}
                             </tr>
                         </thead>
 
@@ -109,17 +111,19 @@ export default function StudentsTab({ classId }) {
                                         {student.phoneNumber || "—"}
                                     </td>
 
-                                    <td className="py-3">
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                setStudentToRemove(student)
-                                            }
-                                            className="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200 cursor-pointer"
-                                        >
-                                            Remove
-                                        </button>
-                                    </td>
+                                    {isAdmin && (
+                                        <td className="py-3">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    setStudentToRemove(student)
+                                                }
+                                                className="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200 cursor-pointer"
+                                            >
+                                                Remove
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
@@ -129,7 +133,7 @@ export default function StudentsTab({ classId }) {
                 )}
             </div>
 
-            {isRegisterOpen && (
+            {isAdmin && isRegisterOpen && (
                 <Modal
                     isOpen={isRegisterOpen}
                     onClose={() => setIsRegisterOpen(false)}
@@ -143,15 +147,19 @@ export default function StudentsTab({ classId }) {
                 </Modal>
             )}
 
-            <ConfirmModal
-                isOpen={!!studentToRemove}
-                onClose={() => (registering ? null : setStudentToRemove(null))}
-                onConfirm={handleRemove}
-                title="Remove Student"
-                message={`Are you sure you want to remove ${studentToRemove?.fullName} from this class?`}
-                confirmLabel="Remove"
-                loading={registering}
-            />
+            {isAdmin && (
+                <ConfirmModal
+                    isOpen={!!studentToRemove}
+                    onClose={() =>
+                        registering ? null : setStudentToRemove(null)
+                    }
+                    onConfirm={handleRemove}
+                    title="Remove Student"
+                    message={`Are you sure you want to remove ${studentToRemove?.fullName} from this class?`}
+                    confirmLabel="Remove"
+                    loading={registering}
+                />
+            )}
         </>
     );
 }

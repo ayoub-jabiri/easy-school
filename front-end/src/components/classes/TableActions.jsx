@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleTableActions } from "../../store/slices/classes.slice";
 import CreateClassModal from "./CreateClassModal";
 
-export default function TableActions() {
+export default function TableActions({ isAdmin }) {
     const { search, level } = useSelector(
         (state) => state.classes.classesList.tableActions
     );
@@ -92,19 +92,23 @@ export default function TableActions() {
                     )}
                 </div>
 
-                <button
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400 text-white transition hover:bg-amber-500 cursor-pointer"
-                    onClick={() => setIsRegisterOpen(true)}
-                    title="Register new class"
-                >
-                    <Plus className="h-4 w-4" />
-                </button>
+                {isAdmin && (
+                    <button
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400 text-white transition hover:bg-amber-500 cursor-pointer"
+                        onClick={() => setIsRegisterOpen(true)}
+                        title="Register new class"
+                    >
+                        <Plus className="h-4 w-4" />
+                    </button>
+                )}
             </div>
 
-            <CreateClassModal
-                isOpen={isRegisterOpen}
-                onClose={() => setIsRegisterOpen(false)}
-            />
+            {isAdmin && (
+                <CreateClassModal
+                    isOpen={isRegisterOpen}
+                    onClose={() => setIsRegisterOpen(false)}
+                />
+            )}
         </>
     );
 }
