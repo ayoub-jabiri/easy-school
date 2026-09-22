@@ -17,7 +17,7 @@ import {
 } from "../../../../store/slices/alert.slice";
 import { useEffect } from "react";
 
-export default function StaffTab({ classId, classData }) {
+export default function StaffTab({ isAdmin, classId, classData }) {
     const dispatch = useDispatch();
     const { assigning, message, error } = useSelector(
         (state) => state.classes.teacherAssignmentData
@@ -51,24 +51,25 @@ export default function StaffTab({ classId, classData }) {
                         Teacher
                     </h2>
 
-                    {classData?.teacherId ? (
-                        <button
-                            type="button"
-                            onClick={handleUnassign}
-                            disabled={assigning}
-                            className="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200 disabled:opacity-60 cursor-pointer"
-                        >
-                            {assigning ? "Unassigning..." : "Unassign"}
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            onClick={() => setIsAssignOpen(true)}
-                            className="rounded-lg bg-sky-100 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-200 cursor-pointer"
-                        >
-                            Assign
-                        </button>
-                    )}
+                    {isAdmin &&
+                        (classData?.teacherId ? (
+                            <button
+                                type="button"
+                                onClick={handleUnassign}
+                                disabled={assigning}
+                                className="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700 transition hover:bg-red-200 disabled:opacity-60 cursor-pointer"
+                            >
+                                {assigning ? "Unassigning..." : "Unassign"}
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => setIsAssignOpen(true)}
+                                className="rounded-lg bg-sky-100 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-200 cursor-pointer"
+                            >
+                                Assign
+                            </button>
+                        ))}
                 </div>
 
                 <div className="mt-4 rounded-xl bg-slate-50 p-4">
@@ -106,7 +107,7 @@ export default function StaffTab({ classId, classData }) {
                 </div>
             </div>
 
-            {isAssignOpen && (
+            {isAdmin && isAssignOpen && (
                 <Modal
                     isOpen={isAssignOpen}
                     onClose={() => setIsAssignOpen(false)}

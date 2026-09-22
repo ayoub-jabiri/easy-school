@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 
 export default function ClassesPage() {
     const { data } = useSelector((state) => state.classes.classesList);
+    const { user } = useSelector((state) => state.user);
+
+    const isAdmin = user?.role === "admin";
 
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
@@ -14,10 +17,10 @@ export default function ClassesPage() {
                         All Classes ({data?.totalClasses || 0})
                     </h1>
 
-                    <TableActions />
+                    <TableActions isAdmin={isAdmin} />
                 </div>
 
-                <ClassesTable />
+                <ClassesTable isAdmin={isAdmin} />
             </div>
         </div>
     );

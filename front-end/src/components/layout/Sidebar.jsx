@@ -55,7 +55,7 @@ const menuItems = [
                 icon: School,
                 label: "Classes",
                 href: "/classes",
-                visible: ["admin", "teacher"],
+                visible: ["admin", "teacher", "student", "parent"],
             },
             {
                 icon: ClipboardCheck,
