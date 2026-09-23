@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { GraduationCap, ArrowRight, Menu, X } from "lucide-react";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 
 export default function LandingHeader() {
+    const { accessToken } = useSelector((state) => state.user);
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
@@ -54,16 +56,22 @@ export default function LandingHeader() {
                 </nav>
 
                 <div className="hidden items-center gap-6 lg:flex">
-                    <Link
-                        to="/login"
-                        className="text-sm font-medium text-slate-600 hover:text-slate-900"
-                    >
-                        Sign In
-                    </Link>
-                    <button className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800">
-                        Join Now
-                        <ArrowRight className="h-4 w-4" />
-                    </button>
+                    {accessToken ? (
+                        <Link
+                            to="/dashboard"
+                            className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                        >
+                            Join Now
+                            <ArrowRight className="h-4 w-4" />
+                        </Link>
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                        >
+                            Sign In
+                        </Link>
+                    )}
                 </div>
 
                 <button
@@ -98,16 +106,22 @@ export default function LandingHeader() {
                     </nav>
 
                     <div className="mt-4 flex flex-col gap-3 border-t border-slate-100 px-3 pt-4">
-                        <Link
-                            to="/login"
-                            className="text-sm font-medium text-slate-600 hover:text-slate-900"
-                        >
-                            Sign In
-                        </Link>
-                        <button className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
-                            Join Now
-                            <ArrowRight className="h-4 w-4" />
-                        </button>
+                        {accessToken ? (
+                            <Link
+                                to="/dashboard"
+                                className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                            >
+                                Join Now
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                            >
+                                Sign In
+                            </Link>
+                        )}
                     </div>
                 </div>
             )}

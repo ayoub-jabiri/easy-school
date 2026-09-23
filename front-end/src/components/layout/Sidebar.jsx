@@ -127,7 +127,7 @@ export default function Sidebar({
                 } max-lg:z-10 main-transition md:sticky top-0 md:flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white px-4 py-5`}
             >
                 <div className="flex items-center justify-between px-1">
-                    <Link href="/" className="flex items-center gap-2">
+                    <Link to="/" className="flex items-center gap-2">
                         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-purple-400 via-pink-400 to-orange-300 text-sm">
                             🎓
                         </span>
