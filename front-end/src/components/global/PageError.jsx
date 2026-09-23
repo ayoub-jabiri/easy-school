@@ -1,8 +1,12 @@
 import { AlertCircle, RotateCw } from "lucide-react";
+import { Link } from "react-router";
 
-export default function PageError({ message = "An error occurred" }) {
+export default function PageError({
+    message = "An error occurred",
+    statusCode = null,
+}) {
     return (
-        <div className="flex min-h-screen w-full flex-col items-center justify-center gap-4 bg-white px-6 text-center">
+        <div className="flex min-h-[calc(100vh-70px)] w-full flex-col items-center justify-center gap-4 bg-white px-6 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-500">
                 <AlertCircle className="h-6 w-6" />
             </span>
@@ -16,13 +20,24 @@ export default function PageError({ message = "An error occurred" }) {
                 </p>
             </div>
 
-            <button
-                onClick={() => window.location.reload()}
-                className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-            >
-                <RotateCw className="h-4 w-4" />
-                Reload
-            </button>
+            {!statusCode && (
+                <button
+                    onClick={() => window.location.reload()}
+                    className="flex items-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                    <RotateCw className="h-4 w-4" />
+                    Reload
+                </button>
+            )}
+
+            {statusCode === 404 && (
+                <Link
+                    to="/dashboard"
+                    className="w-42.5 rounded-md bg-slate-900 border border-slate-900 px-5 py-2.5 text-sm font-semibold text-white main-transition hover:bg-slate-800"
+                >
+                    Back to Dashboard
+                </Link>
+            )}
         </div>
     );
 }

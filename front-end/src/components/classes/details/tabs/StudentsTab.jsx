@@ -80,7 +80,7 @@ export default function StudentsTab({ isAdmin, classId }) {
 
             <div className="mt-5 overflow-x-auto">
                 {data?.students?.length > 0 ? (
-                    <table className="w-full text-left">
+                    <table className="w-full min-w-[580px] text-left">
                         <thead>
                             <tr className="text-xs text-slate-400">
                                 <th className="pb-3">Student</th>

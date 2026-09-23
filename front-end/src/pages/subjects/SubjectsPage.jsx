@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 
 export default function SubjectsPage() {
     const { data } = useSelector((state) => state.subjects.subjectsList);
+    const { user } = useSelector((state) => state.user);
+
+    const isAdmin = user?.role === "admin";
 
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
@@ -14,10 +17,10 @@ export default function SubjectsPage() {
                         All Subjects ({data?.subjects?.length || 0})
                     </h1>
 
-                    <TableActions />
+                    <TableActions isAdmin={isAdmin} />
                 </div>
 
-                <SubjectsTable />
+                <SubjectsTable isAdmin={isAdmin} />
             </div>
         </div>
     );

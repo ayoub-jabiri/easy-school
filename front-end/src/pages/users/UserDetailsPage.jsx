@@ -39,7 +39,9 @@ export default function UserDetailsPage() {
     }
 
     if (error) {
-        return <PageError message={error.message} />;
+        return (
+            <PageError message={error.message} statusCode={error.statusCode} />
+        );
     }
 
     if (!user) {
@@ -176,8 +178,8 @@ export default function UserDetailsPage() {
                             </h2>
                         </div>
 
-                        <div className="mt-4 grid grid-cols-2 gap-y-5 text-sm">
-                            <div>
+                        <div className="mt-4 grid grid-cols-12 gap-y-5 text-sm">
+                            <div className="col-span-6">
                                 <p className="text-xs text-slate-400">Role</p>
                                 <span
                                     className={`mt-1 inline-block rounded-full px-2.5 py-1 text-xs font-medium capitalize ${
@@ -188,7 +190,18 @@ export default function UserDetailsPage() {
                                 </span>
                             </div>
 
-                            <div>
+                            <div className="col-span-6">
+                                <p className="text-xs text-slate-400">
+                                    Registered On
+                                </p>
+                                <p className="font-semibold text-slate-700">
+                                    {user.createdAt
+                                        ? user.createdAt.split("T")[0]
+                                        : "Unknown"}
+                                </p>
+                            </div>
+
+                            <div className="col-span-12">
                                 <p className="text-xs text-slate-400">
                                     User ID
                                 </p>
@@ -197,17 +210,6 @@ export default function UserDetailsPage() {
                                     title={user._id}
                                 >
                                     {user._id}
-                                </p>
-                            </div>
-
-                            <div>
-                                <p className="text-xs text-slate-400">
-                                    Registered On
-                                </p>
-                                <p className="font-semibold text-slate-700">
-                                    {user.createdAt
-                                        ? user.createdAt.split("T")[0]
-                                        : "Unknown"}
                                 </p>
                             </div>
                         </div>

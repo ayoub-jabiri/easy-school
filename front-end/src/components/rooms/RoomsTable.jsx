@@ -16,7 +16,7 @@ import PageError from "../global/PageError";
 import Modal from "../global/Modal";
 import UpdateRoomForm from "./UpdateRoomForm";
 
-export default function RoomsTable() {
+export default function RoomsTable({ isAdmin }) {
     const dispatch = useDispatch();
     const {
         data,
@@ -83,14 +83,16 @@ export default function RoomsTable() {
                 )}
 
                 {data?.rooms?.length > 0 && (
-                    <table className="w-full border-collapse text-left">
+                    <table className="w-full min-w-[630px] border-collapse text-left">
                         <thead>
                             <tr className="text-xs font-medium text-slate-400">
                                 <th className="pb-3 pr-4">Room</th>
                                 <th className="pb-3 pr-4">Room Number</th>
                                 <th className="pb-3 pr-4">Classes Count</th>
                                 <th className="pb-3 pr-4">Status</th>
-                                <th className="pb-3 pr-4">Actions</th>
+                                {isAdmin && (
+                                    <th className="pb-3 pr-4">Actions</th>
+                                )}
                             </tr>
                         </thead>
 
@@ -138,29 +140,35 @@ export default function RoomsTable() {
                                             </span>
                                         </td>
 
-                                        <td className="py-3 pr-4">
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
-                                                    onClick={() =>
-                                                        setRoomToUpdate(room)
-                                                    }
-                                                    title="Update Room"
-                                                >
-                                                    <Pencil className="h-3.5 w-3.5" />
-                                                </button>
+                                        {isAdmin && (
+                                            <td className="py-3 pr-4">
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                        onClick={() =>
+                                                            setRoomToUpdate(
+                                                                room
+                                                            )
+                                                        }
+                                                        title="Update Room"
+                                                    >
+                                                        <Pencil className="h-3.5 w-3.5" />
+                                                    </button>
 
-                                                <button
-                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
-                                                    onClick={() =>
-                                                        setRoomToDelete(room)
-                                                    }
-                                                    title="Delete Room"
-                                                >
-                                                    <Trash2 className="h-3.5 w-3.5" />
-                                                </button>
-                                            </div>
-                                        </td>
+                                                    <button
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                                        onClick={() =>
+                                                            setRoomToDelete(
+                                                                room
+                                                            )
+                                                        }
+                                                        title="Delete Room"
+                                                    >
+                                                        <Trash2 className="h-3.5 w-3.5" />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        )}
                                     </tr>
                                 );
                             })}
@@ -169,7 +177,7 @@ export default function RoomsTable() {
                 )}
             </div>
 
-            <div className="mt-5 flex items-center justify-between text-sm">
+            <div className="mt-5 flex items-center justify-between text-sm max-md:flex-col max-md:gap-3">
                 <p className="text-slate-500">
                     Total Pages: {data?.totalPages || 0}
                 </p>

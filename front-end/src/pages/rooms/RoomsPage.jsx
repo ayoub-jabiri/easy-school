@@ -6,6 +6,10 @@ import { useSelector } from "react-redux";
 export default function RoomsPage() {
     const { data } = useSelector((state) => state.rooms.roomsList);
 
+    const { user } = useSelector((state) => state.user);
+
+    const isAdmin = user?.role === "admin";
+
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
             <div className="mx-auto max-w-full rounded-2xl bg-white p-5 shadow-sm">
@@ -14,10 +18,10 @@ export default function RoomsPage() {
                         All School Rooms ({data?.rooms?.length || 0})
                     </h1>
 
-                    <TableActions />
+                    <TableActions isAdmin={isAdmin} />
                 </div>
 
-                <RoomsTable />
+                <RoomsTable isAdmin={isAdmin} />
             </div>
         </div>
     );

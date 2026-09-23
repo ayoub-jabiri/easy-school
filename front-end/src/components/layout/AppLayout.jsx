@@ -36,19 +36,21 @@ export default function AppLayout({ allowedRoles = [], activeHref, children }) {
 
     return (
         <>
-            <div className="flex">
+            <div className="flex max-w-screen">
                 <Sidebar
                     role={user.role}
                     activeHref={activeHref}
                     isSidebarOpen={isSidebarOpen}
                     hideSidebar={() => setIsSidebarOpen(false)}
                 />
-                <div className="flex-1">
+                <div className="flex-1 max-w-full">
                     <Header
                         user={user}
                         openSidebar={() => setIsSidebarOpen(true)}
                     />
-                    <main>{children}</main>
+                    <main className="md:max-w-[calc(100vw-280px)]">
+                        {children}
+                    </main>
                 </div>
             </div>
         </>

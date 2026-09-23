@@ -15,6 +15,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import { userLogOut } from "../../store/slices/auth.slice";
+import { useEffect } from "react";
 
 const menuItems = [
     {
@@ -104,6 +105,10 @@ export default function Sidebar({
 }) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        hideSidebar();
+    }, [activeHref]);
 
     function handleLogout() {
         navigate("/login", { replace: true });

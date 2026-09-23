@@ -16,7 +16,7 @@ import PageError from "../global/PageError";
 import Modal from "../global/Modal";
 import UpdateSubjectForm from "./UpdateSubjectForm";
 
-export default function SubjectsTable() {
+export default function SubjectsTable({ isAdmin }) {
     const dispatch = useDispatch();
     const {
         data,
@@ -83,12 +83,14 @@ export default function SubjectsTable() {
                 )}
 
                 {data?.subjects?.length > 0 && (
-                    <table className="w-full border-collapse text-left">
+                    <table className="w-full min-w-[500px] border-collapse text-left">
                         <thead>
                             <tr className="text-xs font-medium text-slate-400">
                                 <th className="pb-3 pr-4">Subject</th>
                                 <th className="pb-3 pr-4">Classes Count</th>
-                                <th className="pb-3 pr-4">Actions</th>
+                                {isAdmin && (
+                                    <th className="pb-3 pr-4">Actions</th>
+                                )}
                             </tr>
                         </thead>
 
@@ -113,30 +115,35 @@ export default function SubjectsTable() {
                                     <td className="py-3 pr-4 text-slate-600">
                                         {subject.classes.length ?? 0}
                                     </td>
+                                    {isAdmin && (
+                                        <td className="py-3 pr-4">
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
+                                                    onClick={() =>
+                                                        setSubjectToUpdate(
+                                                            subject
+                                                        )
+                                                    }
+                                                    title="Update Subject"
+                                                >
+                                                    <Pencil className="h-3.5 w-3.5" />
+                                                </button>
 
-                                    <td className="py-3 pr-4">
-                                        <div className="flex items-center gap-2">
-                                            <button
-                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-teal-100 text-teal-600 transition hover:bg-teal-200 cursor-pointer"
-                                                onClick={() =>
-                                                    setSubjectToUpdate(subject)
-                                                }
-                                                title="Update Subject"
-                                            >
-                                                <Pencil className="h-3.5 w-3.5" />
-                                            </button>
-
-                                            <button
-                                                className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
-                                                onClick={() =>
-                                                    setSubjectToDelete(subject)
-                                                }
-                                                title="Delete Subject"
-                                            >
-                                                <Trash2 className="h-3.5 w-3.5" />
-                                            </button>
-                                        </div>
-                                    </td>
+                                                <button
+                                                    className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-100 text-violet-600 transition hover:bg-violet-200 cursor-pointer"
+                                                    onClick={() =>
+                                                        setSubjectToDelete(
+                                                            subject
+                                                        )
+                                                    }
+                                                    title="Delete Subject"
+                                                >
+                                                    <Trash2 className="h-3.5 w-3.5" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
@@ -144,7 +151,7 @@ export default function SubjectsTable() {
                 )}
             </div>
 
-            <div className="mt-5 flex items-center justify-between text-sm">
+            <div className="mt-5 flex items-center justify-between text-sm max-md:flex-col max-md:gap-3">
                 <p className="text-slate-500">
                     Total Pages: {data?.totalPages || 0}
                 </p>
@@ -197,7 +204,7 @@ export default function SubjectsTable() {
                 </div>
             </div>
 
-            {subjectToUpdate && (
+            {isAdmin && subjectToUpdate && (
                 <Modal
                     isOpen={subjectToUpdate}
                     onClose={() => setSubjectToUpdate(null)}
@@ -213,17 +220,19 @@ export default function SubjectsTable() {
                 </Modal>
             )}
 
-            <ConfirmModal
-                isOpen={!!subjectToDelete}
-                onClose={() => setSubjectToDelete(null)}
-                onConfirm={handleConfirmDelete}
-                title="Delete Subject"
-                message={`Are you sure you want to delete "${
-                    subjectToDelete?.title || "this subject"
-                }"? This action cannot be undone.`}
-                confirmLabel="Delete"
-                loading={deleting}
-            />
+            {isAdmin && (
+                <ConfirmModal
+                    isOpen={!!subjectToDelete}
+                    onClose={() => setSubjectToDelete(null)}
+                    onConfirm={handleConfirmDelete}
+                    title="Delete Subject"
+                    message={`Are you sure you want to delete "${
+                        subjectToDelete?.title || "this subject"
+                    }"? This action cannot be undone.`}
+                    confirmLabel="Delete"
+                    loading={deleting}
+                />
+            )}
         </>
     );
 }

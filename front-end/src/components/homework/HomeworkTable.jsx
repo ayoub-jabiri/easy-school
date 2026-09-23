@@ -86,7 +86,7 @@ export default function HomeworkTable() {
                 )}
 
                 {data?.homeworks?.length > 0 && (
-                    <table className="w-full border-collapse text-left">
+                    <table className="w-full min-w-[700px] border-collapse text-left">
                         <thead>
                             <tr className="text-xs font-medium text-slate-400">
                                 <th className="pb-3 pr-4">Title</th>
@@ -193,7 +193,7 @@ export default function HomeworkTable() {
                 )}
             </div>
 
-            <div className="mt-5 flex items-center justify-between text-sm">
+            <div className="mt-5 flex items-center justify-between text-sm max-md:flex-col max-md:gap-3">
                 <p className="text-slate-500">
                     Total Pages: {data?.totalPages || 0}
                 </p>
