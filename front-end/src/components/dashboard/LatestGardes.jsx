@@ -24,7 +24,7 @@ export default function LatestGrades({ data = [] }) {
                 {data.length > 0 &&
                     data.map((item) => (
                         <Link
-                            to={`grades/${item._id}`}
+                            to={`/grades/${item._id}`}
                             key={item._id}
                             className="flex items-center justify-between rounded-lg bg-slate-50 p-3"
                         >

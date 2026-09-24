@@ -20,12 +20,12 @@ export default function Header({ user, openSidebar }) {
             </div>
 
             <div className="flex items-center gap-4">
-                <button className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-500 hover:text-slate-700">
+                <Link
+                    to="/announcements"
+                    className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-500 hover:text-slate-700"
+                >
                     <Bell className="h-4 w-4" />
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-purple-500 text-[10px] font-semibold text-white">
-                        1
-                    </span>
-                </button>
+                </Link>
 
                 <Link to="/profile" className="flex items-center gap-3">
                     <div className="text-right leading-tight">

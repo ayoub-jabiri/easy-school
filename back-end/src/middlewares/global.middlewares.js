@@ -61,7 +61,7 @@ export const paramsIdCheck = (paramName) => {
         }
 
         if (!mongoose.Types.ObjectId.isValid(req.params?.[paramName])) {
-            return clientErrorResponse(res, 400, "Invalid id parameter");
+            return clientErrorResponse(res, 404, "Invalid id parameter");
         }
         next();
     };

@@ -86,7 +86,7 @@ export const getTeacherDashboardService = async (teacherId) => {
 
         Class.distinct("students", { teacherId }),
 
-        Class.distinct("subjectTitle", { teacherId }),
+        Class.distinct("subjectId", { teacherId }),
 
         Homework.countDocuments({
             teacherId,
@@ -94,10 +94,10 @@ export const getTeacherDashboardService = async (teacherId) => {
         }),
     ]);
 
-    const teacherClasses = await Class.find({ teacherId }).populate(
-        "schoolRoomId",
-        "roomNumber"
-    );
+    const teacherClasses = await Class.find({ teacherId })
+        .populate("students", "fullName email")
+        .populate("schoolRoomId", "roomNumber")
+        .populate("subjectId", "title");
 
     const [recentAnnouncements, recentGrades] = await Promise.all([
         Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),

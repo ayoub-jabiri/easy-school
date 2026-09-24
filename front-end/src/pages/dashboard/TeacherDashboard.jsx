@@ -1,6 +1,5 @@
 import CardsList from "../../components/dashboard/teacher/CardsList";
 import ClassesTable from "../../components/dashboard/teacher/ClassesTable";
-import Schedule from "../../components/dashboard/student/Schedule";
 import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
 import LatestGrades from "../../components/dashboard/LatestGardes";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +8,7 @@ import PageLoading from "../../components/global/PageLoading";
 import PageError from "../../components/global/PageError";
 import NoDataAvailable from "../../components/global/NoDataAvailable";
 import { getTeacherDashboard } from "../../store/slices/dashboard.slice";
+import Chart from "../../components/dashboard/teacher/Chart";
 
 export default function TeacherDashboard() {
     const { teacherDashboardData, loading, error } = useSelector(
@@ -42,18 +42,16 @@ export default function TeacherDashboard() {
             <div className="grid grid-cols-12 gap-6 mx-auto max-w-full">
                 <CardsList stats={teacherDashboardData.stats} />
 
-                <div className="col-span-12 xl:col-span-9 flex flex-col gap-6">
-                    <Schedule />
-
+                <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
                     <ClassesTable data={teacherDashboardData.teacherClasses} />
+                    <LatestGrades data={teacherDashboardData.recentGrades} />
                 </div>
 
-                <div className="col-span-12 xl:col-span-3 flex flex-col gap-6">
+                <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+                    <Chart data={teacherDashboardData.stats} />
                     <LatestAnnouncements
                         data={teacherDashboardData.recentAnnouncements}
                     />
-
-                    <LatestGrades data={teacherDashboardData.recentGrades} />
                 </div>
             </div>
         </div>

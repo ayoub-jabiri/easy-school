@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import NoDataAvailable from "../../global/NoDataAvailable";
+import { School } from "lucide-react";
 
 export default function ClassesTable({ data = [] }) {
     return (
@@ -16,14 +17,13 @@ export default function ClassesTable({ data = [] }) {
                 )}
 
                 {data.length > 0 && (
-                    <table className="w-full border-collapse text-left">
+                    <table className="w-full min-w-[420px] border-collapse text-left">
                         <thead>
                             <tr className="text-xs font-medium text-slate-400">
                                 <th className="pb-3 pr-4">Class</th>
                                 <th className="pb-3 pr-4">Subject</th>
                                 <th className="pb-3 pr-4">Students</th>
                                 <th className="pb-3 pr-4">Room</th>
-                                <th className="pb-3 pr-4">Schedule</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,11 +37,25 @@ export default function ClassesTable({ data = [] }) {
                                             to={`/classes/${cls._id}`}
                                             className="hover:underline"
                                         >
-                                            {`${cls.level[0]}${cls.levelYear}`}
+                                            <div className="flex items-center gap-3">
+                                                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-violet-600">
+                                                    <School className="h-4 w-4" />
+                                                </span>
+
+                                                <div>
+                                                    <p className="font-semibold text-slate-800 capitalize">
+                                                        {cls.level} - Year{" "}
+                                                        {cls.levelYear}
+                                                    </p>
+                                                    <p className="text-xs text-slate-400">
+                                                        Group {cls.group}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </Link>
                                     </td>
                                     <td className="py-3 pr-4 text-slate-600">
-                                        {cls.subjectTitle}
+                                        {cls?.subjectId?.title}
                                     </td>
                                     <td className="py-3 pr-4 text-slate-600">
                                         {cls.students.length}
@@ -49,9 +63,6 @@ export default function ClassesTable({ data = [] }) {
                                     <td className="py-3 pr-4 text-slate-600">
                                         Room{" "}
                                         {cls.schoolRoomId?.roomNumber || "N/A"}
-                                    </td>
-                                    <td className="py-3 pr-4 text-slate-600">
-                                        Uknown
                                     </td>
                                 </tr>
                             ))}
