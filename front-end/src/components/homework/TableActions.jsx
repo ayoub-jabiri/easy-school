@@ -69,27 +69,33 @@ export default function TableActions() {
                     />
                 </div>
 
-                <select
-                    value={classId}
-                    onChange={(e) =>
-                        dispatch(
-                            handleTableActions({
-                                key: "classId",
-                                value: e.target.value,
-                            })
-                        )
-                    }
-                    className="w-32.5 max-md:w-full rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
-                >
-                    <option value="">All Classes</option>
-                    {filterableClasses.map((currentClass) => (
-                        <option key={currentClass._id} value={currentClass._id}>
-                            {currentClass.subjectId?.title} —{" "}
-                            {currentClass.level} Year {currentClass.levelYear}{" "}
-                            (Group {currentClass.group})
-                        </option>
-                    ))}
-                </select>
+                {user?.role !== "parent" && (
+                    <select
+                        value={classId}
+                        onChange={(e) =>
+                            dispatch(
+                                handleTableActions({
+                                    key: "classId",
+                                    value: e.target.value,
+                                })
+                            )
+                        }
+                        className="w-32.5 max-md:w-full rounded-full border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                    >
+                        <option value="">All Classes</option>
+                        {filterableClasses.map((currentClass) => (
+                            <option
+                                key={currentClass._id}
+                                value={currentClass._id}
+                            >
+                                {currentClass.subjectId?.title} —{" "}
+                                {currentClass.level} Year{" "}
+                                {currentClass.levelYear} (Group{" "}
+                                {currentClass.group})
+                            </option>
+                        ))}
+                    </select>
+                )}
 
                 <div className="flex gap-3">
                     <div className="relative">

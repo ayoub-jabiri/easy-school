@@ -26,7 +26,11 @@ const router = Router();
 
 router.use(authenticationCheck);
 
-router.get("/", authorizationCheck(["admin", "teacher", "student"]), getGrades);
+router.get(
+    "/",
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
+    getGrades
+);
 router.post(
     "/",
     authorizationCheck(["teacher"]),
@@ -40,7 +44,7 @@ router.post(
 
 router.get(
     "/:gradeId",
-    authorizationCheck(["admin", "teacher", "student"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("gradeId"),
     gradeExistsCheck,
     gradeAccessCheck,

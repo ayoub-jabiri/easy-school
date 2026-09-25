@@ -1,7 +1,7 @@
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import CardShell from "../CardShell";
 
-export default function Charts({ data, total = 30, occupied = 22 }) {
+export default function Charts({ data }) {
     const studentsData = [
         { name: "Boys", value: data?.boys || 0, fill: "#fde047" },
         { name: "Girls", value: data?.girls || 0, fill: "#7dd3fc" },
@@ -17,11 +17,17 @@ export default function Charts({ data, total = 30, occupied = 22 }) {
         }
     }
 
-    const available = Math.max(0, total - occupied);
-
     const classroomData = [
-        { name: "Occupied", value: occupied, color: "#ff8904" },
-        { name: "Available", value: available, color: "#fef3c6" },
+        {
+            name: "Occupied",
+            value: data?.occupiedSchoolRooms || 0,
+            fill: "#ff8904",
+        },
+        {
+            name: "Available",
+            value: data?.availableSchoolRooms || 0,
+            fill: "#fef3c6",
+        },
     ];
 
     return (
@@ -105,7 +111,7 @@ export default function Charts({ data, total = 30, occupied = 22 }) {
                                 {classroomData.map((entry, index) => (
                                     <Cell
                                         key={`cell-${index}`}
-                                        fill={entry.color}
+                                        fill={entry.fill}
                                     />
                                 ))}
                             </Pie>
@@ -114,7 +120,7 @@ export default function Charts({ data, total = 30, occupied = 22 }) {
 
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                         <span className="text-2xl font-bold text-slate-800">
-                            {total}
+                            {data?.schoolRooms || "N/A"}
                         </span>
                         <span className="text-xs text-slate-400">
                             Total Rooms
@@ -126,14 +132,14 @@ export default function Charts({ data, total = 30, occupied = 22 }) {
                     <div className="text-center">
                         <span className="mx-auto mb-1 block h-2.5 w-2.5 rounded-full bg-[#fef3c6]" />
                         <p className="text-sm font-bold text-slate-800">
-                            {available}
+                            {data?.availableSchoolRooms || "N/A"}
                         </p>
                         <p className="text-xs text-slate-400">Available</p>
                     </div>
                     <div className="text-center">
                         <span className="mx-auto mb-1 block h-2.5 w-2.5 rounded-full bg-[#ff8904]" />
                         <p className="text-sm font-bold text-slate-800">
-                            {occupied}
+                            {data?.occupiedSchoolRooms || "N/A"}
                         </p>
                         <p className="text-xs text-slate-400">Occupied</p>
                     </div>

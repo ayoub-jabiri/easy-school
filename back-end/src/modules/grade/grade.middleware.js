@@ -1,9 +1,12 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
 import { getClassByIdService } from "../class/class.service.js";
-import { getSubjectById } from "../subject/subject.service.js";
+import { getGuardiansByQuery } from "../guardian/guardian.service.js";
 import { getUserByIdService } from "../users/user.service.js";
-import { getGradeByIdService } from "./grade.service.js";
+import {
+    getGradeByIdService,
+    getGradeByQueryService,
+} from "./grade.service.js";
 import { gradeSchema, updateGradeSchema } from "./grade.validation.js";
 
 export const gradeDataValidation = (req, res, next) => {
@@ -150,6 +153,27 @@ export const gradeAccessCheck = async (req, res, next) => {
                 403,
                 "You don't have permission to access this grade"
             );
+        }
+
+        if (req.user.role === "parent") {
+            const studentsIds = (
+                await getGuardiansByQuery({
+                    parentId: req.user.id,
+                })
+            ).map((guardian) => guardian.studentId);
+
+            const currentGrade = await getGradeByQueryService({
+                _id: grade._id,
+                studentId: { $in: studentsIds },
+            });
+
+            if (!currentGrade) {
+                return clientErrorResponse(
+                    res,
+                    403,
+                    "You don't have permission to access this grade"
+                );
+            }
         }
 
         next();

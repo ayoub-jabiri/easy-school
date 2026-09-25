@@ -44,6 +44,7 @@ export const getClassesService = async ({ page, limit, search, level }) => {
     };
 };
 
+export const getClassesByQuery = async (query) => await Class.findOne(query);
 export const getClassByQuery = async (query) => await Class.findOne(query);
 
 export const getClassByIdService = async (classId) =>

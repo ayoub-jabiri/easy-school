@@ -1,6 +1,10 @@
 import { clientErrorResponse } from "../../utils/client.responses.js";
 import { serverErrorResponse } from "../../utils/server.error.js";
-import { getClassByIdService } from "../class/class.service.js";
+import {
+    getClassByIdService,
+    getClassesByQuery,
+} from "../class/class.service.js";
+import { getGuardiansByQuery } from "../guardian/guardian.service.js";
 import { getUserByIdService } from "../users/user.service.js";
 import { getHomeworkByIdService } from "./homework.service.js";
 import { homeworkSchema, updateHomeworkSchema } from "./homework.validation.js";
@@ -114,6 +118,27 @@ export const homeworkAccessCheck = async (req, res, next) => {
             const currentClass = await getClassByIdService(homework.classId);
 
             if (!currentClass.students.includes(req.user.id)) {
+                return clientErrorResponse(
+                    res,
+                    403,
+                    "You don't have permission to access this homework"
+                );
+            }
+        }
+
+        if (req.user.role === "parent") {
+            const studentsIds = (
+                await getGuardiansByQuery({
+                    parentId: req.user.id,
+                })
+            ).map((guardian) => guardian.studentId);
+
+            const currentClass = await getClassesByQuery({
+                _id: homework.classId,
+                students: { $in: studentsIds },
+            });
+
+            if (!currentClass) {
                 return clientErrorResponse(
                     res,
                     403,

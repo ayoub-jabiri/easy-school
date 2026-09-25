@@ -3,8 +3,6 @@ import CardShell from "../CardShell";
 import { School } from "lucide-react";
 
 export default function Chart({ data = null }) {
-    console.log(data);
-
     const chartData = [
         { name: "Classes", value: data?.classes || 0, fill: "#7dd3fc" },
         { name: "Subjects", value: data?.subjects || 0, fill: "#fde047" },

@@ -42,6 +42,8 @@ export const getGuardiansService = async ({ page, limit, search }) => {
     };
 };
 
+export const getGuardiansByQuery = async (query) => await Guardian.find(query);
+
 export const getGuardianByQuery = async (query) =>
     await Guardian.findOne(query);
 

@@ -1,19 +1,6 @@
 import Grade from "./grade.model.js";
 import Class from "../class/class.model.js";
-
-// export const getAllGradesService = async (user, gradesLimit, gradesToSkip) => {
-//     if (user.role === "admin") {
-//         return await Grade.find().limit(gradesLimit).skip(gradesToSkip);
-//     } else if (user.role === "teacher") {
-//         return await Grade.find({ teacherId: user.id })
-//             .limit(gradesLimit)
-//             .skip(gradesToSkip);
-//     } else if (user.role === "student") {
-//         return await Grade.find({ studentId: user.id })
-//             .limit(gradesLimit)
-//             .skip(gradesToSkip);
-//     }
-// };
+import guardianModel from "../guardian/guardian.model.js";
 
 export const getAllGradesService = async ({
     user,
@@ -32,6 +19,12 @@ export const getAllGradesService = async ({
         filter.teacherId = user.id;
     } else if (user.role === "student") {
         filter.studentId = user.id;
+    } else if (user.role === "parent") {
+        const childrenIds = (
+            await guardianModel.find({ parentId: user.id })
+        ).map((guardian) => guardian.studentId);
+
+        filter.studentId = { $in: childrenIds };
     }
 
     if (classId) {
@@ -74,6 +67,9 @@ export const getAllGradesService = async ({
 
     return { grades, totalGrades };
 };
+
+export const getGradeByQueryService = async (query) =>
+    await Grade.findOne(query);
 
 export const getGradeByIdService = async (gradeId) =>
     await Grade.findById(gradeId);

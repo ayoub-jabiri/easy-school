@@ -1,6 +1,5 @@
-import { getClassByIdService } from "../class/class.service.js";
 import ClassModel from "../class/class.model.js";
-import { getUserByIdService } from "../users/user.service.js";
+import guardianModel from "../guardian/guardian.model.js";
 import Homework from "./homework.model.js";
 
 const populateOptions = [
@@ -32,6 +31,18 @@ export const getAllHomeworksService = async ({
         );
 
         const classesIds = classes.map((currentClass) => currentClass._id);
+
+        filter.classId = { $in: classesIds };
+    } else if (user.role === "parent") {
+        const childrenIds = (
+            await guardianModel.find({ parentId: user.id })
+        ).map((guardian) => guardian.studentId);
+
+        const classesIds = (
+            await ClassModel.find({
+                students: { $in: childrenIds },
+            })
+        ).map((cls) => cls._id);
 
         filter.classId = { $in: classesIds };
     }

@@ -41,9 +41,7 @@ export default function GradeDetailsPage() {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
     useEffect(() => {
-        if (user?.role !== "parent") {
-            dispatch(getGradeById(id));
-        }
+        dispatch(getGradeById(id));
     }, [dispatch, id, user?.role]);
 
     useEffect(() => {
@@ -63,21 +61,6 @@ export default function GradeDetailsPage() {
         dispatch(deleteGrade(id));
 
         setIsDeleteOpen(false);
-    }
-
-    if (user?.role === "parent") {
-        return (
-            <div className="min-h-screen w-full bg-slate-50 p-6">
-                <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm">
-                    <h1 className="text-lg font-bold text-slate-900">
-                        Grade Details
-                    </h1>
-                    <p className="mt-4 text-sm text-slate-500">
-                        The parent grades portal is coming in a future update.
-                    </p>
-                </div>
-            </div>
-        );
     }
 
     if (loading) {

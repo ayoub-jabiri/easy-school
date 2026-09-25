@@ -27,7 +27,7 @@ router.use(authenticationCheck);
 
 router.get(
     "/",
-    authorizationCheck(["admin", "teacher", "student"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     getHomeworks
 );
 router.post(
@@ -42,7 +42,7 @@ router.post(
 
 router.get(
     "/:homeworkId",
-    authorizationCheck(["admin", "teacher", "student"]),
+    authorizationCheck(["admin", "teacher", "student", "parent"]),
     paramsIdCheck("homeworkId"),
     homeworkExistsCheck,
     homeworkAccessCheck,
