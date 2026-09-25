@@ -16,16 +16,24 @@ import { excludeUserPassword } from "../../utils/client.responses.js";
 
 export const getClasses = async (req, res) => {
     try {
-        const { page = 1, limit = 15, search = "", level = "" } = req.query;
+        const {
+            page = 1,
+            limit = 15,
+            search = "",
+            level = "",
+            mine = false,
+        } = req.query;
 
         const currentPage = +page;
         const classesLimit = +limit;
 
         const { classes, totalClasses } = await getClassesService({
+            user: req.user,
             page: currentPage,
             limit: classesLimit,
             search,
             level,
+            mine,
         });
 
         res.json({

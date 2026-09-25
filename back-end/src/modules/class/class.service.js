@@ -2,8 +2,16 @@ import { getSchoolRoomByIdService } from "../school-room/room.service.js";
 import { getSubjectById } from "../subject/subject.service.js";
 import { getUserByIdService, getUsersService } from "../users/user.service.js";
 import Class from "./class.model.js";
+import Guardian from "../guardian/guardian.model.js";
 
-export const getClassesService = async ({ page, limit, search, level }) => {
+export const getClassesService = async ({
+    user,
+    page,
+    limit,
+    search,
+    level,
+    mine,
+}) => {
     const skip = (page - 1) * limit;
 
     const filter = {};
@@ -22,6 +30,22 @@ export const getClassesService = async ({ page, limit, search, level }) => {
 
     if (level) {
         filter.level = level;
+    }
+
+    if (mine === "true" && user.role !== "admin") {
+        if (user.role === "teacher") {
+            filter.teacherId = user.id;
+        } else if (user.role === "student") {
+            filter.students = user.id;
+        } else if (user.role === "parent") {
+            const guardianLinks = await Guardian.find({
+                parentId: user.id,
+            }).select("studentId");
+
+            filter.students = {
+                $in: guardianLinks.map((link) => link.studentId),
+            };
+        }
     }
 
     const [classes, totalClasses] = await Promise.all([

@@ -12,7 +12,7 @@ export default function ClassesPage() {
     return (
         <div className="min-h-screen w-full bg-slate-50 p-6">
             <div className="mx-auto max-w-full rounded-2xl bg-white p-5 shadow-sm">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <h1 className="text-lg font-bold text-slate-900">
                         All Classes ({data?.totalClasses || 0})
                     </h1>

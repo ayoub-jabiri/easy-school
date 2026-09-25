@@ -5,7 +5,7 @@ import { handleTableActions } from "../../store/slices/classes.slice";
 import CreateClassModal from "./CreateClassModal";
 
 export default function TableActions({ isAdmin }) {
-    const { search, level } = useSelector(
+    const { search, level, mine } = useSelector(
         (state) => state.classes.classesList.tableActions
     );
     const dispatch = useDispatch();
@@ -25,10 +25,14 @@ export default function TableActions({ isAdmin }) {
         setIsFilterOpen(false);
     }
 
+    function handleChangeScope(value) {
+        dispatch(handleTableActions({ key: "mine", value }));
+    }
+
     return (
         <>
-            <div className="flex items-center gap-2 max-md:flex-col max-md:items-end">
-                <div className="relative max-md:w-full">
+            <div className="flex items-center gap-2 max-lg:flex-col max-md:items-end">
+                <div className="relative max-lg:w-full">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
 
                     <input
@@ -42,11 +46,36 @@ export default function TableActions({ isAdmin }) {
                             )
                         }
                         placeholder="Search by level, year, or group..."
-                        className="w-70 max-md:w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+                        className="w-70 max-lg:w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-4 text-sm text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                     />
                 </div>
 
                 <div className="flex gap-3">
+                    {!isAdmin && (
+                        <div className="flex items-center rounded-full border border-slate-200 bg-white p-0.5 text-xs">
+                            <button
+                                onClick={() => handleChangeScope(false)}
+                                className={`rounded-full px-3 py-1.5 transition cursor-pointer ${
+                                    !mine
+                                        ? "bg-slate-900 text-white"
+                                        : "text-slate-500 hover:text-slate-700"
+                                }`}
+                            >
+                                All Classes
+                            </button>
+
+                            <button
+                                onClick={() => handleChangeScope(true)}
+                                className={`rounded-full px-3 py-1.5 transition cursor-pointer ${
+                                    mine
+                                        ? "bg-slate-900 text-white"
+                                        : "text-slate-500 hover:text-slate-700"
+                                }`}
+                            >
+                                My Classes
+                            </button>
+                        </div>
+                    )}
                     <div className="relative">
                         <button
                             className="flex h-9 w-9 items-center justify-center rounded-full bg-sky-100 text-sky-600 transition hover:bg-sky-200 cursor-pointer"

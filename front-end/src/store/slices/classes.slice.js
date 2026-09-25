@@ -175,6 +175,7 @@ const initialState = {
         tableActions: {
             search: "",
             level: "",
+            mine: false,
             page: 1,
             limit: 15,
         },
@@ -253,6 +254,10 @@ const classesSlice = createSlice({
 
                 case "page":
                     state.classesList.tableActions.page = value;
+                    break;
+
+                case "mine":
+                    state.classesList.tableActions.mine = value;
                     break;
 
                 case "limit":
