@@ -12,35 +12,6 @@ const populateOptions = [
     { path: "teacherId", select: "fullName email" },
 ];
 
-// export const getAllHomeworksService = async (
-//     user,
-//     homeworksLimit,
-//     homeworksToSkip
-// ) => {
-//     if (user.role === "admin") {
-//         return await Homework.find()
-//             .sort({ createdAt: -1 })
-//             .limit(homeworksLimit)
-//             .skip(homeworksToSkip)
-//             .populate(populateOptions);
-//     } else if (user.role === "teacher") {
-//         return await Homework.find({ teacherId: user.id })
-//             .sort({ createdAt: -1 })
-//             .limit(homeworksLimit)
-//             .skip(homeworksToSkip)
-//             .populate(populateOptions);
-//     } else if (user.role === "student") {
-//         const classes = await ClassModel.find({ students: user.id });
-//         const classIds = classes.map((currentClass) => currentClass._id);
-
-//         return await Homework.find({ classId: { $in: classIds } })
-//             .sort({ createdAt: -1 })
-//             .limit(homeworksLimit)
-//             .skip(homeworksToSkip)
-//             .populate(populateOptions);
-//     }
-// };
-
 export const getAllHomeworksService = async ({
     user,
     page,

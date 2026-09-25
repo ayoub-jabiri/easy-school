@@ -39,8 +39,10 @@ export default function TableActions() {
             ) || [];
     } else if (user?.role === "student") {
         filterableClasses =
-            classesData?.classes.filter((currentClass) =>
-                currentClass.students.includes(user?._id)
+            classesData?.classes?.filter((currentClass) =>
+                currentClass.students?.some(
+                    (student) => student._id === user?._id
+                )
             ) || [];
     } else if (user?.role === "admin") {
         filterableClasses = classesData?.classes || [];

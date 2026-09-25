@@ -44,12 +44,12 @@ export default function LandingFooter() {
             <div className="container">
                 <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <div className="flex items-center gap-2">
-                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
-                                <GraduationCap className="h-5 w-5" />
+                        <div className="flex items-center gap-2 w-fit">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white">
+                                <GraduationCap className="h-4 w-4" />
                             </span>
-                            <span className="text-base font-extrabold text-slate-900">
-                                EasySchool
+                            <span className="text-sm font-bold text-slate-900">
+                                ACADEMIA
                             </span>
                         </div>
                         <p className="mt-4 text-sm leading-relaxed text-slate-400">

@@ -11,6 +11,7 @@ import {
     UserCircle,
     LogOut,
     X,
+    GraduationCap,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
@@ -127,12 +128,12 @@ export default function Sidebar({
                 } max-lg:z-10 main-transition md:sticky top-0 md:flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-slate-100 bg-white px-4 py-5`}
             >
                 <div className="flex items-center justify-between px-1">
-                    <Link to="/" className="flex items-center gap-2">
-                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-purple-400 via-pink-400 to-orange-300 text-sm">
-                            🎓
+                    <Link to="/" className="flex items-center gap-2 w-fit">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white">
+                            <GraduationCap className="h-4 w-4" />
                         </span>
-                        <span className="text-base font-bold text-slate-900">
-                            EasySchool
+                        <span className="text-sm font-bold text-slate-900">
+                            ACADEMIA
                         </span>
                     </Link>
 

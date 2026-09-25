@@ -11,7 +11,7 @@ export default function Chart({ data = null }) {
     ];
 
     return (
-        <CardShell title="Students" className="col-span-12 lg:col-span-5">
+        <CardShell title="Classes Status" className="col-span-12 lg:col-span-5">
             <div className="relative mx-auto mt-4 h-48 w-48">
                 <ResponsiveContainer width="100%" height="100%">
                     <RadialBarChart

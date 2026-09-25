@@ -95,6 +95,7 @@ export const getTeacherDashboardService = async (teacherId) => {
     ]);
 
     const teacherClasses = await Class.find({ teacherId })
+        .limit(itemsLimit)
         .populate("students", "fullName email")
         .populate("schoolRoomId", "roomNumber")
         .populate("subjectId", "title");
@@ -131,7 +132,7 @@ export const getStudentDashboardService = async (studentId) => {
     const [classes, subjects, teachers] = await Promise.all([
         Class.countDocuments({ students: studentId }),
 
-        Class.distinct("subjectTitle", { students: studentId }),
+        Class.distinct("subjectId", { students: studentId }),
 
         Class.distinct("teacherId", { students: studentId }),
     ]);
@@ -144,6 +145,12 @@ export const getStudentDashboardService = async (studentId) => {
         classId: { $in: studentClassIds },
         dueDate: { $gt: new Date() },
     });
+
+    const studentsClasses = await Class.find({ students: studentId })
+        .limit(itemsLimit)
+        .populate("students", "fullName email")
+        .populate("schoolRoomId", "roomNumber")
+        .populate("subjectId", "title");
 
     const [recentAnnouncements, recentGrades] = await Promise.all([
         Announcement.find().sort({ createdAt: -1 }).limit(itemsLimit),
@@ -167,6 +174,7 @@ export const getStudentDashboardService = async (studentId) => {
             teachers: teachers.length,
             pendingHomeworks,
         },
+        studentsClasses,
         recentAnnouncements,
         recentGrades,
     };
@@ -183,6 +191,11 @@ export const getParentDashboardService = async (parentId) => {
 
         Grade.countDocuments({ studentId: { $in: studentIds } }),
     ]);
+
+    const children = await User.find({ _id: { $in: studentIds } })
+        .sort({ createdAt: -1 })
+        .limit()
+        .select("-password -role");
 
     const childrenClassIds = await Class.distinct("_id", {
         students: { $in: studentIds },
@@ -215,6 +228,7 @@ export const getParentDashboardService = async (parentId) => {
             grades,
             pendingHomeworks,
         },
+        children,
         recentAnnouncements,
         recentGrades,
     };

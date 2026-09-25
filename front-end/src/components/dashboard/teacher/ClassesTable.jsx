@@ -5,10 +5,16 @@ import { School } from "lucide-react";
 export default function ClassesTable({ data = [] }) {
     return (
         <div className="rounded-2xl bg-white p-5 shadow-sm">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center justify-between">
                 <h3 className="text-base font-bold text-slate-900">
                     My Classes
                 </h3>
+                <Link
+                    to="/classes"
+                    className="text-slate-400 text-sm hover:text-slate-600"
+                >
+                    View All
+                </Link>
             </div>
 
             <div className="mt-5 overflow-x-auto">

@@ -19,16 +19,15 @@ export default function LandingHeader() {
     return (
         <header className="w-full border-b border-slate-100 bg-white sticky top-0 z-50">
             <div className="container flex h-16 items-center justify-between">
-                <Link to="/" className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
+                <Link to="/" className="flex items-center gap-2 w-fit">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white">
                         <GraduationCap className="h-5 w-5" />
                     </span>
                     <div className="leading-tight">
                         <div className="flex items-center gap-1">
                             <span className="text-sm font-extrabold text-slate-900">
-                                EasySchool
+                                ACADEMIA
                             </span>
-                            <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
                         </div>
                         <p className="text-[10px] font-medium tracking-wide text-slate-400">
                             ONLINE ACADEMY
@@ -47,9 +46,6 @@ export default function LandingHeader() {
                                     : "hover:text-blue-600"
                             }`}
                         >
-                            {link.active && (
-                                <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                            )}
                             {link.label}
                         </a>
                     ))}

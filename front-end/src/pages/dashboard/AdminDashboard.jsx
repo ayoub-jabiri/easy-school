@@ -41,7 +41,7 @@ export default function AdminDashboard() {
         <div className="min-h-screen w-full bg-slate-50 p-6">
             <div className="grid grid-cols-12 gap-6 mx-auto max-w-full">
                 <CardsList data={adminDashboardData.overview} />
-                <div className="col-span-12 xl:col-span-9 flex flex-col gap-6">
+                <div className="col-span-12 xl:col-span-8 flex flex-col gap-6">
                     <Charts data={adminDashboardData.overview} />
 
                     <LatestRegisteredStudents
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
                     />
                 </div>
 
-                <div className="col-span-12 xl:col-span-3 flex flex-col gap-6">
+                <div className="col-span-12 xl:col-span-4 flex flex-col gap-6">
                     <LatestAnnouncements
                         data={adminDashboardData.recentAnnouncements}
                     />

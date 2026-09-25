@@ -1,4 +1,3 @@
-import Schedule from "../../components/dashboard/student/Schedule";
 import CardsList from "../../components/dashboard/student/CardsList";
 import LatestAnnouncements from "../../components/dashboard/LatestAnnouncements";
 import LatestGrades from "../../components/dashboard/LatestGardes";
@@ -8,6 +7,8 @@ import PageLoading from "../../components/global/PageLoading";
 import PageError from "../../components/global/PageError";
 import NoDataAvailable from "../../components/global/NoDataAvailable";
 import { getStudentDashboard } from "../../store/slices/dashboard.slice";
+import ClassesTable from "../../components/dashboard/teacher/ClassesTable";
+import Chart from "../../components/dashboard/teacher/Chart";
 
 export default function StudentDashboard() {
     const { studentDashboardData, loading, error } = useSelector(
@@ -41,16 +42,16 @@ export default function StudentDashboard() {
             <div className="grid grid-cols-12 gap-6 mx-auto max-w-full">
                 <CardsList stats={studentDashboardData.stats} />
 
-                <div className="col-span-12 xl:col-span-9 flex flex-col gap-6">
-                    <Schedule />
+                <div className="col-span-12 lg:col-span-8 flex flex-col gap-6">
+                    <ClassesTable data={studentDashboardData.studentsClasses} />
+                    <LatestGrades data={studentDashboardData.recentGrades} />
                 </div>
 
-                <div className="col-span-12 xl:col-span-3 flex flex-col gap-6">
+                <div className="col-span-12 lg:col-span-4 flex flex-col gap-6">
+                    <Chart data={studentDashboardData.stats} />
                     <LatestAnnouncements
                         data={studentDashboardData.recentAnnouncements}
                     />
-
-                    <LatestGrades data={studentDashboardData.recentGrades} />
                 </div>
             </div>
         </div>
